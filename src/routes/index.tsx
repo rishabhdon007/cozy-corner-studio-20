@@ -1,26 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import html from "../pages-html/index.html?raw";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: Page,
+  head: () => ({ meta: [{ title: "NRK Iron & Steel | India's Trusted Steel Distributors" }] }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function Page() {
+  return <RawHtmlPage html={html} />;
 }
 
-function Index() {
-  return <PlaceholderIndex />;
+export function RawHtmlPage({ html }: { html: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest("a");
+      if (!target) return;
+      const href = target.getAttribute("href") || "";
+      if (href.startsWith("/") && !href.startsWith("//")) {
+        e.preventDefault();
+        navigate({ to: href });
+      }
+    };
+    el.addEventListener("click", onClick);
+    return () => el.removeEventListener("click", onClick);
+  }, [navigate]);
+  return <div ref={ref} dangerouslySetInnerHTML={{ __html: html }} />;
 }
