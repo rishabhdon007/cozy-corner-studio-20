@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
+@import "tailwindcss";
+@source "../app/**/*.{js,ts,jsx,tsx}";
+@source "../src/**/*.{js,ts,jsx,tsx}";
+@import "tw-animate-css";
+@import "../src/styles.css";
+@import "../src/nrk-theme.css";
+@import "../src/site-styles.css";
