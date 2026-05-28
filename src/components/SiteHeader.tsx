@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { SiteButton } from "@/components/site/SiteButton";
-import { isNavActive, navItems, siteName } from "@/data/site";
+import { isNavActive, navItems } from "@/data/site";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -14,16 +14,20 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-outline-variant/70 bg-white/95 shadow-sm backdrop-blur-md">
       <div className="mx-auto flex max-w-container-max items-center justify-between px-gutter py-3">
-        <Link
-          href="/"
-          className="group flex items-center gap-3 font-display-lg text-headline-md font-black text-primary transition-colors duration-300 hover:text-secondary"
-        >
+        <Link href="/" className="group flex items-center gap-3 transition-opacity duration-300 hover:opacity-90">
           <img
             src="/company_logo.png"
             alt="NRK Iron & Steel Logo"
-            className="h-12 max-h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 md:h-14"
+            className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 md:h-12"
           />
-          <span className="tracking-tight">{siteName}</span>
+          <div className="flex flex-col leading-none">
+            <span className="site-brand-name">
+              <span className="site-brand-nrk">NRK</span>
+              <span className="site-brand-divider" aria-hidden="true" />
+              <span className="site-brand-text">Iron &amp; Steel</span>
+            </span>
+            <span className="site-brand-tagline">Trusted Steel Partner Since 1992</span>
+          </div>
         </Link>
 
         <nav className="hidden items-center gap-2 font-label-md text-label-md md:flex">

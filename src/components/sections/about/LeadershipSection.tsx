@@ -1,4 +1,7 @@
+"use client";
+
 import { SectionHeading } from "@/components/site/SectionHeading";
+import fallbackImage from "@/assests/team_member.webp";
 
 const leaders = [
   {
@@ -69,6 +72,9 @@ export function LeadershipSection() {
                   alt={leader.name}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   src={leader.image}
+                  onError={(event) => {
+                    event.currentTarget.src = fallbackImage.src;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1c2e]/90 via-transparent to-transparent opacity-80" />
               </div>

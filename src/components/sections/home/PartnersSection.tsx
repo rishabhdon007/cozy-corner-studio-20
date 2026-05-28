@@ -46,6 +46,7 @@ function PartnerCard({ partner, ariaHidden = false }: { partner: Partner; ariaHi
         alt={ariaHidden ? "" : partner.alt}
         width={partner.logo.width}
         height={partner.logo.height}
+        loading="lazy"
         className="max-h-16 w-auto h-auto object-contain"
       />
       <p className="font-label-md text-center text-primary">{partner.name}</p>

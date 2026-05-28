@@ -45,6 +45,7 @@ export function HeroSection() {
           loop
           muted
           playsInline
+          preload="metadata"
           suppressHydrationWarning
           className="w-full h-full object-cover opacity-45"
         >

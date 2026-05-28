@@ -1,4 +1,6 @@
+import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteButton } from "@/components/site/SiteButton";
+import { cn } from "@/lib/utils";
 import type { ServiceCardItem } from "../data/serviceCards";
 import { ServiceCard } from "./ServiceCard";
 
@@ -9,29 +11,62 @@ type ServicesGridSectionProps = {
   className?: string;
   heading?: string;
   description?: string;
+  tone?: "light" | "dark";
 };
 
 export function ServicesGridSection({
   items,
   showHeader = true,
   showViewAll = false,
-  className = "bg-surface-container-low reveal py-stack-lg",
+  className = "reveal py-stack-lg",
   heading = "Comprehensive Steel Processing Services",
   description = "We offer advanced steel processing solutions to ensure precision, quality, and optimized use for every requirement.",
+  tone = "light",
 }: ServicesGridSectionProps) {
+  const isDark = tone === "dark";
+
   return (
-    <section className={className}>
-      <div className="mx-auto max-w-container-max px-gutter">
+    <section
+      className={cn(
+        "relative overflow-hidden",
+        isDark ? "bg-primary text-on-primary" : "bg-surface-container-low",
+        className,
+      )}
+    >
+      {isDark ? (
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+      ) : null}
+
+      <div className="relative mx-auto max-w-container-max px-gutter">
         {showHeader ? (
-          <div className="site-section-header mb-stack-md text-center">
-            <span data-scroll-reveal="top" className="site-section-eyebrow">Our Services</span>
-            <h2 data-scroll-reveal="top" className="site-section-title">
-              <span>{heading}</span>
-            </h2>
-            <p data-scroll-reveal="top" className="site-section-lead">
-              <span>{description}</span>
-            </p>
-          </div>
+          isDark ? (
+            <SectionHeading
+              align="center"
+              variant="hero"
+              eyebrow="Our Services"
+              title={heading}
+              lead={description}
+              className="mb-stack-md"
+            />
+          ) : (
+            <div className="site-section-header mb-stack-md text-center">
+              <span data-scroll-reveal="top" className="site-section-eyebrow">
+                Our Services
+              </span>
+              <h2 data-scroll-reveal="top" className="site-section-title">
+                <span>{heading}</span>
+              </h2>
+              <p data-scroll-reveal="top" className="site-section-lead">
+                <span>{description}</span>
+              </p>
+            </div>
+          )
         ) : null}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item, index) => (
@@ -44,7 +79,7 @@ export function ServicesGridSection({
         </div>
         {showViewAll ? (
           <div data-scroll-reveal="" className="mt-8 text-center">
-            <SiteButton href="/services" variant="outline">
+            <SiteButton href="/services" variant={isDark ? "white" : "outline"}>
               View All Services
             </SiteButton>
           </div>

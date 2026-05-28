@@ -1,4 +1,7 @@
+"use client";
+
 import { SectionHeading } from "@/components/site/SectionHeading";
+import fallbackImage from "@/assests/constrution area.jpg";
 
 const VIDEO_THUMB =
   "https://lh3.googleusercontent.com/aida/ADBb0ujPEXWWg0iI87xROhYOFi07NvkaakLAKcufgsmsIULakcaTeHZTBoIc_SxWcBJJ_XJXykvO25FlqnSvlL2F2-qayNrL4cFeH77NIYfPrDj7cPcOgWyaoKvxwlrpSEHlZKBjl6X4VE8b3F2mfO97oySF6u5pyG3CEJy3o0ht1wmhFITEbVwKqYEQKEAzVynO-vMzEP2_ED04Cr3uAEBun4G0G363gZ2HgbEP0sHEUcbr6f0mh2B_d0W_Br0";
@@ -21,6 +24,9 @@ export function VideoTourSection() {
             alt="Facility video tour thumbnail"
             className="h-full w-full object-cover opacity-70 transition-opacity duration-500 group-hover:opacity-50"
             src={VIDEO_THUMB}
+            onError={(event) => {
+              event.currentTarget.src = fallbackImage.src;
+            }}
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-primary-fixed/80 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">

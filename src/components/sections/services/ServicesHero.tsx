@@ -60,11 +60,16 @@ export function ServicesHero() {
       className="relative w-full overflow-hidden bg-primary"
     >
       <div className="absolute inset-0">
-        <img
-          src={servicesHeroImage.src}
-          alt=""
-          aria-hidden="true"
+        <video
           className="h-full w-full object-cover opacity-35"
+          src="/assests/banner_video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={servicesHeroImage.src}
+          aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent" />
@@ -82,8 +87,14 @@ export function ServicesHero() {
               </Link>
               <ChevronRight className="h-3 w-3" aria-hidden="true" />
             </li>
+            <li className="flex items-center gap-2">
+              <Link href="/services" className="transition-colors hover:text-white">
+                Services
+              </Link>
+              <ChevronRight className="h-3 w-3" aria-hidden="true" />
+            </li>
             <li>
-              <span className="text-white">Services</span>
+              <span className="text-white">{EYEBROW}</span>
             </li>
           </ol>
         </nav>

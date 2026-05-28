@@ -209,65 +209,125 @@ function isSectionInView(section: HTMLElement, threshold = 0.05): boolean {
   return visibleHeight / rect.height >= threshold || visibleHeight >= 120;
 }
 
-export function initScrollReveal(root: ParentNode): () => void {
-  const sections = getRevealSections(root);
-  if (!sections.length) return () => undefined;
+const SECTION_SELECTOR = 'section:not([data-scroll-reveal="off"])';
 
+function collectNewSections(node: Node, initializedSections: WeakSet<HTMLElement>): HTMLElement[] {
+  if (!(node instanceof HTMLElement)) return [];
+
+  const sections: HTMLElement[] = [];
+  if (node.matches(SECTION_SELECTOR) && !initializedSections.has(node)) {
+    sections.push(node);
+  }
+
+  node.querySelectorAll<HTMLElement>(SECTION_SELECTOR).forEach((section) => {
+    if (!initializedSections.has(section)) {
+      sections.push(section);
+    }
+  });
+
+  return sections;
+}
+
+function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => void>): void {
+
+  const items = collectRevealItems(section);
+  if (!items.length) return;
+
+  applyRevealAttributes(items);
+  for (const item of items) prepareLineReveal(item, cleanups);
+
+  let revealed = false;
+  const reveal = (): void => {
+    if (revealed) return;
+    revealed = true;
+    section.classList.add("is-revealed");
+    for (const item of items) {
+      item.classList.add("is-visible");
+      item.querySelectorAll<HTMLElement>("[data-scroll-reveal]").forEach((child) => {
+        if (child !== item) {
+          child.classList.add("is-visible");
+        }
+      });
+    }
+  };
+
+  if (typeof IntersectionObserver === "undefined") {
+    reveal();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        reveal();
+        observer.disconnect();
+      }
+    },
+    { threshold: [0, 0.05, 0.1, 0.2], rootMargin: "80px 0px -8% 0px" },
+  );
+
+  observer.observe(section);
+
+  if (isSectionInView(section)) {
+    reveal();
+    observer.disconnect();
+  } else {
+    // Short fallback for above-the-fold sections that miss the first intersection pass.
+    const quickFallbackId = window.setTimeout(() => {
+      if (!revealed && isSectionInView(section)) reveal();
+    }, 120);
+    cleanups.push(() => window.clearTimeout(quickFallbackId));
+
+    const fallbackId = window.setTimeout(() => reveal(), 15000);
+    cleanups.push(() => window.clearTimeout(fallbackId));
+  }
+
+  cleanups.push(() => observer.disconnect());
+}
+
+export function initScrollReveal(root: ParentNode): () => void {
   const cleanups: Array<() => void> = [];
+  const initializedSections = new WeakSet<HTMLElement>();
+
+  const initSection = (section: HTMLElement) => {
+    if (initializedSections.has(section)) return;
+    if (section.classList.contains("is-revealed")) return;
+    initializedSections.add(section);
+    initSingleSectionReveal(section, cleanups);
+  };
+
+  const sections = getRevealSections(root);
 
   for (const section of sections) {
-    const items = collectRevealItems(section);
-    if (!items.length) continue;
+    initSection(section);
+  }
 
-    applyRevealAttributes(items);
-    for (const item of items) prepareLineReveal(item, cleanups);
-
-    let revealed = false;
-    const reveal = (): void => {
-      if (revealed) return;
-      revealed = true;
-      section.classList.add("is-revealed");
-      for (const item of items) {
-        item.classList.add("is-visible");
-        item.querySelectorAll<HTMLElement>("[data-scroll-reveal]").forEach((child) => {
-          if (child !== item) {
-            child.classList.add("is-visible");
+  const observeRoot = root instanceof Document ? root.body : root;
+  if (typeof MutationObserver !== "undefined" && observeRoot instanceof HTMLElement) {
+    const mutationObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          for (const section of collectNewSections(node, initializedSections)) {
+            initSection(section);
           }
-        });
-      }
-    };
-
-    if (typeof IntersectionObserver === "undefined") {
-      reveal();
-      continue;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          reveal();
-          observer.disconnect();
         }
-      },
-      { threshold: [0, 0.05, 0.1, 0.2], rootMargin: "80px 0px -8% 0px" },
-    );
+      }
+    });
 
-    observer.observe(section);
-
-    if (isSectionInView(section)) {
-      reveal();
-      observer.disconnect();
-    } else {
-      // Safe long fallback timeout (15s) so off-screen sections do not trigger prematurely
-      const fallbackId = window.setTimeout(() => reveal(), 15000);
-      cleanups.push(() => window.clearTimeout(fallbackId));
-    }
-
-    cleanups.push(() => observer.disconnect());
+    mutationObserver.observe(observeRoot, { childList: true, subtree: true });
+    cleanups.push(() => mutationObserver.disconnect());
   }
 
   return () => {
     for (const cleanup of cleanups) cleanup();
   };
+}
+
+/** Re-initialize scroll reveal for sections that were added after the first pass. */
+export function rescanUnrevealedSections(root: ParentNode = document.body): void {
+  for (const section of getRevealSections(root)) {
+    if (section.classList.contains("is-revealed")) continue;
+    initSingleSectionReveal(section, []);
+  }
 }

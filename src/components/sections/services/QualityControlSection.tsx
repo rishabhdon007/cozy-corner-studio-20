@@ -1,5 +1,6 @@
 import { ImageFeatureSplitSection } from "@/components/site/ImageFeatureSplitSection";
 import { SiteButton } from "@/components/site/SiteButton";
+import qcImage from "@/assests/constrution area.jpg";
 
 const qualityPoints = [
   {
@@ -22,15 +23,13 @@ const qualityPoints = [
   },
 ] as const;
 
-const QC_IMAGE =
-  "https://lh3.googleusercontent.com/aida/ADBb0ujNeJfj5wjuiu3qa5PPpnbdTCPvKNZ6N2yri4I15sFCyU37e27ZxTaBi-X_HrEEoMrBQ_Y87Eky8g_cWUxRDlugbnlELvSyUYarJSXBSVn3wUXaFOlujrxI8ykr_gOeXzy-9wgeAJ9fdfdpExYYPQ4PuLncFTJa42kasKT_q9zpCwhLgzElMiOrDPJ6PkodKV-52kPNF3ODoLhOUdTcw0k9CTEY048brLSdv86qeEhwYXr-VqT5vRXSubc";
-
 export function QualityControlSection() {
   return (
     <ImageFeatureSplitSection
       id="quality-assurance"
-      image={QC_IMAGE}
+      image={qcImage}
       imageAlt="Quality Control Inspection"
+      useNextImage
       badge={{ value: "ISO", label: "9001:2008 Certified" }}
       imageOverlay={
         <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent" />

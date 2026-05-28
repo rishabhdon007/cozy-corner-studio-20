@@ -1,3 +1,7 @@
+"use client";
+
+import fallbackImage from "@/assests/constrution area.jpg";
+
 const HERO_IMAGE =
   "https://lh3.googleusercontent.com/aida/ADBb0ujNeJfj5wjuiu3qa5PPpnbdTCPvKNZ6N2yri4I15sFCyU37e27ZxTaBi-X_HrEEoMrBQ_Y87Eky8g_cWUxRDlugbnlELvSyUYarJSXBSVn3wUXaFOlujrxI8ykr_gOeXzy-9wgeAJ9fdfdpExYYPQ4PuLncFTJa42kasKT_q9zpCwhLgzElMiOrDPJ6PkodKV-52kPNF3ODoLhOUdTcw0k9CTEY048brLSdv86qeEhwYXr-VqT5vRXSubc";
 
@@ -17,7 +21,14 @@ export function GalleryHero() {
           </p>
         </div>
         <div className="relative hidden h-64 overflow-hidden rounded-xl border border-outline-variant shadow-[0_4px_20px_rgba(10,42,94,0.05)] md:block md:h-96">
-          <img alt="Industrial operations" className="h-full w-full object-cover" src={HERO_IMAGE} />
+          <img
+            alt="Industrial operations"
+            className="h-full w-full object-cover"
+            src={HERO_IMAGE}
+            onError={(event) => {
+              event.currentTarget.src = fallbackImage.src;
+            }}
+          />
           <div className="absolute inset-0 bg-primary opacity-10 mix-blend-multiply" />
         </div>
       </div>

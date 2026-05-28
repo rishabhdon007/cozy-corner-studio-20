@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { SiteButton } from "@/components/site/SiteButton";
+import fallbackImage from "@/assests/constrution area.jpg";
 import type { ServiceCardItem } from "../data/serviceCards";
 import { ServiceDetailModal } from "./sections/services/ServiceDetailModal";
 
@@ -37,7 +38,13 @@ export function ServiceCard({
         <img
           alt={item.title}
           src={item.image}
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          onError={(event) => {
+            event.currentTarget.src = fallbackImage.src;
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
         <span className="absolute right-4 top-4 z-20 bg-emerald-600 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-lg">

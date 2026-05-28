@@ -18,6 +18,7 @@ type ImageFeatureSplitSectionProps = {
   image: string | StaticImageData;
   imageAlt: string;
   useNextImage?: boolean;
+  imagePriority?: boolean;
   imageOverlay?: ReactNode;
   badge: { value: string; label: string };
   eyebrow: string;
@@ -33,6 +34,7 @@ export function ImageFeatureSplitSection({
   image,
   imageAlt,
   useNextImage = false,
+  imagePriority = false,
   imageOverlay,
   badge,
   eyebrow,
@@ -66,11 +68,19 @@ export function ImageFeatureSplitSection({
                   alt={imageAlt}
                   fill
                   className="object-cover"
-                  priority
+                  priority={imagePriority}
+                  loading={imagePriority ? undefined : "lazy"}
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (
-                <img alt={imageAlt} className="h-full w-full object-cover" src={typeof image === "string" ? image : image.src} />
+                <img
+                  alt={imageAlt}
+                  className="h-full w-full object-cover"
+                  src={typeof image === "string" ? image : image.src}
+                  loading={imagePriority ? "eager" : "lazy"}
+                  decoding="async"
+                  fetchPriority={imagePriority ? "high" : "low"}
+                />
               )}
               {imageOverlay}
             </div>

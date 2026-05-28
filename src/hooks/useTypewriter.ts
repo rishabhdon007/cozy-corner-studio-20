@@ -2,27 +2,41 @@
 
 import { type RefObject, useEffect } from "react";
 
-function initHeroTypewriter(root: ParentNode): () => void {
-  const headline = root.querySelector<HTMLElement>("[data-typewriter]");
-  if (!headline) return () => undefined;
+function hideTypewriterCursor(container: HTMLElement): void {
+  container.classList.add("is-typewriter-complete");
+  container.querySelectorAll<HTMLElement>("[data-typewriter-cursor]").forEach((cursor) => {
+    cursor.style.display = "none";
+    cursor.setAttribute("aria-hidden", "true");
+  });
+}
 
+function showTypewriterCursor(container: HTMLElement): void {
+  container.classList.remove("is-typewriter-complete");
+  container.querySelectorAll<HTMLElement>("[data-typewriter-cursor]").forEach((cursor) => {
+    cursor.style.removeProperty("display");
+    cursor.removeAttribute("aria-hidden");
+  });
+}
+
+function initHeroTypewriterBlock(headline: HTMLElement): () => void {
   const lines = [...headline.querySelectorAll<HTMLElement>("[data-typewriter-line]")];
-  const cursor = headline.querySelector<HTMLElement>("[data-typewriter-cursor]");
   if (lines.length === 0) return () => undefined;
 
   const finalLines = lines.map((line) => line.dataset.typewriterText ?? line.textContent ?? "");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   if (prefersReducedMotion) {
     lines.forEach((line, i) => {
       line.textContent = finalLines[i];
     });
-    if (cursor) cursor.style.display = "none";
+    hideTypewriterCursor(headline);
     return () => undefined;
   }
 
   let cancelled = false;
   let timeoutId: number | undefined;
 
+  showTypewriterCursor(headline);
   lines.forEach((line) => {
     line.textContent = "";
   });
@@ -31,6 +45,7 @@ function initHeroTypewriter(root: ParentNode): () => void {
     if (cancelled) return;
 
     if (lineIndex >= lines.length) {
+      hideTypewriterCursor(headline);
       return;
     }
 
@@ -54,17 +69,35 @@ function initHeroTypewriter(root: ParentNode): () => void {
   };
 }
 
-function initLoopingTaglineTypewriter(root: ParentNode): () => void {
-  const container = root.querySelector<HTMLElement>("[data-typewriter-loop]");
-  if (!container) return () => undefined;
+function initHeroTypewriter(root: ParentNode): () => void {
+  const headlines = [...root.querySelectorAll<HTMLElement>("[data-typewriter]")];
+  if (headlines.length === 0) return () => undefined;
 
+  const cleanups = headlines.map((headline) => initHeroTypewriterBlock(headline));
+
+  return () => {
+    cleanups.forEach((cleanup) => cleanup());
+  };
+}
+
+function initLoopingTaglineTypewriter(root: ParentNode): () => void {
+  const containers = [...root.querySelectorAll<HTMLElement>("[data-typewriter-loop]")];
+  if (containers.length === 0) return () => undefined;
+
+  const cleanups = containers.map((container) => initLoopingTaglineBlock(container));
+
+  return () => {
+    cleanups.forEach((cleanup) => cleanup());
+  };
+}
+
+function initLoopingTaglineBlock(container: HTMLElement): () => void {
   const fullText = container.dataset.typewriterText ?? container.textContent?.trim() ?? "";
   const highlightWord = container.dataset.typewriterHighlight ?? "";
   const output =
     container.querySelector<HTMLElement>("[data-typewriter-output]") ??
     container.querySelector<HTMLElement>("[data-typewriter-loop]") ??
     container;
-  const cursor = container.querySelector<HTMLElement>("[data-typewriter-cursor]");
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const highlightStart = highlightWord ? fullText.indexOf(highlightWord) : -1;
@@ -96,7 +129,7 @@ function initLoopingTaglineTypewriter(root: ParentNode): () => void {
 
   if (prefersReducedMotion) {
     renderText(fullText.length);
-    if (cursor) cursor.style.display = "none";
+    hideTypewriterCursor(container);
     return () => undefined;
   }
 
@@ -108,6 +141,8 @@ function initLoopingTaglineTypewriter(root: ParentNode): () => void {
   const pauseAfterType = 2400;
   const pauseAfterDelete = 700;
 
+  showTypewriterCursor(container);
+
   const loop = (mode: "typing" | "deleting", index: number): void => {
     if (cancelled) return;
 
@@ -117,7 +152,12 @@ function initLoopingTaglineTypewriter(root: ParentNode): () => void {
         timeoutId = window.setTimeout(() => loop("typing", index + 1), typeSpeed);
         return;
       }
-      timeoutId = window.setTimeout(() => loop("deleting", fullText.length - 1), pauseAfterType);
+
+      hideTypewriterCursor(container);
+      timeoutId = window.setTimeout(() => {
+        showTypewriterCursor(container);
+        loop("deleting", fullText.length - 1);
+      }, pauseAfterType);
       return;
     }
 
@@ -126,7 +166,12 @@ function initLoopingTaglineTypewriter(root: ParentNode): () => void {
       timeoutId = window.setTimeout(() => loop("deleting", index - 1), deleteSpeed);
       return;
     }
-    timeoutId = window.setTimeout(() => loop("typing", 1), pauseAfterDelete);
+
+    hideTypewriterCursor(container);
+    timeoutId = window.setTimeout(() => {
+      showTypewriterCursor(container);
+      loop("typing", 1);
+    }, pauseAfterDelete);
   };
 
   renderText(0);

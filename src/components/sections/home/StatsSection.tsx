@@ -37,6 +37,7 @@ export function StatsSection() {
   return (
     <section
       ref={sectionRef}
+      data-scroll-reveal="off"
       className="relative z-20 -mt-24 bg-transparent px-gutter pb-12 reveal"
     >
       <div className="max-w-container-max mx-auto rounded-[32px] bg-white/95 p-4 md:p-6 shadow-2xl shadow-primary/10 ring-1 ring-outline-variant/40 backdrop-blur-sm">

@@ -35,9 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-background font-body text-on-background antialiased" suppressHydrationWarning>
+        <SiteHeader />
         <ScrollProgressBar />
         <SiteEffects />
-        <SiteHeader />
         <main>{children}</main>
         <FloatingContactButtons />
         <SiteFooter />
