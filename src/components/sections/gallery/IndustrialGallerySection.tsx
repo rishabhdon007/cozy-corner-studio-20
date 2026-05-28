@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { SectionHeading } from "@/components/site/SectionHeading";
-import fallbackImage from "@/assests/constrution area.jpg";
+import fallbackImage from "@/assests/constrution area.webp";
 
 const filters = ["All", "Manufacturing", "Logistics", "Facilities"] as const;
 type GalleryFilter = (typeof filters)[number];

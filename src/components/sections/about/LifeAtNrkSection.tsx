@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import constructionImg from "@/assests/constrution area.jpg";
+import constructionImg from "@/assests/constrution area.webp";
 import teamMemberImg from "@/assests/team_member.webp";
 
 export function LifeAtNrkSection() {
@@ -35,7 +35,7 @@ export function LifeAtNrkSection() {
         <div
           data-scroll-reveal="top"
           data-scroll-reveal-delay="2"
-          className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:grid-rows-2"
           style={{ gridAutoRows: "280px" }}
         >
 

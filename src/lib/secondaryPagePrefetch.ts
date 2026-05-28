@@ -58,12 +58,12 @@ function prefetchMediaUrl(url: string) {
 async function prefetchBundledMedia() {
   const [construction, teamMember, journey1994, journey2005, journey2015, companyLogo] =
     await Promise.all([
-      import("@/assests/constrution area.jpg"),
+      import("@/assests/constrution area.webp"),
       import("@/assests/team_member.webp"),
-      import("@/assests/aboutus/screen.png"),
-      import("@/assests/aboutus/screen 2.png"),
-      import("@/assests/aboutus/screen 3.png"),
-      import("@/assests/company_logo.png"),
+      import("@/assests/aboutus/screen.webp"),
+      import("@/assests/aboutus/screen 2.webp"),
+      import("@/assests/aboutus/screen 3.webp"),
+      import("@/assests/company_logo.webp"),
     ]);
 
   const bundledUrls = [

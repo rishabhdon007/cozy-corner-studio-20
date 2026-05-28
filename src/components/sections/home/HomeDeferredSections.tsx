@@ -9,12 +9,12 @@ import { rescanUnrevealedSections } from "@/scrollRevealDom";
 
 const ServicesGridSection = dynamic(
   () => import("@/components/ServicesGridSection").then((module) => ({ default: module.ServicesGridSection })),
-  { loading: () => <SectionPlaceholder minHeight={720} className="bg-primary/5" /> },
+  { loading: () => <SectionPlaceholder minHeight={720} className="bg-primary/5" />, ssr: false },
 );
 
 const PartnersSection = dynamic(
   () => import("@/components/sections/home/PartnersSection").then((module) => ({ default: module.PartnersSection })),
-  { loading: () => <SectionPlaceholder minHeight={280} /> },
+  { loading: () => <SectionPlaceholder minHeight={280} />, ssr: false },
 );
 
 const TestimonialsSection = dynamic(
@@ -22,7 +22,7 @@ const TestimonialsSection = dynamic(
     import("@/components/sections/home/TestimonialsSection").then((module) => ({
       default: module.TestimonialsSection,
     })),
-  { loading: () => <SectionPlaceholder minHeight={420} /> },
+  { loading: () => <SectionPlaceholder minHeight={420} />, ssr: false },
 );
 
 const WhyChooseUsSection = dynamic(
@@ -30,31 +30,21 @@ const WhyChooseUsSection = dynamic(
     import("@/components/sections/home/WhyChooseUsSection").then((module) => ({
       default: module.WhyChooseUsSection,
     })),
-  { loading: () => <SectionPlaceholder minHeight={680} className="bg-primary/5" /> },
+  { loading: () => <SectionPlaceholder minHeight={680} className="bg-primary/5" />, ssr: false },
 );
 
 const ContactCtaSection = dynamic(
   () => import("@/components/site/ContactCtaSection").then((module) => ({ default: module.ContactCtaSection })),
-  { loading: () => <SectionPlaceholder minHeight={360} /> },
+  { loading: () => <SectionPlaceholder minHeight={360} />, ssr: false },
 );
 
 export function HomeDeferredSections() {
   useEffect(() => {
-    let rafId = 0;
-    let timeoutId = 0;
-
-    const rescan = () => rescanUnrevealedSections(document.body);
-
-    rafId = window.requestAnimationFrame(() => {
-      rafId = window.requestAnimationFrame(rescan);
-    });
-
-    timeoutId = window.setTimeout(rescan, 600);
-
-    return () => {
-      window.cancelAnimationFrame(rafId);
-      window.clearTimeout(timeoutId);
-    };
+    const timeoutIds = [
+      window.setTimeout(() => rescanUnrevealedSections(document.body), 150),
+      window.setTimeout(() => rescanUnrevealedSections(document.body), 600),
+    ];
+    return () => timeoutIds.forEach((id) => window.clearTimeout(id));
   }, []);
 
   return (

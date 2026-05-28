@@ -13,8 +13,8 @@ export function ContactFormSection() {
   return (
     <section className="pb-4 md:pb-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-          <div data-scroll-reveal="left" className="lg:col-span-7">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
+          <div data-scroll-reveal="left" className="md:col-span-7 lg:col-span-7">
             <div className="rounded-[2.5rem] border border-outline-variant/10 bg-white p-8 shadow-sm transition-all duration-500 hover:border-primary/20 hover:shadow-xl md:p-10">
               <form className="space-y-8" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -136,7 +136,7 @@ export function ContactFormSection() {
             </div>
           </div>
 
-          <div className="space-y-6 lg:col-span-5">
+          <div className="space-y-6 md:col-span-5 lg:col-span-5">
             <ContactInfoCards />
             <MapWithOverlay />
           </div>

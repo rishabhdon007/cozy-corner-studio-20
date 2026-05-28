@@ -1,7 +1,7 @@
 "use client";
 
 import { SectionHeading } from "@/components/site/SectionHeading";
-import fallbackImage from "@/assests/constrution area.jpg";
+import fallbackImage from "@/assests/constrution area.webp";
 
 const VIDEO_THUMB =
   "https://lh3.googleusercontent.com/aida/ADBb0ujPEXWWg0iI87xROhYOFi07NvkaakLAKcufgsmsIULakcaTeHZTBoIc_SxWcBJJ_XJXykvO25FlqnSvlL2F2-qayNrL4cFeH77NIYfPrDj7cPcOgWyaoKvxwlrpSEHlZKBjl6X4VE8b3F2mfO97oySF6u5pyG3CEJy3o0ht1wmhFITEbVwKqYEQKEAzVynO-vMzEP2_ED04Cr3uAEBun4G0G363gZ2HgbEP0sHEUcbr6f0mh2B_d0W_Br0";

@@ -1,6 +1,6 @@
 import type { StaticImageData } from "next/image";
 
-import indiaMartLogo from "@/assests/IndiaMART_logo.svg.png";
+import indiaMartLogo from "@/assests/IndiaMART_logo.webp";
 import justDialLogo from "@/assests/jdlogosvg.svg";
 
 export const contactCopy = {
@@ -15,6 +15,28 @@ export const contactCtaBackgroundImage =
 
 export function assetSrc(image: StaticImageData | string): string {
   return typeof image === "string" ? image : image.src;
+}
+
+export type CatalogInquiryKind = "service" | "product";
+
+export type CatalogInquiryIntent = "inquire" | "sales";
+
+export function buildCatalogWhatsAppMessage(
+  title: string,
+  kind: CatalogInquiryKind,
+  intent: CatalogInquiryIntent,
+): string {
+  const kindLabel = kind === "service" ? "service" : "product";
+
+  if (intent === "sales") {
+    return `Hello NRK Iron & Steel, I would like to speak with sales about ${title} (${kindLabel}). Please connect me with your team.`;
+  }
+
+  return `Hello NRK Iron & Steel, I would like to inquire about ${title} (${kindLabel}). Please share pricing, availability, and relevant details.`;
+}
+
+export function buildWhatsAppHref(message: string): string {
+  return `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 
 export const contactInfo = {

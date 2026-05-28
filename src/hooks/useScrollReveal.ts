@@ -3,7 +3,7 @@
 import { type RefObject, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-import { initScrollReveal } from "@/scrollRevealDom";
+import { scheduleScrollRevealInit } from "@/scrollRevealDom";
 
 type ScrollRevealRoot = RefObject<HTMLElement | null> | ParentNode | null | undefined;
 
@@ -20,8 +20,8 @@ export function useScrollReveal(root?: ScrollRevealRoot, enabled = true): void {
 
   useEffect(() => {
     if (!enabled) return;
-    // Run synchronously: wrapping only in rAF is fragile in React Strict Mode
-    // (cleanup can cancel the frame before init runs, leaving reveals uninitialized).
-    return initScrollReveal(resolveRoot(root));
+    // Defer past hydration — initScrollReveal mutates DOM (styles, text splits) and
+    // will mismatch streamed / dynamically imported sections if it runs too early.
+    return scheduleScrollRevealInit(resolveRoot(root));
   }, [pathname, root, enabled]);
 }

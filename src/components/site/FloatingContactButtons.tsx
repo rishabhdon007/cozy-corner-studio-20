@@ -1,30 +1,57 @@
+"use client";
+
+import { useState } from "react";
+
 import { SiteButton } from "@/components/site/SiteButton";
 import { contactInfo } from "@/data/contact";
+import { cn } from "@/lib/utils";
 
 export function FloatingContactButtons() {
+  const [talkExpanded, setTalkExpanded] = useState(false);
   const whatsappHref = `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(contactInfo.whatsappMessage)}`;
 
   return (
     <>
-      <div className="fixed bottom-5 left-5 z-50">
+      <div className="floating-contact-shell fixed bottom-5 left-5 z-50">
         <SiteButton
           href={contactInfo.phoneHref}
           variant="floating"
           icon={false}
-          className="group"
+          className={cn(
+            "group overflow-hidden transition-all duration-300",
+            talkExpanded
+              ? "max-md:px-5"
+              : "max-md:h-14 max-md:w-14 max-md:p-0 max-md:hover:w-auto max-md:hover:px-5",
+          )}
           aria-label="Talk to an NRK steel expert"
+          aria-expanded={talkExpanded}
           data-icon-start="true"
+          onClick={(event) => {
+            if (typeof window !== "undefined" && window.innerWidth < 768 && !talkExpanded) {
+              event.preventDefault();
+              setTalkExpanded(true);
+            }
+          }}
+          onBlur={() => setTalkExpanded(false)}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-colors group-hover:bg-white/15">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 transition-colors group-hover:bg-white/15">
             <span className="site-btn-icon material-symbols-outlined text-xl">support_agent</span>
           </span>
-          <span className="font-label-md text-xs md:text-sm font-black tracking-wide">
+          <span
+            className={cn(
+              "font-label-md overflow-hidden whitespace-nowrap text-xs font-black tracking-wide transition-all duration-300 md:text-sm",
+              talkExpanded
+                ? "max-md:ml-2 max-md:w-auto max-md:opacity-100"
+                : "max-md:w-0 max-md:opacity-0 max-md:group-hover:ml-2 max-md:group-hover:w-auto max-md:group-hover:opacity-100",
+              "md:ml-2 md:w-auto md:opacity-100",
+            )}
+          >
             Talk to Expert
           </span>
         </SiteButton>
       </div>
 
-      <div className="fixed bottom-5 right-5 z-50">
+      <div className="floating-contact-shell fixed bottom-5 right-5 z-50">
         <SiteButton
           href={whatsappHref}
           variant="whatsapp"

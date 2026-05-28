@@ -37,9 +37,14 @@ function initHeroTypewriterBlock(headline: HTMLElement): () => void {
   let timeoutId: number | undefined;
 
   showTypewriterCursor(headline);
-  lines.forEach((line) => {
-    line.textContent = "";
-  });
+
+  const startTyping = (): void => {
+    if (cancelled) return;
+    lines.forEach((line) => {
+      line.textContent = "";
+    });
+    typeLine(0, 0);
+  };
 
   const typeLine = (lineIndex: number, charIndex: number): void => {
     if (cancelled) return;
@@ -61,11 +66,15 @@ function initHeroTypewriterBlock(headline: HTMLElement): () => void {
     timeoutId = window.setTimeout(() => typeLine(lineIndex + 1, 0), 180);
   };
 
-  timeoutId = window.setTimeout(() => typeLine(0, 0), 250);
+  timeoutId = window.setTimeout(startTyping, 250);
 
   return () => {
     cancelled = true;
     if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+    lines.forEach((line, i) => {
+      line.textContent = finalLines[i];
+    });
+    hideTypewriterCursor(headline);
   };
 }
 
@@ -174,12 +183,13 @@ function initLoopingTaglineBlock(container: HTMLElement): () => void {
     }, pauseAfterDelete);
   };
 
-  renderText(0);
   timeoutId = window.setTimeout(() => loop("typing", 1), 350);
 
   return () => {
     cancelled = true;
     if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+    renderText(fullText.length);
+    hideTypewriterCursor(container);
   };
 }
 

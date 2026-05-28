@@ -59,9 +59,9 @@ export function ImageFeatureSplitSection({
       />
 
       <div className="relative mx-auto max-w-container-max px-gutter">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:items-stretch lg:gap-16">
-          <div className="relative lg:h-full" data-scroll-reveal="left">
-            <div className="relative h-[420px] w-full overflow-hidden rounded-[28px] border border-white/10 shadow-2xl shadow-black/30 md:h-[560px] lg:h-full lg:min-h-[680px]">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:items-stretch md:gap-10 lg:gap-16">
+          <div className="relative md:h-full lg:h-full" data-scroll-reveal="left">
+            <div className="relative h-[360px] w-full overflow-hidden rounded-[28px] border border-white/10 shadow-2xl shadow-black/30 md:h-[480px] lg:h-full lg:min-h-[680px]">
               {useNextImage ? (
                 <Image
                   src={image}

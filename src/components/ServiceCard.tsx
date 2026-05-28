@@ -1,107 +1,106 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { SiteButton } from "@/components/site/SiteButton";
-import fallbackImage from "@/assests/constrution area.jpg";
+import type { CatalogInquiryKind } from "@/data/contact";
+import { DEFAULT_CATALOG_IMAGE, resolveCatalogImageSrc } from "@/lib/catalogMedia";
 import type { ServiceCardItem } from "../data/serviceCards";
-import { ServiceDetailModal } from "./sections/services/ServiceDetailModal";
+import { CatalogQuickViewModal } from "./sections/services/CatalogQuickViewModal";
 
 type ServiceCardProps = {
   item: ServiceCardItem;
   revealDirection?: "left" | "right" | "top" | "";
   href?: string;
-  inquireHref?: string;
-  enableModal?: boolean;
+  catalogKind?: CatalogInquiryKind;
 };
 
 export function ServiceCard({
   item,
   revealDirection,
   href,
-  inquireHref,
-  enableModal = true,
+  catalogKind = "service",
 }: ServiceCardProps) {
-  const serviceHref = href ?? `/services/${item.slug}`;
-  const inquiryLink = inquireHref ?? serviceHref;
+  const router = useRouter();
+  const detailHref = href ?? (catalogKind === "product" ? `/product/${item.slug}` : `/services/${item.slug}`);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const cardImageSrc = resolveCatalogImageSrc(item.image);
+
+  const openDetails = () => {
+    router.push(detailHref);
+  };
 
   return (
     <>
       <div
         data-scroll-reveal={revealDirection}
-        className="group relative flex h-[300px] cursor-pointer items-end overflow-hidden rounded-xl border border-outline-variant bg-surface shadow-sm"
-        onClick={() => {
-          window.location.href = serviceHref;
+        className="group relative flex h-[300px] cursor-pointer items-end overflow-hidden rounded-xl border border-outline-variant bg-surface shadow-sm md:h-[320px] lg:h-[300px]"
+        onClick={openDetails}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openDetails();
+          }
         }}
+        role="link"
+        tabIndex={0}
+        aria-label={`View ${item.title} details`}
       >
         <img
           alt={item.title}
-          src={item.image}
+          src={cardImageSrc}
           loading="lazy"
           decoding="async"
           fetchPriority="low"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           onError={(event) => {
-            event.currentTarget.src = fallbackImage.src;
+            if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
+              event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
+            }
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
         <span className="absolute right-4 top-4 z-20 bg-emerald-600 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-lg">
           Ready for Dispatch
         </span>
-        <div className="relative z-10 w-full transform p-6 transition-transform duration-300 group-hover:-translate-y-2">
+        <div className="relative z-10 w-full transform p-4 transition-transform duration-300 sm:p-6 group-hover:-translate-y-2">
           <h3 className="mb-2 font-headline-md text-headline-md text-on-primary">{item.title.toUpperCase()}</h3>
           <p className="mb-4 line-clamp-2 font-body-md text-sm text-surface-container-lowest opacity-90">{item.description}</p>
-          <div className="flex items-center gap-3">
+          <div className="flex items-stretch gap-2.5 sm:items-center sm:gap-3">
             <SiteButton
-              href={inquiryLink}
+              href={detailHref}
               variant="service-card"
               icon="mail"
               iconClassName="text-sm"
-              className="relative z-20 flex-1"
+              className="relative z-20 min-h-11 flex-1 self-stretch sm:min-h-0"
               onClick={(event) => {
                 event.stopPropagation();
               }}
             >
               Inquire
             </SiteButton>
-            {enableModal ? (
-              <SiteButton
-                variant="icon-circle"
-                icon="arrow_outward"
-                iconClassName="text-sm"
-                className="relative z-20 cursor-pointer"
-                aria-label={`Open ${item.title} quick view modal`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setIsModalOpen(true);
-                }}
-              />
-            ) : (
-              <SiteButton
-                href={serviceHref}
-                variant="icon-circle"
-                icon="arrow_outward"
-                iconClassName="text-sm"
-                className="relative z-20"
-                aria-label={`View ${item.title} details`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
-              />
-            )}
+            <SiteButton
+              variant="icon-circle"
+              icon="arrow_outward"
+              iconClassName="text-sm"
+              className="relative z-20 h-11 w-11 shrink-0 cursor-pointer self-center sm:h-9 sm:w-9"
+              aria-label={`Open ${item.title} quick view`}
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsModalOpen(true);
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {enableModal ? (
-        <ServiceDetailModal
-          isOpen={isModalOpen}
-          onOpenChange={setIsModalOpen}
-          serviceId={item.id}
-        />
-      ) : null}
+      <CatalogQuickViewModal
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        slug={item.slug}
+        catalogKind={catalogKind}
+      />
     </>
   );
 }

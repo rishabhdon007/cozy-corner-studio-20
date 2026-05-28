@@ -1,4 +1,4 @@
-import constructionAreaImage from "@/assests/constrution area.jpg";
+import constructionAreaImage from "@/assests/constrution area.webp";
 import { DirectoryProfileLinks } from "@/components/site/DirectoryProfileLinks";
 import { SiteButton } from "@/components/site/SiteButton";
 import { contactCopy, contactCtaBackgroundImage } from "@/data/contact";

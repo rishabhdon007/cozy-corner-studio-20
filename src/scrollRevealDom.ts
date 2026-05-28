@@ -76,6 +76,8 @@ function applyRevealAttributes(items: HTMLElement[]): void {
       item.setAttribute("data-scroll-reveal", "");
     }
 
+    item.classList.add("scroll-reveal-item");
+
     const delaySteps = item.getAttribute("data-scroll-reveal-delay");
     const delayMs = delaySteps ? Number(delaySteps) * 140 : index * 140;
     item.style.setProperty("--scroll-reveal-delay", String(Math.min(delayMs, 1680)));
@@ -136,6 +138,13 @@ function splitIntoLineSpans(el: HTMLElement): void {
     const lineIndex = uniqueTops.findIndex((t) => Math.abs(t - top) <= 1);
     if (lineIndex >= 0) lines[lineIndex].push(span);
   });
+
+  // Layout not ready yet (common during hydration) — collapsing every word onto one
+  // line produces broken copy like "ProcessingServices".
+  if (uniqueTops.length <= 1 && words.length > 1) {
+    el.textContent = originalText;
+    return;
+  }
 
   // Rebuild DOM with line wrappers
   const frag = document.createDocumentFragment();
@@ -211,16 +220,29 @@ function isSectionInView(section: HTMLElement, threshold = 0.05): boolean {
 
 const SECTION_SELECTOR = 'section:not([data-scroll-reveal="off"])';
 
-function collectNewSections(node: Node, initializedSections: WeakSet<HTMLElement>): HTMLElement[] {
+type SectionRevealBinding = {
+  observer: IntersectionObserver | null;
+  reveal: () => void;
+};
+
+const sectionRevealBindings = new WeakMap<HTMLElement, SectionRevealBinding>();
+
+function scheduleReveal(reveal: () => void): void {
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(reveal);
+  });
+}
+
+function collectNewSections(node: Node): HTMLElement[] {
   if (!(node instanceof HTMLElement)) return [];
 
   const sections: HTMLElement[] = [];
-  if (node.matches(SECTION_SELECTOR) && !initializedSections.has(node)) {
+  if (node.matches(SECTION_SELECTOR) && !node.classList.contains("is-revealed")) {
     sections.push(node);
   }
 
   node.querySelectorAll<HTMLElement>(SECTION_SELECTOR).forEach((section) => {
-    if (!initializedSections.has(section)) {
+    if (!section.classList.contains("is-revealed")) {
       sections.push(section);
     }
   });
@@ -228,13 +250,31 @@ function collectNewSections(node: Node, initializedSections: WeakSet<HTMLElement
   return sections;
 }
 
-function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => void>): void {
+function getSectionRevealItems(section: HTMLElement, cleanups: Array<() => void>): HTMLElement[] {
+  const registered = [
+    ...section.querySelectorAll<HTMLElement>("[data-scroll-reveal].scroll-reveal-item"),
+  ].filter((item) => !item.matches('[data-scroll-reveal="off"]'));
+
+  if (registered.length) return registered;
 
   const items = collectRevealItems(section);
-  if (!items.length) return;
+  if (!items.length) return [];
 
   applyRevealAttributes(items);
-  for (const item of items) prepareLineReveal(item, cleanups);
+  for (const item of items) {
+    prepareLineReveal(item, cleanups);
+  }
+
+  return items;
+}
+
+function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => void>): void {
+  if (section.classList.contains("is-revealed")) return;
+
+  sectionRevealBindings.get(section)?.observer?.disconnect();
+
+  const items = getSectionRevealItems(section, cleanups);
+  if (!items.length) return;
 
   let revealed = false;
   const reveal = (): void => {
@@ -249,10 +289,12 @@ function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => voi
         }
       });
     }
+    sectionRevealBindings.get(section)?.observer?.disconnect();
+    sectionRevealBindings.delete(section);
   };
 
   if (typeof IntersectionObserver === "undefined") {
-    reveal();
+    scheduleReveal(reveal);
     return;
   }
 
@@ -260,7 +302,7 @@ function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => voi
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        reveal();
+        scheduleReveal(reveal);
         observer.disconnect();
       }
     },
@@ -268,34 +310,65 @@ function initSingleSectionReveal(section: HTMLElement, cleanups: Array<() => voi
   );
 
   observer.observe(section);
+  sectionRevealBindings.set(section, { observer, reveal });
 
   if (isSectionInView(section)) {
-    reveal();
+    scheduleReveal(reveal);
     observer.disconnect();
+    sectionRevealBindings.delete(section);
   } else {
-    // Short fallback for above-the-fold sections that miss the first intersection pass.
     const quickFallbackId = window.setTimeout(() => {
-      if (!revealed && isSectionInView(section)) reveal();
+      if (!revealed && isSectionInView(section)) scheduleReveal(reveal);
     }, 120);
     cleanups.push(() => window.clearTimeout(quickFallbackId));
 
-    const fallbackId = window.setTimeout(() => reveal(), 15000);
+    const fallbackId = window.setTimeout(() => scheduleReveal(reveal), 15000);
     cleanups.push(() => window.clearTimeout(fallbackId));
   }
 
-  cleanups.push(() => observer.disconnect());
+  cleanups.push(() => {
+    observer.disconnect();
+    sectionRevealBindings.delete(section);
+  });
+}
+
+/** Wait until React hydration finishes before mutating the DOM. */
+export function scheduleScrollRevealInit(root: ParentNode, delayMs = 50): () => void {
+  let cancelled = false;
+  let cleanup: (() => void) | undefined;
+  let timeoutId = 0;
+  let rafOuter = 0;
+  let rafInner = 0;
+
+  const run = () => {
+    if (cancelled) return;
+    cleanup = initScrollReveal(root);
+  };
+
+  timeoutId = window.setTimeout(() => {
+    rafOuter = window.requestAnimationFrame(() => {
+      rafInner = window.requestAnimationFrame(run);
+    });
+  }, delayMs);
+
+  return () => {
+    cancelled = true;
+    window.clearTimeout(timeoutId);
+    window.cancelAnimationFrame(rafOuter);
+    window.cancelAnimationFrame(rafInner);
+    cleanup?.();
+  };
 }
 
 export function initScrollReveal(root: ParentNode): () => void {
   const cleanups: Array<() => void> = [];
-  const initializedSections = new WeakSet<HTMLElement>();
 
   const initSection = (section: HTMLElement) => {
-    if (initializedSections.has(section)) return;
     if (section.classList.contains("is-revealed")) return;
-    initializedSections.add(section);
     initSingleSectionReveal(section, cleanups);
   };
+
+  document.documentElement.classList.add("scroll-reveal-active");
 
   const sections = getRevealSections(root);
 
@@ -305,22 +378,33 @@ export function initScrollReveal(root: ParentNode): () => void {
 
   const observeRoot = root instanceof Document ? root.body : root;
   if (typeof MutationObserver !== "undefined" && observeRoot instanceof HTMLElement) {
+    let mutationDebounceId = 0;
     const mutationObserver = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        for (const node of mutation.addedNodes) {
-          for (const section of collectNewSections(node, initializedSections)) {
-            initSection(section);
+      if (mutationDebounceId) window.clearTimeout(mutationDebounceId);
+      mutationDebounceId = window.setTimeout(() => {
+        mutationDebounceId = 0;
+        for (const mutation of mutations) {
+          for (const node of mutation.addedNodes) {
+            for (const section of collectNewSections(node)) {
+              initSection(section);
+            }
           }
         }
-      }
+      }, 50);
     });
 
     mutationObserver.observe(observeRoot, { childList: true, subtree: true });
-    cleanups.push(() => mutationObserver.disconnect());
+    cleanups.push(() => {
+      if (mutationDebounceId) window.clearTimeout(mutationDebounceId);
+      mutationObserver.disconnect();
+    });
   }
 
   return () => {
     for (const cleanup of cleanups) cleanup();
+    if (!document.querySelector(`${SECTION_SELECTOR}:not(.is-revealed)`)) {
+      document.documentElement.classList.remove("scroll-reveal-active");
+    }
   };
 }
 

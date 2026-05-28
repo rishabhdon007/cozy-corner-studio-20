@@ -11,7 +11,7 @@ export function ProductHeader() {
     <>
       <nav
         aria-label="Breadcrumb"
-        className="mb-8 inline-flex rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-on-surface-variant shadow-sm ring-1 ring-outline-variant/60"
+        className="mb-8 inline-flex max-w-full flex-wrap rounded-full bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-on-surface-variant shadow-sm ring-1 ring-outline-variant/60"
       >
         <ol className="inline-flex list-none p-0">
           {breadcrumbs.map((crumb) => (
@@ -36,7 +36,7 @@ export function ProductHeader() {
         <span className="mb-3 inline-block text-xs font-black uppercase tracking-[0.18em] text-secondary">
           Product Spotlight
         </span>
-        <h1 className="vertical-accent mb-5 font-heading text-5xl font-black uppercase leading-none tracking-[-0.04em] text-primary-dark md:text-7xl">
+        <h1 className="vertical-accent mb-5 font-heading text-[34px] font-black uppercase leading-none tracking-[-0.04em] text-primary-dark sm:text-5xl md:text-7xl">
           Cold Rolled Coils
         </h1>
         <p className="text-lg leading-relaxed text-on-surface-variant">

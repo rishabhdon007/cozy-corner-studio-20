@@ -8,6 +8,7 @@ export type ProductDetail = {
   description: string;
   mainImage: string;
   processImage: string;
+  processVideo?: string;
   gallery: string[];
   specs: Array<{ label: string; value: string }>;
   variants: string[];
@@ -55,8 +56,7 @@ export const productRecommendations = {
     slug: "galvanized-coated-sheets",
     title: "Galvanized & Coated Sheets",
     type: "Coated Products",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDb9_Y_WHvzw5qyfg_kWZGIEDL1IUmyuYrnq2dmwjVywQ-tr5KnJhWJvxwxr5LnZJZABkBvzPo8ebB9l-aE4SpRISo5m45JP3lEk1e4paWLH0wcNs6veu9_pq2K_94W8Apy5xG_fu1TVnXFM5oKBeBnkfGxQSwxH2UQP7_qVIjg6Z-3MXjhabz7hOjJBhMGtD66Zmk-hsUfpG9v_J20kanmHiAC4mQeWKhvx8ea31HErSomuIY3AklCqkk3NEAldks772zPnqA2XEE",
+    image: "",
     note: "Corrosion-resistant sheets for roofing, cladding, and durable panels.",
   },
   msPlates: {

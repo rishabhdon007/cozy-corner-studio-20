@@ -31,8 +31,8 @@ const variants = ["Cr Sheet Cutting", "CR Semi Hard Material"];
 
 export function ProductHeroSection() {
   return (
-    <div className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
-      <div className="space-y-6 lg:col-span-2">
+    <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-6 md:col-span-1 lg:col-span-2">
         <div className="group relative h-80 overflow-hidden rounded-[28px] bg-gray-200 shadow-2xl shadow-primary/10 md:h-[460px]">
           <img
             alt="Large roll of cold rolled steel"
@@ -63,7 +63,7 @@ export function ProductHeroSection() {
             <span className="text-sm font-bold uppercase tracking-wider text-white">Watch Process Video</span>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {secondaryImages.map((image) => (
             <div key={image.alt} className="h-36 overflow-hidden rounded-2xl bg-gray-200 shadow-sm">
               <img
@@ -76,7 +76,7 @@ export function ProductHeroSection() {
         </div>
       </div>
 
-      <div className="lg:col-span-1">
+      <div className="md:col-span-1 lg:col-span-1">
         <div className="flex h-full flex-col rounded-[28px] border border-outline-variant bg-white/95 p-8 shadow-2xl shadow-primary/10 lg:sticky lg:top-28">
           <h2 className="mb-4 font-heading text-3xl font-black tracking-tight text-primary">Precision Engineering</h2>
           <p className="mb-8 text-sm leading-relaxed text-gray-600">

@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   title: "NRK Iron & Steel | India's Trusted Steel Distributors",
   description: "Three decades of trusted steel distribution and processing across India.",
   icons: {
-    icon: "/company_logo.png",
-    apple: "/company_logo.png",
+    icon: "/company_logo.webp",
+    apple: "/company_logo.webp",
   },
 };
 
@@ -34,13 +34,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background font-body text-on-background antialiased" suppressHydrationWarning>
+      <body className="site-body bg-background font-body text-on-background antialiased" suppressHydrationWarning>
         <SiteHeader />
         <ScrollProgressBar />
         <SiteEffects />
-        <main>{children}</main>
-        <FloatingContactButtons />
+        <main className="site-main">{children}</main>
         <SiteFooter />
+        <FloatingContactButtons />
       </body>
     </html>
   );

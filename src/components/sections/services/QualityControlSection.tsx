@@ -1,6 +1,6 @@
 import { ImageFeatureSplitSection } from "@/components/site/ImageFeatureSplitSection";
 import { SiteButton } from "@/components/site/SiteButton";
-import qcImage from "@/assests/constrution area.jpg";
+import qcImage from "@/assests/constrution area.webp";
 
 const qualityPoints = [
   {

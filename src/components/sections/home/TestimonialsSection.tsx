@@ -1,9 +1,16 @@
+"use client";
+
 import type { CSSProperties } from "react";
+
+import { cn } from "@/lib/utils";
 
 type Testimonial = {
   quote: string;
   name: string;
   role: string;
+  initials: string;
+  avatarIcon: string;
+  avatarClass: string;
 };
 
 const TESTIMONIALS: Testimonial[] = [
@@ -12,40 +19,58 @@ const TESTIMONIALS: Testimonial[] = [
       "Very good company, the vehicle gets unloaded as soon as it leaves and Sethji also behaves very well with the driver brother.",
     name: "Bhagirath Bishnoi Jakhar",
     role: "Avi Steel Processor",
+    initials: "BJ",
+    avatarIcon: "engineering",
+    avatarClass: "bg-[#1f4b99] text-white",
   },
   {
     quote: "Very good service with wide range of product. Owners' nature is very nice.",
     name: "Jayesh Jha",
     role: "Avi Steel Processor",
+    initials: "JJ",
+    avatarIcon: "factory",
+    avatarClass: "bg-[#48626e] text-white",
   },
   {
     quote: "Superb quality and branded metal product here.",
     name: "Raj Maheta",
     role: "Avi Steel Processor",
+    initials: "RM",
+    avatarIcon: "verified",
+    avatarClass: "bg-[#b7791f] text-white",
   },
   {
     quote:
       "Their team keeps dispatch planning simple. Material reaches our site on time, and communication is clear from quote to delivery.",
     name: "Amit Patel",
     role: "Fabrication Partner",
+    initials: "AP",
+    avatarIcon: "local_shipping",
+    avatarClass: "bg-[#2563eb] text-white",
   },
   {
     quote:
       "We regularly need processed steel in specific sizes. NRK handles the requirements carefully and gives dependable support.",
     name: "Nilesh Shah",
     role: "Industrial Buyer",
+    initials: "NS",
+    avatarIcon: "inventory_2",
+    avatarClass: "bg-[#0f766e] text-white",
   },
   {
     quote:
       "The biggest benefit is reliability. Stock updates, pricing, and delivery timelines are handled professionally every time.",
     name: "Priya Mehta",
     role: "Project Procurement",
+    initials: "PM",
+    avatarIcon: "account_circle",
+    avatarClass: "bg-[#7c3aed] text-white",
   },
 ];
 
 function StarRating() {
   return (
-    <div className="flex text-[#b7791f] mb-6 text-sm">
+    <div className="mb-6 flex text-sm text-[#b7791f]">
       {Array.from({ length: 5 }).map((_, index) => (
         <span
           key={index}
@@ -54,6 +79,22 @@ function StarRating() {
           star
         </span>
       ))}
+    </div>
+  );
+}
+
+function TestimonialAvatar({ testimonial }: { testimonial: Testimonial }) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white shadow-sm",
+        testimonial.avatarClass,
+      )}
+    >
+      <span className="material-symbols-outlined absolute text-[22px] opacity-25">
+        {testimonial.avatarIcon}
+      </span>
+      <span className="relative text-xs font-black tracking-wide">{testimonial.initials}</span>
     </div>
   );
 }
@@ -67,20 +108,18 @@ function TestimonialCard({
 }) {
   return (
     <div className="testimonial-card" {...(ariaHidden ? { "aria-hidden": "true" as const } : {})}>
-      <div className="relative bg-white text-on-surface p-7 md:p-9 rounded-[28px] min-h-[360px] h-full flex flex-col justify-between shadow-sm border border-white/70 overflow-hidden">
-        <span className="absolute right-7 top-4 text-[92px] leading-none font-black text-primary/[0.04] select-none">
+      <div className="relative flex h-full min-h-[360px] flex-col justify-between overflow-hidden rounded-[28px] border border-white/70 bg-white p-7 text-on-surface shadow-sm md:p-9">
+        <span className="absolute right-7 top-4 select-none text-[92px] font-black leading-none text-primary/[0.04]">
           ”
         </span>
         <div className="relative z-10">
           <StarRating />
-          <p className="font-body-md text-base md:text-lg leading-relaxed italic text-primary mb-8">
+          <p className="font-body-md mb-8 text-base italic leading-relaxed text-primary md:text-lg">
             &ldquo;{testimonial.quote}&rdquo;
           </p>
         </div>
         <div className="relative z-10 flex items-center gap-3 pt-5">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-primary">
-            <span className="material-symbols-outlined">person</span>
-          </div>
+          <TestimonialAvatar testimonial={testimonial} />
           <div>
             <p className="font-headline-md text-primary">{testimonial.name}</p>
             <p className="font-label-md text-on-surface-variant">{testimonial.role}</p>
@@ -95,20 +134,19 @@ export function TestimonialsSection() {
   const marqueeTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
-    <section className="relative w-full py-20 md:py-28 bg-[#dfeaf6] reveal overflow-hidden">
+    <section className="reveal relative w-full overflow-hidden bg-[#dfeaf6] py-20 md:py-28">
       <div className="relative z-10 w-full px-gutter">
-        <div className="site-section-header mb-12 relative">
+        <div className="site-section-header relative mb-12">
           <span className="site-section-eyebrow">Client Voices</span>
           <h2 className="site-section-title">What Our Clients Say</h2>
           <p className="site-section-lead">
             Real feedback from businesses that trust NRK Iron &amp; Steel for quality material,
             service, and timely support.
           </p>
-          <div className="pointer-events-none absolute inset-y-1/2 right-0 hidden translate-y-[-55%] md:flex lg:translate-y-[-60%]">
+          <div className="pointer-events-none absolute inset-y-1/2 right-0 hidden translate-y-[-60%] lg:flex">
             <div className="testimonials-3d-text">
               <div className="testimonials-3d-text-inner">
                 {Array.from({ length: 16 }).map((_, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
                   <span key={index} style={{ "--i": index + 1 } as CSSProperties}>
                     NRK <i>Iron</i> &amp; Steel
                   </span>
@@ -119,7 +157,10 @@ export function TestimonialsSection() {
         </div>
 
         <div className="testimonials-marquee relative overflow-hidden" id="testimonials-carousel">
-          <div className="testimonial-track testimonials-marquee-track gap-6" id="testimonial-track">
+          <div
+            className="testimonial-track testimonials-marquee-track testimonials-marquee-track-reverse gap-6"
+            id="testimonial-track"
+          >
             {marqueeTestimonials.map((testimonial, index) => (
               <TestimonialCard
                 key={`${testimonial.name}-${index}`}

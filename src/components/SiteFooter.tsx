@@ -30,12 +30,12 @@ function SocialIcon({ label }: { label: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="full-width mt-auto border-t border-outline-variant/10 bg-primary text-on-primary">
-      <div className="mx-auto grid max-w-container-max grid-cols-1 gap-gutter px-gutter py-stack-lg md:grid-cols-4">
-        <div className="col-span-1 space-y-4">
+    <footer className="site-footer full-width border-t border-outline-variant/10 bg-primary text-on-primary">
+      <div className="mx-auto grid max-w-container-max grid-cols-1 gap-gutter px-gutter py-stack-lg md:grid-cols-2 lg:grid-cols-4">
+        <div className="col-span-1 space-y-4 md:col-span-2 lg:col-span-1">
           <Link href="/" className="mb-4 flex items-center gap-3 font-display-lg text-headline-md font-black text-on-primary">
             <img
-              src="/company_logo.png"
+              src="/company_logo.webp"
               alt="NRK Iron & Steel Logo"
               className="h-12 max-h-14 w-auto object-contain md:h-14"
             />

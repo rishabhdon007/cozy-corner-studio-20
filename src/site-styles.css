@@ -15,21 +15,21 @@
   will-change: opacity, transform;
 }
 
-/* !important: utility classes (e.g. Tailwind opacity/transform) must not override reveal */
-[data-scroll-reveal]:not([data-scroll-reveal="off"]):not(.is-visible) {
+/* Only hide elements after scroll-reveal JS has registered them (scroll-reveal-item). */
+html.scroll-reveal-active [data-scroll-reveal].scroll-reveal-item:not([data-scroll-reveal="off"]):not(.is-visible) {
   opacity: 0 !important;
   transform: translate3d(0, 28px, 0) !important;
 }
 
-[data-scroll-reveal="left"]:not(.is-visible) {
+[data-scroll-reveal="left"].scroll-reveal-item:not(.is-visible) {
   transform: translate3d(-36px, 0, 0) !important;
 }
 
-[data-scroll-reveal="right"]:not(.is-visible) {
+[data-scroll-reveal="right"].scroll-reveal-item:not(.is-visible) {
   transform: translate3d(36px, 0, 0) !important;
 }
 
-[data-scroll-reveal="top"]:not(.is-visible) {
+[data-scroll-reveal="top"].scroll-reveal-item:not(.is-visible) {
   transform: translate3d(0, -36px, 0) !important;
 }
 
@@ -63,8 +63,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-scroll-reveal]:not([data-scroll-reveal="off"]):not(.is-visible),
-  [data-scroll-reveal]:not([data-scroll-reveal="off"]).is-visible {
+  html.scroll-reveal-active [data-scroll-reveal].scroll-reveal-item:not([data-scroll-reveal="off"]):not(.is-visible),
+  [data-scroll-reveal].scroll-reveal-item.is-visible {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -147,11 +147,21 @@
   }
 
   .site-section-title--hero {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
 
   .site-section-lead {
     font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-section-title {
+    font-size: 3.25rem;
+  }
+
+  .site-section-title--hero {
+    font-size: 4rem;
   }
 }
 
@@ -325,7 +335,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .testimonials-3d-text {
     width: 320px;
     height: 320px;
@@ -476,13 +486,27 @@
   }
 }
 
+@keyframes testimonials-marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 .testimonials-marquee-track {
   display: flex;
   width: max-content;
   animation: testimonials-marquee 38s linear infinite;
 }
 
-.testimonials-marquee:hover .testimonials-marquee-track {
+.testimonials-marquee-track-reverse {
+  animation: testimonials-marquee-reverse 38s linear infinite;
+}
+
+.testimonials-marquee:hover .testimonials-marquee-track,
+.testimonials-marquee:hover .testimonials-marquee-track-reverse {
   animation-play-state: paused;
 }
 
@@ -511,7 +535,7 @@ footer > div {
   margin-right: auto;
 }
 
-footer img[src="/company_logo.png"] {
+footer img[src="/company_logo.webp"] {
   height: 3.5rem;
   max-height: 3.5rem;
   width: auto;
@@ -666,5 +690,93 @@ button.site-btn:not(.site-btn-row) {
 @media (prefers-reduced-motion: reduce) {
   .button-click-sweep-overlay {
     display: none;
+  }
+}
+
+/* ── Mobile layout & navigation ── */
+@media (max-width: 767px) {
+  :root,
+  .light {
+    --spacing-gutter: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root,
+  .light {
+    --spacing-gutter: 1.25rem;
+  }
+}
+
+.site-body {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  overflow-x: clip;
+}
+
+.site-main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+.site-body > footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+@media (max-width: 767px) {
+  .site-body > footer {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+html {
+  background-color: #001e40;
+}
+
+body:has(.mobile-nav-panel[data-state="open"]) .floating-contact-shell {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.mobile-nav-panel[data-state="open"] .mobile-nav-item {
+  animation: mobile-nav-item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.08s + (var(--nav-index, 0) * 0.05s));
+}
+
+@keyframes mobile-nav-item-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-panel[data-state="open"] .mobile-nav-item {
+    animation: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .catalog-quick-view-dialog {
+    margin: 0;
+  }
+
+  .catalog-quick-view-dialog > button.absolute {
+    top: 0.85rem;
+    right: 0.85rem;
+    z-index: 20;
+  }
+
+  body:has(.catalog-quick-view-dialog[data-state="open"]) .floating-contact-shell {
+    opacity: 0;
+    pointer-events: none;
   }
 }

@@ -3,10 +3,10 @@
 import Image, { type StaticImageData } from "next/image";
 import { memo, type RefObject, useEffect, useRef, useState } from "react";
 
-import journey1994Image from "@/assests/aboutus/screen.png";
-import journey2005Image from "@/assests/aboutus/screen 2.png";
-import journey2015Image from "@/assests/aboutus/screen 3.png";
-import companyLogo from "@/assests/company_logo.png";
+import journey1994Image from "@/assests/aboutus/screen.webp";
+import journey2005Image from "@/assests/aboutus/screen 2.webp";
+import journey2015Image from "@/assests/aboutus/screen 3.webp";
+import companyLogo from "@/assests/company_logo.webp";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { cn } from "@/lib/utils";
 

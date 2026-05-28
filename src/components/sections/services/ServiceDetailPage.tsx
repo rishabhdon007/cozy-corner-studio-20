@@ -2,24 +2,29 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import {
-  ArrowRight,
-  ChevronRight,
-  FileText,
-  Phone,
-  PlayCircle,
-  Ruler,
-} from "lucide-react";
+import { ArrowRight, ChevronRight, FileText, Phone, Ruler } from "lucide-react";
 
 import { ServiceCard } from "@/components/ServiceCard";
 import { SiteButton } from "@/components/site/SiteButton";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { cn } from "@/lib/utils";
 import type { ServiceCardItem } from "@/data/serviceCards";
 import { getProduct, type ProductDetail, type ProductRecommendation } from "@/data/products";
 import { getService, type ServiceDetail } from "@/data/services";
-import { initScrollReveal } from "@/scrollRevealDom";
+import {
+  buildCatalogWhatsAppMessage,
+  buildWhatsAppHref,
+  type CatalogInquiryKind,
+} from "@/data/contact";
+import {
+  buildCatalogMediaItems,
+  DEFAULT_CATALOG_IMAGE,
+  resolveCatalogImageSrc,
+} from "@/lib/catalogMedia";
+
+import { CatalogMediaCarousel } from "./CatalogMediaCarousel";
 
 type CatalogDetail = ServiceDetail | ProductDetail;
 
@@ -28,6 +33,7 @@ type CatalogDetailPageProps = {
   parent: { label: string; href: string };
   notFound: { title: string; backHref: string; backLabel: string };
   variantsHeading?: string;
+  catalogKind: CatalogInquiryKind;
 };
 
 const SPEC_ROW_ICONS = [
@@ -50,6 +56,7 @@ export function ServiceDetailPage({ serviceId }: { serviceId: string }) {
         backHref: "/services",
         backLabel: "Back to Services",
       }}
+      catalogKind="service"
     />
   );
 }
@@ -65,6 +72,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         backLabel: "Back to Services",
       }}
       variantsHeading="Available Variants"
+      catalogKind="product"
     />
   );
 }
@@ -74,24 +82,11 @@ function CatalogDetailPage({
   parent,
   notFound,
   variantsHeading = "Available Service Options",
+  catalogKind,
 }: CatalogDetailPageProps) {
   const pageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!item || !pageRef.current) return;
-
-    let cleanup: (() => void) | undefined;
-    const frame = window.requestAnimationFrame(() => {
-      if (pageRef.current) {
-        cleanup = initScrollReveal(pageRef.current);
-      }
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      cleanup?.();
-    };
-  }, [item?.slug]);
+  const mounted = useHasMounted();
+  useScrollReveal(pageRef, mounted && Boolean(item));
 
   if (!item) {
     return (
@@ -111,51 +106,28 @@ function CatalogDetailPage({
     );
   }
 
+  const mediaItems = buildCatalogMediaItems(item);
+  const inquireWhatsAppHref = buildWhatsAppHref(
+    buildCatalogWhatsAppMessage(item.title, catalogKind, "inquire"),
+  );
+  const salesWhatsAppHref = buildWhatsAppHref(
+    buildCatalogWhatsAppMessage(item.title, catalogKind, "sales"),
+  );
+
   return (
     <div ref={pageRef} className="min-h-screen bg-[#f7fafc] text-gray-900 reveal">
       <CatalogDetailHero item={item} parent={parent} />
 
-      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <section className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-stretch">
-          <div className="flex h-full flex-col gap-4 lg:col-span-2">
-            <div
-              data-scroll-reveal=""
-              className="group relative min-h-[240px] flex-1 cursor-pointer overflow-hidden rounded-2xl bg-gray-900 shadow-lg"
-            >
-              <img
-                src={item.processImage}
-                alt={`${item.title} process`}
-                className="h-full w-full object-cover opacity-70 transition-opacity duration-300 group-hover:opacity-50"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg transition-transform duration-300 group-hover:scale-110">
-                  <PlayCircle className="h-7 w-7 text-primary" aria-hidden="true" />
-                </div>
-                <span className="text-sm font-bold uppercase tracking-wider text-white">
-                  Watch Process Video
-                </span>
-              </div>
+      <main className="mx-auto max-w-container-max px-gutter py-10 md:py-12">
+        <section className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
+          <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-2 lg:h-full">
+            <div className="shrink-0" data-scroll-reveal="">
+              <CatalogMediaCarousel items={mediaItems} title={item.title} />
             </div>
-
-            <div className="grid shrink-0 grid-cols-3 gap-4">
-              {item.gallery.map((image, index) => (
-                <div
-                  key={image}
-                  data-scroll-reveal={index % 2 === 0 ? "left" : "right"}
-                  data-scroll-reveal-delay={String(index + 2)}
-                  className="aspect-[4/3] overflow-hidden rounded-xl bg-gray-200"
-                >
-                  <img
-                    src={image}
-                    alt={`${item.title} detail ${index + 1}`}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
-                  />
-                </div>
-              ))}
-            </div>
+            <KeyAdvantagesCompact cards={item.featureCards} className="lg:flex-1" />
           </div>
 
-          <aside className="flex lg:col-span-1">
+          <aside className="flex md:col-span-2 lg:col-span-1 lg:h-full">
             <div className="flex h-full w-full flex-col rounded-2xl border border-white/10 bg-primary p-8 shadow-2xl shadow-black/20">
               <div
                 data-scroll-reveal="right"
@@ -205,7 +177,9 @@ function CatalogDetailPage({
 
               <div className="mt-auto space-y-3">
                 <SiteButton
-                  href="/contact"
+                  href={inquireWhatsAppHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   variant="detail-primary"
                   layout="full"
                   lucideIcon={ArrowRight}
@@ -225,7 +199,9 @@ function CatalogDetailPage({
                   Request Spec Sheet
                 </SiteButton>
                 <SiteButton
-                  href="/contact"
+                  href={salesWhatsAppHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   variant="detail-outline-muted"
                   layout="full"
                   lucideIcon={Phone}
@@ -273,12 +249,11 @@ function CatalogDetailPage({
         </section>
 
         <TechnicalSpecs rows={item.technicalSpecs} />
-        <FeatureCards cards={item.featureCards} />
       </main>
 
       <WhyChooseNrk />
 
-      <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-container-max px-gutter pb-10">
         <RelatedProducts products={item.recommendations} />
       </div>
     </div>
@@ -308,8 +283,7 @@ function CatalogDetailHero({
       return;
     }
 
-    const typeDuration =
-      250 + (item.eyebrow.length + item.title.length) * 42 + 180 + 200;
+    const typeDuration = 250 + (item.eyebrow.length + item.title.length) * 42 + 180 + 200;
 
     const timers = [
       window.setTimeout(() => setHeroStep(1), typeDuration),
@@ -317,9 +291,11 @@ function CatalogDetailHero({
       window.setTimeout(() => setHeroStep(3), typeDuration + 440),
       window.setTimeout(() => setHeroStep(4), typeDuration + 660),
     ];
+    const fallback = window.setTimeout(() => setHeroStep(4), 4000);
 
     return () => {
       timers.forEach((timer) => window.clearTimeout(timer));
+      window.clearTimeout(fallback);
     };
   }, [mounted, item.eyebrow, item.title, item.slug]);
 
@@ -329,18 +305,23 @@ function CatalogDetailHero({
       data-scroll-reveal="off"
       className="relative w-full overflow-hidden bg-primary"
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         <img
-          src={item.mainImage}
+          src={resolveCatalogImageSrc(item.mainImage)}
           alt=""
           aria-hidden="true"
           className="h-full w-full object-cover opacity-35"
+          onError={(event) => {
+            if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
+              event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
+            }
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[255px] max-w-container-max flex-col justify-end px-gutter pb-9 pt-20 md:min-h-[315px] md:pb-12 md:pt-24">
+      <div className="relative z-10 mx-auto flex min-h-[255px] max-w-container-max flex-col justify-end px-gutter pb-9 pt-20 md:min-h-[315px] md:pb-12 md:pt-24">
         <Breadcrumb current={item.title} parent={parent} variant="dark" />
 
         <div className="max-w-3xl text-on-primary">
@@ -357,7 +338,7 @@ function CatalogDetailHero({
               )}
             />
 
-            <h1 className="font-display mb-5 text-[44px] font-black uppercase leading-[0.98] tracking-[-0.055em] text-white md:text-[64px] lg:text-[76px]">
+            <h1 className="font-display mb-5 text-[32px] font-black uppercase leading-[0.98] tracking-[-0.055em] text-white sm:text-[40px] md:text-[48px] lg:text-[64px] xl:text-[76px]">
               <span data-typewriter-line data-typewriter-text={item.title} suppressHydrationWarning>
                 {item.title}
               </span>
@@ -370,7 +351,7 @@ function CatalogDetailHero({
 
           <p
             className={cn(
-              "font-body-lg mb-4 max-w-2xl text-base leading-relaxed text-surface-variant/90 transition-all duration-700 md:text-lg",
+              "font-body-lg mb-4 max-w-2xl text-base leading-relaxed text-white/90 transition-all duration-700 md:text-lg",
               !mounted || heroStep >= 2 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
             )}
           >
@@ -512,7 +493,13 @@ function TechnicalSpecs({ rows }: { rows: ServiceDetail["technicalSpecs"] }) {
   );
 }
 
-function FeatureCards({ cards }: { cards: ServiceDetail["featureCards"] }) {
+function KeyAdvantagesCompact({
+  cards,
+  className,
+}: {
+  cards: ServiceDetail["featureCards"];
+  className?: string;
+}) {
   const icons = {
     gauge: "speed",
     shield: "verified",
@@ -520,47 +507,46 @@ function FeatureCards({ cards }: { cards: ServiceDetail["featureCards"] }) {
   } as const;
 
   return (
-    <section className="mb-16">
-      <div className="mb-8 flex flex-col items-center text-center">
-        <div
-          data-scroll-reveal="top"
-          className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary"
-        >
-          <span className="material-symbols-outlined text-3xl">stars</span>
+    <div
+      data-scroll-reveal=""
+      className={cn(
+        "flex flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5 lg:h-full",
+        className,
+      )}
+    >
+      <div className="mb-3 flex shrink-0 items-center gap-2.5 border-b border-gray-100 pb-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <span className="material-symbols-outlined text-lg">stars</span>
         </div>
-        <p
-          data-scroll-reveal="top"
-          data-scroll-reveal-delay="1"
-          className="mb-2 text-sm font-bold uppercase tracking-[0.2em] text-secondary"
-        >
-          Service Strengths
-        </p>
-        <h2
-          data-scroll-reveal="top"
-          data-scroll-reveal-delay="2"
-          className="text-3xl font-black uppercase tracking-wide text-primary"
-        >
-          Key Advantages
-        </h2>
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-secondary">
+            Service Strengths
+          </p>
+          <h3 className="text-sm font-black uppercase tracking-wide text-primary sm:text-base">
+            Key Advantages
+          </h3>
+        </div>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+      <div className="grid flex-1 grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
         {cards.map((card, index) => (
           <div
             key={card.title}
-            data-scroll-reveal={index % 2 === 0 ? "left" : "right"}
-            data-scroll-reveal-delay={String(index + 3)}
-            className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg"
+            data-scroll-reveal=""
+            data-scroll-reveal-delay={String(index + 1)}
+            className="flex h-full gap-2.5 rounded-xl border border-gray-100 bg-[#f7fafc] p-3 sm:p-4"
           >
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/5 transition-transform duration-500 group-hover:scale-125" />
-            <div className="relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
-              <span className="material-symbols-outlined text-2xl">{icons[card.icon]}</span>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white shadow-sm sm:h-9 sm:w-9">
+              <span className="material-symbols-outlined text-base">{icons[card.icon]}</span>
             </div>
-            <h3 className="relative mb-3 text-lg font-bold text-gray-900">{card.title}</h3>
-            <p className="relative text-sm leading-relaxed text-gray-600">{card.body}</p>
+            <div className="flex min-w-0 flex-1 flex-col justify-center">
+              <h4 className="mb-1 text-xs font-bold leading-tight text-gray-900 sm:text-sm">{card.title}</h4>
+              <p className="text-[11px] leading-relaxed text-gray-600 sm:text-xs">{card.body}</p>
+            </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -629,7 +615,7 @@ function WhyChooseNrk() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-container-max px-gutter">
-        <div className="mb-12 grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-12">
+        <div className="mb-12 grid grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
           <div className="text-on-primary">
             <div className="mb-7">
               <p
@@ -647,7 +633,7 @@ function WhyChooseNrk() {
             <h2
               data-scroll-reveal="top"
               data-scroll-reveal-delay="2"
-              className="font-display mb-7 text-[42px] font-black leading-[0.98] tracking-[-0.055em] text-white md:text-[64px] lg:text-[72px]"
+              className="font-display mb-7 text-[42px] font-black leading-[0.98] tracking-[-0.055em] text-white md:text-[52px] lg:text-[64px] xl:text-[72px]"
             >
               Why Businesses
               <br />
@@ -734,7 +720,7 @@ function RelatedProducts({ products }: { products: ProductRecommendation[] }) {
     slug: product.slug,
     title: product.title,
     description: product.note,
-    image: product.image,
+    image: resolveCatalogImageSrc(product.image),
   }));
 
   return (
@@ -774,8 +760,7 @@ function RelatedProducts({ products }: { products: ProductRecommendation[] }) {
             key={item.id}
             item={item}
             href={`/product/${item.slug}`}
-            inquireHref="/contact"
-            enableModal={false}
+            catalogKind="product"
             revealDirection={index % 2 === 0 ? "left" : "right"}
           />
         ))}

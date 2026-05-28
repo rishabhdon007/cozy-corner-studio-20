@@ -11,6 +11,7 @@ export type ServiceDetail = {
   description: string;
   mainImage: string;
   processImage: string;
+  processVideo?: string;
   gallery: string[];
   specs: Array<{ label: string; value: string }>;
   variants: string[];
@@ -192,8 +193,7 @@ const services: Record<string, ServiceDetail> = {
     summary: "Galvanized, galvalume, color-coated, and profile sheet solutions for durable applications.",
     description:
       "Our coated and profile sheet range supports roofing, cladding, industrial panels, and corrosion-resistant fabrication. Material can be supplied in plain, corrugated, coated, or profile formats based on project needs.",
-    mainImage:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDb9_Y_WHvzw5qyfg_kWZGIEDL1IUmyuYrnq2dmwjVywQ-tr5KnJhWJvxwxr5LnZJZABkBvzPo8ebB9l-aE4SpRISo5m45JP3lEk1e4paWLH0wcNs6veu9_pq2K_94W8Apy5xG_fu1TVnXFM5oKBeBnkfGxQSwxH2UQP7_qVIjg6Z-3MXjhabz7hOjJBhMGtD66Zmk-hsUfpG9v_J20kanmHiAC4mQeWKhvx8ea31HErSomuIY3AklCqkk3NEAldks772zPnqA2XEE",
+    mainImage: "",
     processImage:
       "https://lh3.googleusercontent.com/aida/ADBb0uivdi1gtq1TGu910WV5iy4kr7Vpsh3NqNR6Xt_aBSacWZlPipe-q8DQ3I-LVLuyrkVFlH_dmkAd6u7YAJz-J0O1aqQExJ6SE-3lhHW6a4T-9wVrgXfGBnxKqZM5dHHJ2CSHJsgMkbikHnO2yoVSAtVOv-CpEpoiLudhVzGEmGR0spg0QfCRa5pLZV5WO9vF6f19Udr5ZMb3pkrpK20Xe_RH2jqs2VA8A65TJHkXzU5Um0WyIU9k2n9uFH4",
     gallery: [
@@ -232,6 +232,7 @@ const services: Record<string, ServiceDetail> = {
     summary: "Material handling, warehousing, and transport support for dependable steel supply.",
     description:
       "Our logistics and warehousing capabilities help customers receive processed and prime steel material with fewer handoff delays. Crane-assisted handling, organized storage, and planned transport keep orders moving from inventory to site.",
+    processVideo: "/assests/banner_video.mp4",
     mainImage:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuA6Kc9N6DGv9yY4wvzS_HrS_QTitHzJXYX0Wi0Fb6hqe9bnD6wSqtHxKTJaUcjUtkLbXJVLfWTNthUYbql4EMwPsvy1vzCCQkmBV5JYrI2mppuyh_8rK6BU0vapoOC0tYuqSmtQcDUQcNSNlOELAsCcLMaD_ypL52BJ65h9vjTlZLRzrgrHeqabhO-pfRIfxIME3FRnPgL51eJree-8LFhfbIwkuHEJ-R66ITRigpfSvbzjC5hVal2eDlWHY3shoQLepJ0mcG2II8Q",
     processImage:

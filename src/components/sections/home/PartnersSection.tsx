@@ -1,10 +1,10 @@
 import Image, { type StaticImageData } from "next/image";
 
 import { SectionHeading } from "@/components/site/SectionHeading";
-import essarSteelLogo from "@/assests/client_logo/essar_steel.png";
-import jindalSteelLogo from "@/assests/client_logo/Jindal_Steel_Limited_Logo.png";
-import sailLogo from "@/assests/client_logo/sail.png";
-import tataSteelLogo from "@/assests/client_logo/Tata_Steel_Logo.png";
+import essarSteelLogo from "@/assests/client_logo/essar_steel.webp";
+import jindalSteelLogo from "@/assests/client_logo/Jindal_Steel_Limited_Logo.webp";
+import sailLogo from "@/assests/client_logo/sail.webp";
+import tataSteelLogo from "@/assests/client_logo/Tata_Steel_Logo.webp";
 
 type Partner = {
   name: string;

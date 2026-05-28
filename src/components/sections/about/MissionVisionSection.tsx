@@ -95,14 +95,14 @@ export function MissionVisionSection() {
         </div>
 
         {/* Vision & Mission Cards Grid */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Card 1: Our Mission (Wider - 2 Cols) */}
           <div
             data-scroll-reveal="left"
-            className="group relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#071629] via-[#0c233a] to-[#040e1b] p-8 md:p-12 text-white flex flex-col justify-between shadow-xl min-h-[400px] lg:col-span-2 border border-white/5"
+            className="group relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#071629] via-[#0c233a] to-[#040e1b] p-8 md:p-10 text-white flex flex-col justify-between shadow-xl min-h-[400px] md:col-span-2 lg:col-span-2 border border-white/5"
           >
             {/* Circular Graphic Accent on Right */}
-            <div className="absolute right-8 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full border border-white/10 p-2.5 hidden md:flex items-center justify-center bg-[#07172c]/40 backdrop-blur-sm shadow-inner pointer-events-none select-none">
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full border border-white/10 p-2.5 hidden lg:flex items-center justify-center bg-[#07172c]/40 backdrop-blur-sm shadow-inner pointer-events-none select-none">
               <div className="relative w-full h-full rounded-full overflow-hidden border border-white/20">
                 <img
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9ZpmlTi9am7jAl3U69ngMTXiV7YHlzoRweLAmBg3U0RavWxTHJ2b8IPruaQ9-dnjFUwuQL1xNZK3LBkggzBv1l8DtaQdmxOKFUWUOs07kpOxvYHIR2JpYxH0rexpvWJQ6fGejqpa5AiBFrUL7Tye0qUdPKUM06F3Jee_vttkYUqoFFByAHosY8tUmo5j5CPpTt_T5F_XPrQgnxvPP_AJEwx_FY5STNvE5dvPOsAnCOV8AB-RmL7qlceqMvm3HoBGYRxvu7pIfys"
@@ -167,7 +167,7 @@ export function MissionVisionSection() {
           {/* Card 2: Our Vision (Narrower - 1 Col) */}
           <div
             data-scroll-reveal="right"
-            className="group relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1c2838] via-[#243547] to-[#151f2b] p-8 md:p-12 text-white flex flex-col justify-between shadow-xl min-h-[400px] lg:col-span-1 border border-white/5"
+            className="group relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1c2838] via-[#243547] to-[#151f2b] p-8 md:p-10 text-white flex flex-col justify-between shadow-xl min-h-[400px] md:col-span-2 lg:col-span-1 border border-white/5"
           >
             {/* Subtle illustration/handshake background watermark overlay */}
             <div className="absolute inset-0 bg-[url('https://lh3.googleusercontent.com/aida/ADBb0ujPEXWWg0iI87xROhYOFi07NvkaakLAKcufgsmsIULakcaTeHZTBoIc_SxWcBJJ_XJXykvO25FlqnSvlL2F2-qayNrL4cFeH77NIYfPrDj7cPcOgWyaoKvxwlrpSEHlZKBjl6X4VE8b3F2mfO97oySF6u5pyG3CEJy3o0ht1wmhFITEbVwKqYEQKEAzVynO-vMzEP2_ED04Cr3uAEBun4G0G363gZ2HgbEP0sHEUcbr6f0mh2B_d0W_Br0')] opacity-5 bg-cover bg-center mix-blend-overlay pointer-events-none select-none" />

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import servicesHeroImage from "@/assests/constrution area.jpg";
+import servicesHeroImage from "@/assests/constrution area.webp";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { cn } from "@/lib/utils";
@@ -113,7 +113,7 @@ export function ServicesHero() {
               )}
             />
 
-            <h1 className="font-display mb-5 text-[44px] font-black uppercase leading-[0.98] tracking-[-0.055em] text-white md:text-[64px] lg:text-[76px]">
+            <h1 className="font-display mb-5 text-[32px] font-black uppercase leading-[0.98] tracking-[-0.055em] text-white sm:text-[40px] md:text-[48px] lg:text-[64px] xl:text-[76px]">
               <span data-typewriter-line data-typewriter-text={TITLE_PARTS.before} suppressHydrationWarning>
                 {TITLE_PARTS.before}
               </span>

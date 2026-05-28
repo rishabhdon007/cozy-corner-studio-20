@@ -61,9 +61,9 @@ export function GlobalPresenceSection() {
           className="mb-12 max-w-2xl mx-auto"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: Interactive Map Box */}
-          <div className="lg:col-span-8 flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/15 bg-gradient-to-br from-[#4a7594] via-[#5a8fad] to-[#3d6d8f] p-4 sm:p-8 shadow-xl relative min-h-[500px] md:min-h-[580px] backdrop-blur-md">
+          <div className="md:col-span-7 lg:col-span-8 flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/15 bg-gradient-to-br from-[#4a7594] via-[#5a8fad] to-[#3d6d8f] p-4 sm:p-8 shadow-xl relative min-h-[420px] md:min-h-[500px] lg:min-h-[580px] backdrop-blur-md">
             {/* Soft grid watermark overlay */}
             <div
               className="absolute inset-0 opacity-[0.08] pointer-events-none"
@@ -135,7 +135,7 @@ export function GlobalPresenceSection() {
           </div>
 
           {/* Right Column: Information Panel Cards */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
+          <div className="md:col-span-5 lg:col-span-4 flex flex-col gap-4">
             {/* Dynamic Active Display Panel (Displays detailed specs of hovered hub, else defaults) */}
             <div className="flex-1 flex flex-col justify-between rounded-[28px] bg-gradient-to-br from-[#5a8fad] via-[#4a7594] to-[#3d6d8f] p-8 text-white text-left shadow-xl relative border border-white/20 backdrop-blur-md transition-all duration-300 min-h-[220px]">
               <div className="absolute top-0 right-0 p-6 opacity-[0.04] pointer-events-none select-none">

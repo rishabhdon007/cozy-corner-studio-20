@@ -1,6 +1,6 @@
 "use client";
 
-import fallbackImage from "@/assests/constrution area.jpg";
+import fallbackImage from "@/assests/constrution area.webp";
 
 const HERO_IMAGE =
   "https://lh3.googleusercontent.com/aida/ADBb0ujNeJfj5wjuiu3qa5PPpnbdTCPvKNZ6N2yri4I15sFCyU37e27ZxTaBi-X_HrEEoMrBQ_Y87Eky8g_cWUxRDlugbnlELvSyUYarJSXBSVn3wUXaFOlujrxI8ykr_gOeXzy-9wgeAJ9fdfdpExYYPQ4PuLncFTJa42kasKT_q9zpCwhLgzElMiOrDPJ6PkodKV-52kPNF3ODoLhOUdTcw0k9CTEY048brLSdv86qeEhwYXr-VqT5vRXSubc";
