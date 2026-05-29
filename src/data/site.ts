@@ -26,9 +26,12 @@ export const serviceFooterLinks = [
   { label: "Slitting", href: "/services/slitting" },
   { label: "Cut to Length", href: "/services/cut-to-length" },
   { label: "Annealing", href: "/services/annealing" },
-  { label: "HR, CR & MS Plates", href: "/services/hr-cr-ms-plates" },
-  { label: "Coated & Profile Sheets", href: "/services/coated-profile-sheets" },
-  { label: "Logistics & Warehousing", href: "/services/logistics-warehousing" },
+  { label: "Crane Handling", href: "/services/crane-handling" },
+  { label: "Profiling & Fabrication", href: "/services/profiling-fabrication" },
+  { label: "Logistics & Transport", href: "/services/logistics-warehousing" },
+  { label: "HR Sheets & Coils", href: "/product/hr-sheets-coils" },
+  { label: "Cold Rolled Coils", href: "/product/cold-rolled-coils" },
+  { label: "Centering Plates", href: "/product/centering-plates" },
 ] as const;
 
 export const legalLinks = [

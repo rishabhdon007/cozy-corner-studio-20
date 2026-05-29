@@ -1,6 +1,6 @@
 import { ImageFeatureSplitSection } from "@/components/site/ImageFeatureSplitSection";
 import { SiteButton } from "@/components/site/SiteButton";
-import qcImage from "@/assests/constrution area.webp";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
 const qualityPoints = [
   {
@@ -27,7 +27,7 @@ export function QualityControlSection() {
   return (
     <ImageFeatureSplitSection
       id="quality-assurance"
-      image={qcImage}
+      image={SITE_IMAGES.construction}
       imageAlt="Quality Control Inspection"
       useNextImage
       badge={{ value: "ISO", label: "9001:2008 Certified" }}

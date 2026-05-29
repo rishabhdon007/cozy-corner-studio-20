@@ -5,6 +5,8 @@ import { useEffect, type CSSProperties } from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 
 import { SiteButton } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { isNavActive, navItems } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -52,9 +54,11 @@ export function MobileNavMenu({ open, onOpenChange, pathname }: MobileNavMenuPro
               className="flex items-center gap-3"
               onClick={() => onOpenChange(false)}
             >
-              <img
-                src="/company_logo.webp"
+              <SiteImage
+                src={SITE_IMAGES.companyLogo}
                 alt="NRK Iron & Steel"
+                width={120}
+                height={40}
                 className="h-10 w-auto object-contain"
               />
               <div className="leading-none">

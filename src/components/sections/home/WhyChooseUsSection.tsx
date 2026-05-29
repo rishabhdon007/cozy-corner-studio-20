@@ -1,5 +1,5 @@
-import teamMemberImage from "@/assests/team_member.webp";
 import { ImageFeatureSplitSection } from "@/components/site/ImageFeatureSplitSection";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
 const FEATURES = [
   {
@@ -43,7 +43,7 @@ export function WhyChooseUsSection() {
   return (
     <ImageFeatureSplitSection
       id="why-choose-us"
-      image={teamMemberImage}
+      image={SITE_IMAGES.teamMember}
       imageAlt="NRK Iron & Steel team member"
       useNextImage
       badge={{ value: "30+", label: "Years of Trust" }}

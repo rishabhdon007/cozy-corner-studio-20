@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import servicesHeroImage from "@/assests/constrution area.webp";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { cn } from "@/lib/utils";
@@ -68,7 +68,7 @@ export function ServicesHero() {
           loop
           playsInline
           preload="metadata"
-          poster={servicesHeroImage.src}
+          poster={SITE_IMAGES.construction}
           aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />

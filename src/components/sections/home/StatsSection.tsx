@@ -7,24 +7,24 @@ import { useCountUp } from "@/hooks/useCountUp";
 
 const STATS = [
   {
-    value: "3+",
-    label: "Decades Experience",
+    value: "30+",
+    label: "Years Experience",
     description:
-      "Since 1992, delivering trusted steel solutions nationwide with excellence.",
+      "Since 1994, delivering trusted steel solutions nationwide with excellence.",
     icon: "workspace_premium",
   },
   {
     value: "4000+",
     label: "Annual Reach",
     description:
-      "Serving 4000+ clients yearly across diverse industries nationwide with reliability.",
+      "Serving 4000+ clients yearly across diverse industries nationwide with reliability, and counting.",
     icon: "public",
   },
   {
-    value: "70%",
+    value: "90%",
     label: "Retention Rate",
     description:
-      "Maintaining 70% loyal customers through unmatched quality and service.",
+      "Maintaining 90% loyal customers through unmatched quality and service.",
     icon: "handshake",
   },
 ] as const;

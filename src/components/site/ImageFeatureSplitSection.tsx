@@ -1,7 +1,8 @@
-import Image, { type StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 
 import { FeatureListItem } from "@/components/site/FeatureListItem";
+import { SiteImage } from "@/components/site/SiteImage";
 import { FloatingMetricBadge } from "@/components/site/FloatingMetricBadge";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { cn } from "@/lib/utils";
@@ -62,26 +63,14 @@ export function ImageFeatureSplitSection({
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:items-stretch md:gap-10 lg:gap-16">
           <div className="relative md:h-full lg:h-full" data-scroll-reveal="left">
             <div className="relative h-[360px] w-full overflow-hidden rounded-[28px] border border-white/10 shadow-2xl shadow-black/30 md:h-[480px] lg:h-full lg:min-h-[680px]">
-              {useNextImage ? (
-                <Image
-                  src={image}
-                  alt={imageAlt}
-                  fill
-                  className="object-cover"
-                  priority={imagePriority}
-                  loading={imagePriority ? undefined : "lazy"}
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              ) : (
-                <img
-                  alt={imageAlt}
-                  className="h-full w-full object-cover"
-                  src={typeof image === "string" ? image : image.src}
-                  loading={imagePriority ? "eager" : "lazy"}
-                  decoding="async"
-                  fetchPriority={imagePriority ? "high" : "low"}
-                />
-              )}
+              <SiteImage
+                src={image}
+                alt={imageAlt}
+                fill
+                priority={imagePriority}
+                loading={imagePriority ? "eager" : "lazy"}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
               {imageOverlay}
             </div>
             <FloatingMetricBadge value={badge.value} label={badge.label} />

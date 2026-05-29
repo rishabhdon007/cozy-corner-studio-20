@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, PlayCircle, ZoomIn } from "lucide-react";
 
+import { SiteImage } from "@/components/site/SiteImage";
 import {
   Carousel,
   CarouselContent,
@@ -11,11 +12,8 @@ import {
 } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import {
-  DEFAULT_CATALOG_IMAGE,
-  type CatalogMediaItem,
-  resolveCatalogImageSrc,
-} from "@/lib/catalogMedia";
+import type { CatalogMediaItem } from "@/lib/catalogMedia";
+import { resolveCatalogImageSrc } from "@/lib/catalogMedia";
 
 type CatalogMediaCarouselProps = {
   items: CatalogMediaItem[];
@@ -48,15 +46,12 @@ function MediaSlide({
     >
       {isVideo ? (
         <>
-          <img
+          <SiteImage
             src={resolveCatalogImageSrc(item.poster ?? item.src)}
             alt=""
-            className="h-full w-full object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-60"
-            onError={(event) => {
-              if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-                event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-              }
-            }}
+            fill
+            sizes="(max-width: 768px) 100vw, 66vw"
+            className="opacity-80 transition-opacity duration-300 group-hover:opacity-60"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/25">
             <div className="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg transition-transform duration-300 group-hover:scale-110 md:h-16 md:w-16">
@@ -69,15 +64,12 @@ function MediaSlide({
         </>
       ) : (
         <>
-          <img
+          <SiteImage
             src={resolveCatalogImageSrc(item.src)}
             alt={`${title} — ${item.label}`}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            onError={(event) => {
-              if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-                event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-              }
-            }}
+            fill
+            sizes="(max-width: 768px) 100vw, 66vw"
+            className="transition-transform duration-500 group-hover:scale-[1.03]"
           />
           {onOpen ? (
             <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/20 group-hover:opacity-100">
@@ -115,11 +107,15 @@ function LightboxMedia({ item, title }: { item: CatalogMediaItem; title: string 
   }
 
   return (
-    <img
-      src={item.src}
-      alt={`${title} — ${item.label}`}
-      className="max-h-[min(78vh,720px)] w-full rounded-lg object-contain"
-    />
+    <div className="relative mx-auto aspect-[16/10] w-full max-h-[min(78vh,720px)]">
+      <SiteImage
+        src={item.src}
+        alt={`${title} — ${item.label}`}
+        fill
+        sizes="90vw"
+        className="rounded-lg object-contain"
+      />
+    </div>
   );
 }
 
@@ -240,20 +236,24 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
             >
               {item.type === "video" ? (
                 <>
-                  <img
-                    src={item.poster ?? item.src}
+                  <SiteImage
+                    src={resolveCatalogImageSrc(item.poster ?? item.src)}
                     alt=""
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                    fill
+                    sizes="120px"
+                    className="transition-transform duration-500 hover:scale-110"
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/35">
                     <PlayCircle className="h-8 w-8 text-white" aria-hidden="true" />
                   </span>
                 </>
               ) : (
-                <img
+                <SiteImage
                   src={item.src}
                   alt=""
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+                  fill
+                  sizes="120px"
+                  className="transition-transform duration-500 hover:scale-110"
                 />
               )}
             </button>
@@ -317,11 +317,16 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
                 >
                   {item.type === "video" ? (
                     <>
-                      <img src={item.poster ?? item.src} alt="" className="h-full w-full object-cover" />
+                      <SiteImage
+                        src={resolveCatalogImageSrc(item.poster ?? item.src)}
+                        alt=""
+                        fill
+                        sizes="80px"
+                      />
                       <PlayCircle className="absolute inset-0 m-auto h-5 w-5 text-white drop-shadow" />
                     </>
                   ) : (
-                    <img src={item.src} alt="" className="h-full w-full object-cover" />
+                    <SiteImage src={item.src} alt="" fill sizes="80px" />
                   )}
                 </button>
               ))}

@@ -4,8 +4,11 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronRight, FileText, Phone, Ruler } from "lucide-react";
 
+import { CatalogOfferingsSection } from "@/components/site/CatalogOfferingsSection";
+import { CatalogIndiaMartSection } from "@/components/site/CatalogIndiaMartSection";
 import { ServiceCard } from "@/components/ServiceCard";
 import { SiteButton } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -20,9 +23,10 @@ import {
 } from "@/data/contact";
 import {
   buildCatalogMediaItems,
-  DEFAULT_CATALOG_IMAGE,
   resolveCatalogImageSrc,
 } from "@/lib/catalogMedia";
+import { PRICE_NOT_MENTIONED, ASK_FOR_PRICE } from "@/data/catalogOfferings";
+import type { CatalogOffering } from "@/data/catalogTypes";
 
 import { CatalogMediaCarousel } from "./CatalogMediaCarousel";
 
@@ -219,36 +223,53 @@ function CatalogDetailPage({
                   data-scroll-reveal-delay="11"
                   className="mb-3 text-xs font-bold uppercase tracking-wider text-white/55"
                 >
-                  {variantsHeading}
+                  {item.offerings?.length ? "Offerings & Rates" : variantsHeading}
                 </h3>
                 <ul className="space-y-2">
-                  {item.variants.map((variant, index) => (
-                    <li key={variant}>
-                      <SiteButton
-                        href="/contact"
-                        variant="row-variant"
-                        icon={false}
-                        className="group w-full"
-                        data-scroll-reveal=""
-                        data-scroll-reveal-delay={String(index + 12)}
-                      >
-                        <span className="flex items-center">
-                          <span className="mr-3 rounded-lg bg-white/10 p-2 text-primary-fixed-dim">
-                            <Ruler className="h-4 w-4" aria-hidden="true" />
-                          </span>
-                          <span className="text-sm font-medium text-white">{variant}</span>
-                        </span>
-                        <ChevronRight className="site-btn-icon h-4 w-4 text-white/40 transition-colors group-hover:text-white" aria-hidden="true" />
-                      </SiteButton>
-                    </li>
-                  ))}
+                  {item.offerings?.length
+                    ? item.offerings.map((offering, index) => (
+                        <li key={offering.id}>
+                          <SidebarOfferingRow offering={offering} index={index} />
+                        </li>
+                      ))
+                    : item.variants.map((variant, index) => (
+                        <li key={variant}>
+                          <SiteButton
+                            href="/contact"
+                            variant="row-variant"
+                            icon={false}
+                            className="group w-full"
+                            data-scroll-reveal=""
+                            data-scroll-reveal-delay={String(index + 12)}
+                          >
+                            <span className="flex items-center">
+                              <span className="mr-3 rounded-lg bg-white/10 p-2 text-primary-fixed-dim">
+                                <Ruler className="h-4 w-4" aria-hidden="true" />
+                              </span>
+                              <span className="text-sm font-medium text-white">{variant}</span>
+                            </span>
+                            <ChevronRight className="site-btn-icon h-4 w-4 text-white/40 transition-colors group-hover:text-white" aria-hidden="true" />
+                          </SiteButton>
+                        </li>
+                      ))}
                 </ul>
               </div>
             </div>
           </aside>
         </section>
 
+        {item.offerings?.length ? (
+          <CatalogOfferingsSection offerings={item.offerings} catalogTitle={item.title} />
+        ) : null}
+
         <TechnicalSpecs rows={item.technicalSpecs} />
+
+        <CatalogIndiaMartSection
+          slug={item.slug}
+          kind={catalogKind}
+          compact
+          className="mb-16 mt-10"
+        />
       </main>
 
       <WhyChooseNrk />
@@ -306,16 +327,14 @@ function CatalogDetailHero({
       className="relative w-full overflow-hidden bg-primary"
     >
       <div className="absolute inset-0 z-0">
-        <img
+        <SiteImage
           src={resolveCatalogImageSrc(item.mainImage)}
           alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover opacity-35"
-          onError={(event) => {
-            if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-              event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-            }
-          }}
+          fill
+          sizes="100vw"
+          priority
+          className="opacity-35"
+          aria-hidden
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent" />
@@ -410,6 +429,44 @@ function Breadcrumb({
         </li>
       </ol>
     </nav>
+  );
+}
+
+function SidebarOfferingRow({ offering, index }: { offering: CatalogOffering; index: number }) {
+  const priced =
+    offering.price !== PRICE_NOT_MENTIONED &&
+    offering.price !== ASK_FOR_PRICE &&
+    Boolean(offering.price.trim());
+  const priceLabel = priced
+    ? `${offering.price}${offering.priceUnit ? `/${offering.priceUnit}` : ""}`
+    : offering.price === ASK_FOR_PRICE
+      ? ASK_FOR_PRICE
+      : PRICE_NOT_MENTIONED;
+
+  return (
+    <div
+      data-scroll-reveal=""
+      data-scroll-reveal-delay={String(index + 12)}
+      className="group/offer rounded-xl border border-white/10 bg-gradient-to-r from-white/[0.08] to-white/[0.03] px-3 py-3 transition-colors hover:border-white/20 hover:from-white/[0.12]"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-sm font-semibold leading-snug text-white">{offering.title}</p>
+        {priced ? (
+          <span className="shrink-0 rounded bg-emerald-600/90 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white">
+            Rate
+          </span>
+        ) : null}
+      </div>
+      <p className={cn("mt-1.5 text-sm font-black", priced ? "text-primary-fixed-dim" : "text-white/55")}>
+        {priceLabel}
+      </p>
+      {offering.minOrderQty ? (
+        <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-white/45">
+          MOQ {offering.minOrderQty}
+          {offering.minOrderUnit ? ` ${offering.minOrderUnit}` : ""}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

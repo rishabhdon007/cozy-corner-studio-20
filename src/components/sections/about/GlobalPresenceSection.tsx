@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SectionHeading } from "@/components/site/SectionHeading";
+import { SiteImage } from "@/components/site/SiteImage";
 
 type HubLocation = {
   id: string;
@@ -85,12 +86,14 @@ export function GlobalPresenceSection() {
             </div>
 
             {/* Map Container */}
-            <div className="relative w-full flex-1 flex items-center justify-center max-w-[480px] mx-auto my-8">
-              {/* High-Fidelity SVG Map of India Vector Outline */}
-              <img
+            <div className="relative w-full flex-1 flex items-center justify-center max-w-[480px] mx-auto my-8 min-h-[280px]">
+              <SiteImage
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/India_location_map.svg/800px-India_location_map.svg.png"
                 alt="Map of India Network Outline"
-                className="w-full h-auto object-contain opacity-25 grayscale brightness-125 select-none pointer-events-none"
+                fill
+                sizes="480px"
+                className="object-contain opacity-25 grayscale brightness-125 select-none pointer-events-none"
+                unoptimized
               />
 
               {/* Dynamic Map Beacon Pins Overlay */}

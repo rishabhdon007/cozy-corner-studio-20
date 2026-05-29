@@ -1,7 +1,9 @@
-import constructionAreaImage from "@/assests/constrution area.webp";
 import { DirectoryProfileLinks } from "@/components/site/DirectoryProfileLinks";
+import { GoogleReviewsCard } from "@/components/site/GoogleReviewsCard";
 import { SiteButton } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
 import { brochureDownloadUrl, contactCopy } from "@/data/contact";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
 
 type ConnectCtaTheme = "blue-gradient" | "primary";
@@ -36,7 +38,7 @@ const themeStyles: Record<
 
 export function ConnectCtaSection({
   theme = "blue-gradient",
-  backgroundImage = constructionAreaImage.src,
+  backgroundImage = SITE_IMAGES.construction,
   backgroundAlt = "High-Rise Steel Architectural Skyscrapers",
   eyebrow = contactCopy.eyebrow,
   title = contactCopy.title,
@@ -57,14 +59,16 @@ export function ConnectCtaSection({
           )}
         >
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <img
+            <SiteImage
+              src={backgroundImage}
               alt={backgroundAlt}
-              aria-hidden={backgroundAlt === ""}
+              fill
+              sizes="100vw"
               className={cn(
-                "pointer-events-none h-full w-full select-none object-cover transition-transform duration-1000 ease-out group-hover:scale-105",
+                "pointer-events-none select-none transition-transform duration-1000 ease-out group-hover:scale-105",
                 styles.imageOpacity,
               )}
-              src={backgroundImage}
+              aria-hidden={backgroundAlt === ""}
             />
             {theme === "blue-gradient" ? (
               <>
@@ -90,24 +94,24 @@ export function ConnectCtaSection({
           </div>
 
           <div className="relative z-10 flex w-full flex-col gap-4 lg:w-[480px] lg:shrink-0">
-            <div className="flex w-full flex-col items-center gap-3 sm:flex-row">
-              <SiteButton href="/contact" variant="white" className="w-full flex-1 cursor-pointer sm:w-auto">
-                Contact Us Now
-              </SiteButton>
-              <SiteButton
-                href={brochureDownloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="glass"
-                icon="download"
-                iconClassName="text-sm"
-                className="w-full flex-1 cursor-pointer sm:w-auto"
-              >
-                Download Brochure
-              </SiteButton>
-            </div>
+            <SiteButton
+              href={brochureDownloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="glass"
+              icon="download"
+              iconClassName="text-sm"
+              className="w-full cursor-pointer"
+            >
+              Download Brochure
+            </SiteButton>
 
-            {showDirectoryLinks ? <DirectoryProfileLinks /> : null}
+            {showDirectoryLinks ? (
+              <>
+                <DirectoryProfileLinks />
+                <GoogleReviewsCard />
+              </>
+            ) : null}
           </div>
         </div>
       </div>
@@ -119,7 +123,7 @@ export function ServicesConnectCtaSection() {
   return (
     <ConnectCtaSection
       theme="primary"
-      backgroundImage={constructionAreaImage.src}
+      backgroundImage={SITE_IMAGES.construction}
       backgroundAlt=""
     />
   );

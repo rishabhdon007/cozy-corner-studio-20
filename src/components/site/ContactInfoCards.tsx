@@ -1,6 +1,7 @@
 import { contactInfo } from "@/data/contact";
 
 import { ContactInfoCard } from "./ContactInfoCard";
+import { GoogleReviewsCard } from "./GoogleReviewsCard";
 
 type ContactInfoCardsProps = {
   className?: string;
@@ -18,6 +19,7 @@ export function ContactInfoCards({ className, scrollReveal = "right" }: ContactI
       />
       <ContactInfoCard icon="mail" label="Email Our Partners" value={contactInfo.email} href={contactInfo.emailHref} />
       <ContactInfoCard icon="location_on" label="Visit Headquarters" value={contactInfo.address.city} />
+      <GoogleReviewsCard variant="light" />
     </div>
   );
 }

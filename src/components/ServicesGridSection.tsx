@@ -73,6 +73,7 @@ export function ServicesGridSection({
             <ServiceCard
               key={item.id}
               item={item}
+              catalogKind={item.kind}
               revealDirection={index % 2 === 0 ? "left" : "right"}
             />
           ))}

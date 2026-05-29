@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 
+import { SiteImage } from "@/components/site/SiteImage";
 import { contactInfo } from "@/data/contact";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { legalLinks, quickLinks, serviceFooterLinks, siteName, siteTaglineExtended, socialLinks } from "@/data/site";
 
 function SocialIcon({ label }: { label: string }) {
@@ -34,9 +36,11 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-container-max grid-cols-1 gap-gutter px-gutter py-stack-lg md:grid-cols-2 lg:grid-cols-4">
         <div className="col-span-1 space-y-4 md:col-span-2 lg:col-span-1">
           <Link href="/" className="mb-4 flex items-center gap-3 font-display-lg text-headline-md font-black text-on-primary">
-            <img
-              src="/company_logo.webp"
+            <SiteImage
+              src={SITE_IMAGES.companyLogo}
               alt="NRK Iron & Steel Logo"
+              width={160}
+              height={56}
               className="h-12 max-h-14 w-auto object-contain md:h-14"
             />
             <span>{siteName}</span>

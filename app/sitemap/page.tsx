@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { LegalPageShell } from "@/components/site/LegalPageShell";
 import { productSlugs } from "@/data/products";
-import { serviceFooterLinks, quickLinks, legalLinks } from "@/data/site";
-import { getService } from "@/data/services";
+import { quickLinks, legalLinks } from "@/data/site";
+import { getService, serviceSlugs } from "@/data/services";
 import { getProduct } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -23,6 +23,11 @@ const productLinks = productSlugs.map((slug) => ({
   href: `/product/${slug}`,
 }));
 
+const serviceDetailLinks = serviceSlugs.map((slug) => ({
+  label: getService(slug)?.title ?? slug,
+  href: `/services/${slug}`,
+}));
+
 const sitemapGroups = [
   {
     title: "Company",
@@ -32,15 +37,12 @@ const sitemapGroups = [
   {
     title: "Services",
     icon: "precision_manufacturing",
-    links: serviceFooterLinks.map((link) => ({
-      label: getService(link.href.split("/").pop() ?? "")?.title ?? link.label,
-      href: link.href,
-    })),
+    links: serviceDetailLinks,
   },
   {
     title: "Products",
     icon: "inventory_2",
-    links: [{ label: "Product Catalogue", href: "/product" }, ...productLinks],
+    links: [{ label: "Product Catalogue", href: "/services" }, ...productLinks],
   },
   {
     title: "Legal",

@@ -2,6 +2,7 @@ import type { StaticImageData } from "next/image";
 
 import { assetSrc } from "@/data/contact";
 import { SiteButton, SiteButtonIcon } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
 
 export type DirectoryProfile = {
   href: string;
@@ -32,8 +33,8 @@ export function DirectoryProfileLink({
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm ring-1 ring-white/40">
-        <img src={assetSrc(logo)} alt={logoAlt} className="h-full w-full object-contain" />
+      <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm ring-1 ring-white/40">
+        <SiteImage src={assetSrc(logo)} alt={logoAlt} fill className="object-contain" sizes="36px" />
       </span>
       <span className="min-w-0 text-left">
         <span className="block font-label-md text-[8px] font-black uppercase tracking-[0.16em] text-secondary-fixed">

@@ -1,7 +1,6 @@
 import type { StaticImageData } from "next/image";
 
-import indiaMartLogo from "@/assests/IndiaMART_logo.webp";
-import justDialLogo from "@/assests/jdlogosvg.svg";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
 export const contactCopy = {
   eyebrow: "Connect With NRK",
@@ -69,15 +68,22 @@ export const contactInfo = {
     "https://www.justdial.com/Indore/Nrk-Iron-and-Steel-LLP-KHASRA-SURVEY-NO-623-624-627-LASUDIA-MORI-Dewas-Naka-Indore/0731PX731-X731-220420165534-Z5E5_BZDET",
   indiaMart: {
     url: "https://www.indiamart.com/nrk-ironandsteelsindore/",
-    logo: indiaMartLogo,
+    logo: SITE_IMAGES.indiaMartLogo,
     eyebrow: "Verified Profile",
     label: "Visit our IndiaMART Profile",
   },
   justDial: {
     url: "https://www.justdial.com/Indore/Nrk-Iron-and-Steel-LLP-KHASRA-SURVEY-NO-623-624-627-LASUDIA-MORI-Dewas-Naka-Indore/0731PX731-X731-220420165534-Z5E5_BZDET",
-    logo: justDialLogo,
+    logo: SITE_IMAGES.justDialLogo,
     eyebrow: "Business Listing",
     label: "Visit our JustDial Profile",
+  },
+  googleReviews: {
+    businessName: "NRK Iron and Steels LLP",
+    rating: 5.0,
+    reviewCount: 4,
+    label: "View on Google",
+    url: "https://www.google.com/maps/search/?api=1&query=NRK+Iron+and+Steels+LLP+S.K.-+1+COMPOUND+Plot+No.+46+47+MR+11+Dewas+Naka+Lasudia+Mori+Indore+Madhya+Pradesh+452010",
   },
 } as const;
 

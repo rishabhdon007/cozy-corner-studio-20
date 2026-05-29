@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SiteButton } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
 import {
   buildCatalogWhatsAppMessage,
   buildWhatsAppHref,
@@ -16,7 +17,8 @@ import {
 } from "@/data/contact";
 import { getProduct } from "@/data/products";
 import { getService } from "@/data/services";
-import { DEFAULT_CATALOG_IMAGE, resolveCatalogImageSrc } from "@/lib/catalogMedia";
+import { resolveCatalogImageSrc } from "@/lib/catalogMedia";
+import { cn } from "@/lib/utils";
 
 type CatalogQuickViewModalProps = {
   isOpen: boolean;
@@ -44,7 +46,7 @@ export function CatalogQuickViewModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="catalog-quick-view-dialog inset-x-0 bottom-0 top-auto max-h-[92dvh] w-full max-w-none translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl rounded-b-none border-0 bg-[#f7fafc] p-0 text-gray-900 md:inset-auto md:bottom-auto md:left-1/2 md:top-1/2 md:max-h-[90vh] md:max-w-3xl md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl lg:max-w-4xl">
+      <DialogContent className="catalog-quick-view-dialog inset-x-0 bottom-0 top-auto max-h-[92dvh] w-full max-w-none translate-x-0 translate-y-0 overflow-x-hidden overflow-y-auto rounded-t-2xl rounded-b-none border-0 bg-[#f7fafc] p-0 text-gray-900 md:inset-auto md:bottom-auto md:left-1/2 md:top-1/2 md:max-h-[90vh] md:max-w-3xl md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl lg:max-w-4xl">
         <div className="sticky top-0 z-10 border-b border-gray-200/80 bg-[#f7fafc]/95 px-4 py-3 backdrop-blur-sm md:static md:border-0 md:bg-transparent md:px-8 md:pt-8 md:backdrop-blur-none">
           <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-secondary md:mb-2 md:text-xs">
             {item.eyebrow}
@@ -54,37 +56,34 @@ export function CatalogQuickViewModal({
           </DialogTitle>
         </div>
 
-        <div className="px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-8 md:pb-8">
-          <section className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-            <div className="space-y-6 md:col-span-1 lg:col-span-2">
-              <div className="group relative h-56 w-full overflow-hidden bg-gray-200 md:h-64 lg:h-72">
-                <img
+        <div className="min-w-0 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))] md:px-8 md:pb-8">
+          <section className="flex flex-col gap-6 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+            <div className="flex min-w-0 flex-col gap-6 md:col-span-1 lg:col-span-2">
+              <div className="group relative h-52 w-full min-w-0 overflow-hidden rounded-xl bg-gray-200 sm:h-56 md:h-64 lg:h-72">
+                <SiteImage
                   src={resolveCatalogImageSrc(item.mainImage)}
                   alt={`${item.title} preview`}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  onError={(event) => {
-                    if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-                      event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-                    }
-                  }}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                  className="transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute bottom-4 left-4 bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                <div className="absolute bottom-3 left-3 right-3 max-w-[calc(100%-1.5rem)] bg-primary px-3 py-1.5 text-[10px] font-bold uppercase leading-snug tracking-wider text-white sm:bottom-4 sm:left-4 sm:right-auto sm:max-w-none">
                   {item.badge}
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="flex min-w-0 flex-col gap-3 md:grid md:grid-cols-3 md:gap-3">
                 {item.gallery.slice(0, 3).map((image, index) => (
-                  <div key={`${image}-${index}`} className="aspect-[4/3] overflow-hidden bg-gray-200 sm:h-24 sm:aspect-auto">
-                    <img
+                  <div
+                    key={`${image}-${index}`}
+                    className="relative aspect-[16/9] w-full min-w-0 overflow-hidden rounded-lg bg-gray-200 md:aspect-[4/3]"
+                  >
+                    <SiteImage
                       src={resolveCatalogImageSrc(image)}
                       alt={`${item.title} detail ${index + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
-                      onError={(event) => {
-                        if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-                          event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-                        }
-                      }}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 120px"
+                      className="transition-transform duration-500 hover:scale-110"
                     />
                   </div>
                 ))}
@@ -94,17 +93,17 @@ export function CatalogQuickViewModal({
                 <h3 className="mb-4 text-xs font-black uppercase tracking-wider text-gray-500">
                   Processing Flow
                 </h3>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-3">
                   {item.process.map((step, index) => (
-                    <div key={step} className="flex items-start gap-3">
+                    <div key={step} className="flex min-w-0 items-start gap-3">
                       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-primary text-xs font-black text-white">
                         {index + 1}
                       </span>
-                      <div>
+                      <div className="min-w-0">
                         <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
                           Step {index + 1}
                         </p>
-                        <h4 className="text-sm font-bold text-gray-800">{step}</h4>
+                        <h4 className="text-sm font-bold leading-snug text-gray-800">{step}</h4>
                       </div>
                     </div>
                   ))}
@@ -112,7 +111,7 @@ export function CatalogQuickViewModal({
               </div>
             </div>
 
-            <aside className="md:col-span-1 lg:col-span-1">
+            <aside className="min-w-0 md:col-span-1 lg:col-span-1">
               <div className="flex h-full flex-col rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
                 <h2 className="mb-3 text-lg font-black uppercase tracking-wide text-gray-900">
                   {item.category}
@@ -122,9 +121,9 @@ export function CatalogQuickViewModal({
                 </DialogDescription>
                 <p className="mb-6 text-xs leading-relaxed text-gray-600">{item.description}</p>
 
-                <div className="mb-6 grid grid-cols-2 gap-x-3 gap-y-4 border-y border-gray-100 py-4">
+                <div className="mb-6 grid grid-cols-1 gap-4 border-y border-gray-100 py-4 sm:grid-cols-2">
                   {item.specs.map((spec) => (
-                    <div key={spec.label}>
+                    <div key={spec.label} className="min-w-0">
                       <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                         {spec.label}
                       </p>
@@ -161,18 +160,45 @@ export function CatalogQuickViewModal({
             <h3 className="mb-3 text-xs font-black uppercase tracking-wider text-gray-500 sm:mb-4">
               Technical Specifications
             </h3>
-            <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-              <div className="min-w-[32rem] rounded border border-gray-200 bg-white shadow-sm sm:min-w-0">
+
+            {/* Mobile: stacked cards — no horizontal scroll */}
+            <div className="space-y-3 md:hidden">
+              {item.technicalSpecs.map((row, index) => (
+                <div
+                  key={row.property}
+                  className={cn(
+                    "rounded-lg border border-gray-200 bg-white p-4 shadow-sm",
+                    index % 2 ? "bg-gray-50" : "bg-white",
+                  )}
+                >
+                  <p className="mb-2 text-xs font-black uppercase tracking-wider text-primary">{row.property}</p>
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <p className="font-bold uppercase tracking-wider text-gray-400">Standard Value</p>
+                      <p className="mt-0.5 font-semibold text-gray-800">{row.value}</p>
+                    </div>
+                    <div>
+                      <p className="font-bold uppercase tracking-wider text-gray-400">Check Method</p>
+                      <p className="mt-0.5 text-gray-600">{row.method}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop: table */}
+            <div className="hidden overflow-x-auto md:block">
+              <div className="rounded border border-gray-200 bg-white shadow-sm">
                 <table className="w-full divide-y divide-gray-200 text-left">
                   <thead className="bg-primary text-[10px] font-bold uppercase tracking-wider text-white">
                     <tr>
-                      <th className="px-3 py-2.5 sm:px-4 sm:py-3" scope="col">
+                      <th className="px-4 py-3" scope="col">
                         Parameter
                       </th>
-                      <th className="px-3 py-2.5 sm:px-4 sm:py-3" scope="col">
+                      <th className="px-4 py-3" scope="col">
                         Standard Value
                       </th>
-                      <th className="px-3 py-2.5 sm:px-4 sm:py-3" scope="col">
+                      <th className="px-4 py-3" scope="col">
                         Check Method
                       </th>
                     </tr>
@@ -180,13 +206,9 @@ export function CatalogQuickViewModal({
                   <tbody className="divide-y divide-gray-200 bg-white text-xs">
                     {item.technicalSpecs.map((row, index) => (
                       <tr key={row.property} className={index % 2 ? "bg-gray-50" : "bg-white"}>
-                        <td className="px-3 py-2 font-bold text-gray-900 sm:px-4 sm:py-2.5">
-                          {row.property}
-                        </td>
-                        <td className="px-3 py-2 text-gray-600 sm:px-4 sm:py-2.5">{row.value}</td>
-                        <td className="px-3 py-2 text-[10px] text-gray-500 sm:px-4 sm:py-2.5">
-                          {row.method}
-                        </td>
+                        <td className="px-4 py-2.5 font-bold text-gray-900">{row.property}</td>
+                        <td className="px-4 py-2.5 text-gray-600">{row.value}</td>
+                        <td className="px-4 py-2.5 text-[10px] text-gray-500">{row.method}</td>
                       </tr>
                     ))}
                   </tbody>

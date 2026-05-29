@@ -7,6 +7,7 @@ export { DirectoryProfileLink, type DirectoryProfile } from "./DirectoryProfileL
 export { DirectoryProfileLinks } from "./DirectoryProfileLinks";
 export { FeatureListItem } from "./FeatureListItem";
 export { FloatingContactButtons } from "./FloatingContactButtons";
+export { GoogleReviewsCard } from "./GoogleReviewsCard";
 export { FloatingMetricBadge } from "./FloatingMetricBadge";
 export { HeroCtaGroup } from "./HeroCtaGroup";
 export { ImageFeatureSplitSection } from "./ImageFeatureSplitSection";

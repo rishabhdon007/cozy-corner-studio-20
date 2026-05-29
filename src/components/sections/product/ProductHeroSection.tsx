@@ -1,23 +1,12 @@
 import Link from "next/link";
 
-const MAIN_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCu_AF4dpTBmmHegSorKBsEdCUm3I3JfVSx-XDp7nW5n2ACrXY9J0CwN8jLoATp9dx0caHq31eUOSVbKeaHMKJzjupwoBrIK4jxfcIsnTr8TBQxD-0C98JSDHjG-OdTpegwo_gsOy2i-sOqIkEyz6x-hSP1L-xFv5WSgkSEd1eEuYryj9gEMid7FVJuc8NxOzfqCsFI9ZsUBqJC3_YM-jOg7zVDEf7NY08107lVgXiQ56XFQE-7ka9R9lxfEI9Tx4mH7_kGlulQTAc";
-const VIDEO_THUMB =
-  "https://lh3.googleusercontent.com/aida/ADBb0ujPEXWWg0iI87xROhYOFi07NvkaakLAKcufgsmsIULakcaTeHZTBoIc_SxWcBJJ_XJXykvO25FlqnSvlL2F2-qayNrL4cFeH77NIYfPrDj7cPcOgWyaoKvxwlrpSEHlZKBjl6X4VE8b3F2mfO97oySF6u5pyG3CEJy3o0ht1wmhFITEbVwKqYEQKEAzVynO-vMzEP2_ED04Cr3uAEBun4G0G363gZ2HgbEP0sHEUcbr6f0mh2B_d0W_Br0";
+import { SiteImage } from "@/components/site/SiteImage";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
 const secondaryImages = [
-  {
-    alt: "Steel stack close up",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBRKVZ7OTc54HY7px_IqK8IxBw7DBGJMM5ThTrK647yBQMXSlaSxNsdaLQctQu-8gJbNDTB0YHO3eYOhF8ur_gsbIu1Y4d6zHOG9OcLj2fmcy7gyNJRIolPBBdl-m7shRcFHnxlPXIS0KdCuk_fxOLQYQ-9NnNlpBTWbdin817CizhsNzZhbJScA9I99Me2FtiMWFKVQU3EDHQWiJzxUNaPUrmqK6RSwHfYT3yGcnNT1xTsR1CftjNgOTAkcEs5MMSgN-hKI5nOtWE",
-  },
-  {
-    alt: "Multiple steel coils",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9ZpmlTi9am7jAl3U69ngMTXiV7YHlzoRweLAmBg3U0RavWxTHJ2b8IPruaQ9-dnjFUwuQL1xNZK3LBkggzBv1l8DtaQdmxOKFUWUOs07kpOxvYHIR2JpYxH0rexpvWJQ6fGejqpa5AiBFrUL7Tye0qUdPKUM06F3Jee_vttkYUqoFFByAHosY8tUmo5j5CPpTt_T5F_XPrQgnxvPP_AJEwx_FY5STNvE5dvPOsAnCOV8AB-RmL7qlceqMvm3HoBGYRxvu7pIfys",
-  },
-  {
-    alt: "Reflective steel surface",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDB0V8AkOvGcfFYxE2ed-7p9yTbfHgwusGX0YJPJiWlQ6LtK8_fMgtMpIWkh5LBeQRsFE3TPoKv2DeP-jBKRXCuBj20dsQggHyp7lEK9P-DmAiVRv8C0fFhkI3ifeUcWszFt38r-adOR2x86Jnmvtl25Uu61Fdfyogckz2ub6Kr0ahiUCWppxsiiG2XinepiY7a560BYqW4Blpzr1SoHiAUIq7Nst3WySQUQBIJI-JaCBcURjJgPGnXBId3w0dc-528UA64lZDbGjU",
-  },
+  { alt: "Steel coil product", src: SITE_IMAGES.products.coil },
+  { alt: "Iron product", src: SITE_IMAGES.products.iron },
+  { alt: "Steel plate product", src: SITE_IMAGES.products.plate },
 ];
 
 const specs = [
@@ -34,10 +23,12 @@ export function ProductHeroSection() {
     <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
       <div className="space-y-6 md:col-span-1 lg:col-span-2">
         <div className="group relative h-80 overflow-hidden rounded-[28px] bg-gray-200 shadow-2xl shadow-primary/10 md:h-[460px]">
-          <img
+          <SiteImage
+            src={SITE_IMAGES.products.coil}
             alt="Large roll of cold rolled steel"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            src={MAIN_IMAGE}
+            fill
+            sizes="(max-width: 1024px) 100vw, 66vw"
+            className="transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
           <div className="absolute bottom-5 left-5 rounded-full bg-white/95 px-4 py-2 text-xs font-black uppercase tracking-wider text-primary-dark shadow-lg">
@@ -45,10 +36,12 @@ export function ProductHeroSection() {
           </div>
         </div>
         <div className="group relative h-64 cursor-pointer overflow-hidden rounded-[24px] bg-gray-900 shadow-xl shadow-primary/10">
-          <img
+          <SiteImage
+            src={SITE_IMAGES.construction}
             alt="Steel Slitting Line Video Thumbnail"
-            className="h-full w-full object-cover opacity-70 transition-opacity duration-300 group-hover:opacity-50"
-            src={VIDEO_THUMB}
+            fill
+            sizes="(max-width: 1024px) 100vw, 66vw"
+            className="opacity-70 transition-opacity duration-300 group-hover:opacity-50"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg transition-transform duration-300 group-hover:scale-110">
@@ -65,11 +58,13 @@ export function ProductHeroSection() {
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {secondaryImages.map((image) => (
-            <div key={image.alt} className="h-36 overflow-hidden rounded-2xl bg-gray-200 shadow-sm">
-              <img
-                alt={image.alt}
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-110"
+            <div key={image.alt} className="relative h-36 overflow-hidden rounded-2xl bg-gray-200 shadow-sm">
+              <SiteImage
                 src={image.src}
+                alt={image.alt}
+                fill
+                sizes="200px"
+                className="transition-transform duration-500 hover:scale-110"
               />
             </div>
           ))}

@@ -4,10 +4,11 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import constructionAreaImage from "@/assests/constrution area.webp";
+import { SiteImage } from "@/components/site/SiteImage";
 import { contactCopy } from "@/data/contact";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
 
 const EYEBROW = contactCopy.eyebrow;
@@ -60,11 +61,14 @@ export function ContactHero() {
       className="relative w-full overflow-hidden bg-primary"
     >
       <div className="absolute inset-0">
-        <img
-          src={constructionAreaImage.src}
+        <SiteImage
+          src={SITE_IMAGES.construction}
           alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover opacity-35"
+          fill
+          sizes="100vw"
+          priority
+          className="opacity-35"
+          aria-hidden
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent" />

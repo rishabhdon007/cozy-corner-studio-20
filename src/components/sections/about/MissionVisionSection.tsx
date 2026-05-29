@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { SectionHeading } from "@/components/site/SectionHeading";
+import { SiteImage } from "@/components/site/SiteImage";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
-const STEEL_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCBzog-TW3l4yWFZEA5inGiBy0dfswusuxcF_GjZWrOP6jVIBNX_RupmXGyYNuLH_n--2cr2w5qa3UpV_74YSbwkiwORXwnhnttjTuiOBDCtMj_0BFBbOkusbkC6wnzEOsIYeIp-2nyK7lpt8Z8e3Nuol8yyIJC1tAVBlqvND6AQ0Noz5IUHYAXUSRvOv4v4Rs7sWGWoL2ikLZc4Q2hwaR4YMm2T-vPHTmEJzI8slRc2N62yTtgjvxHDxSI9Av6ka6D5omsWAdI91A";
+const STEEL_IMAGE = SITE_IMAGES.construction;
 
 type SlideItem = {
   title: string;
@@ -104,10 +105,12 @@ export function MissionVisionSection() {
             {/* Circular Graphic Accent on Right */}
             <div className="absolute right-8 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full border border-white/10 p-2.5 hidden lg:flex items-center justify-center bg-[#07172c]/40 backdrop-blur-sm shadow-inner pointer-events-none select-none">
               <div className="relative w-full h-full rounded-full overflow-hidden border border-white/20">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9ZpmlTi9am7jAl3U69ngMTXiV7YHlzoRweLAmBg3U0RavWxTHJ2b8IPruaQ9-dnjFUwuQL1xNZK3LBkggzBv1l8DtaQdmxOKFUWUOs07kpOxvYHIR2JpYxH0rexpvWJQ6fGejqpa5AiBFrUL7Tye0qUdPKUM06F3Jee_vttkYUqoFFByAHosY8tUmo5j5CPpTt_T5F_XPrQgnxvPP_AJEwx_FY5STNvE5dvPOsAnCOV8AB-RmL7qlceqMvm3HoBGYRxvu7pIfys"
-                  alt="Industrial Handshake Background"
-                  className="w-full h-full object-cover opacity-25 scale-110 group-hover:scale-100 transition-transform duration-1000 mix-blend-luminosity"
+                <SiteImage
+                  src={SITE_IMAGES.products.coil}
+                  alt="Industrial steel coils"
+                  fill
+                  sizes="288px"
+                  className="opacity-25 scale-110 group-hover:scale-100 transition-transform duration-1000 mix-blend-luminosity"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#06172e]/85 to-transparent" />
                 <div className="absolute inset-4 rounded-full border border-dashed border-secondary/35 flex items-center justify-center bg-primary/10 backdrop-blur-md">
@@ -170,7 +173,7 @@ export function MissionVisionSection() {
             className="group relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1c2838] via-[#243547] to-[#151f2b] p-8 md:p-10 text-white flex flex-col justify-between shadow-xl min-h-[400px] md:col-span-2 lg:col-span-1 border border-white/5"
           >
             {/* Subtle illustration/handshake background watermark overlay */}
-            <div className="absolute inset-0 bg-[url('https://lh3.googleusercontent.com/aida/ADBb0ujPEXWWg0iI87xROhYOFi07NvkaakLAKcufgsmsIULakcaTeHZTBoIc_SxWcBJJ_XJXykvO25FlqnSvlL2F2-qayNrL4cFeH77NIYfPrDj7cPcOgWyaoKvxwlrpSEHlZKBjl6X4VE8b3F2mfO97oySF6u5pyG3CEJy3o0ht1wmhFITEbVwKqYEQKEAzVynO-vMzEP2_ED04Cr3uAEBun4G0G363gZ2HgbEP0sHEUcbr6f0mh2B_d0W_Br0')] opacity-5 bg-cover bg-center mix-blend-overlay pointer-events-none select-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#1c2838]/95 via-[#243547]/90 to-[#151f2b]/95 pointer-events-none select-none" />
             <span className="material-symbols-outlined text-[130px] text-white/5 absolute -bottom-8 -right-8 select-none pointer-events-none">
               visibility
             </span>
@@ -225,10 +228,12 @@ export function MissionVisionSection() {
 
         {/* Quality Control Banner */}
         <div className="group relative mt-16 h-[600px] overflow-hidden rounded-2xl border border-outline-variant">
-          <img
-            alt="Steel processing"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          <SiteImage
             src={STEEL_IMAGE}
+            alt="Steel processing"
+            fill
+            sizes="100vw"
+            className="transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
           <div className="absolute bottom-0 left-0 p-8">

@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { MobileNavMenu } from "@/components/site/MobileNavMenu";
 import { SiteButton } from "@/components/site/SiteButton";
+import { SiteImage } from "@/components/site/SiteImage";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { isNavActive, navItems } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -34,10 +36,13 @@ export function SiteHeader() {
             href="/"
             className="group flex min-w-0 items-center gap-2 transition-opacity duration-300 hover:opacity-90 sm:gap-3"
           >
-            <img
-              src="/company_logo.webp"
+            <SiteImage
+              src={SITE_IMAGES.companyLogo}
               alt="NRK Iron & Steel Logo"
+              width={160}
+              height={48}
               className="h-10 w-auto shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-11 md:h-12"
+              priority
             />
             <div className="min-w-0 flex flex-col leading-none">
               <span className="site-brand-name truncate">

@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { SiteImage } from "@/components/site/SiteImage";
 import { SiteButton } from "@/components/site/SiteButton";
 import type { CatalogInquiryKind } from "@/data/contact";
-import { DEFAULT_CATALOG_IMAGE, resolveCatalogImageSrc } from "@/lib/catalogMedia";
+import { resolveCatalogImageSrc } from "@/lib/catalogMedia";
 import type { ServiceCardItem } from "../data/serviceCards";
 import { CatalogQuickViewModal } from "./sections/services/CatalogQuickViewModal";
 
@@ -23,7 +24,8 @@ export function ServiceCard({
   catalogKind = "service",
 }: ServiceCardProps) {
   const router = useRouter();
-  const detailHref = href ?? (catalogKind === "product" ? `/product/${item.slug}` : `/services/${item.slug}`);
+  const detailHref = href ?? (item.kind === "product" || catalogKind === "product" ? `/product/${item.slug}` : `/services/${item.slug}`);
+  const resolvedKind = item.kind ?? catalogKind;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cardImageSrc = resolveCatalogImageSrc(item.image);
 
@@ -47,18 +49,12 @@ export function ServiceCard({
         tabIndex={0}
         aria-label={`View ${item.title} details`}
       >
-        <img
-          alt={item.title}
+        <SiteImage
           src={cardImageSrc}
-          loading="lazy"
-          decoding="async"
-          fetchPriority="low"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-          onError={(event) => {
-            if (event.currentTarget.src !== DEFAULT_CATALOG_IMAGE) {
-              event.currentTarget.src = DEFAULT_CATALOG_IMAGE;
-            }
-          }}
+          alt={item.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
         <span className="absolute right-4 top-4 z-20 bg-emerald-600 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-lg">
@@ -99,7 +95,7 @@ export function ServiceCard({
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
         slug={item.slug}
-        catalogKind={catalogKind}
+        catalogKind={resolvedKind}
       />
     </>
   );

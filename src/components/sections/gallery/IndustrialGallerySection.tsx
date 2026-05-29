@@ -1,105 +1,143 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { SiteImage } from "@/components/site/SiteImage";
+import { SITE_IMAGES } from "@/lib/siteImages";
+import { cn } from "@/lib/utils";
 
-import { SectionHeading } from "@/components/site/SectionHeading";
-import fallbackImage from "@/assests/constrution area.webp";
+type GalleryItem = {
+  id: string;
+  title: string;
+  image: string;
+  layout: "top-left" | "bottom-left" | "tall-center" | "top-right" | "bottom-right" | "top-far" | "bottom-far";
+};
 
-const filters = ["All", "Manufacturing", "Logistics", "Facilities"] as const;
-type GalleryFilter = (typeof filters)[number];
-
-const galleryItems = [
+const galleryItems: GalleryItem[] = [
   {
-    category: "Manufacturing" as const,
+    id: "slitting",
     title: "Heavy Slitting Operations",
-    image:
-      "https://lh3.googleusercontent.com/aida/ADBb0uhlMAkLjSuHuh5Nlgp_0YcZG1ec0WSnd4QBpgzql8UzRSLcGybcim1ElD1wV8tfD73weAYy6HtNSxPhccDrV3KJ-NVCLHeccgEkIZ0p78xWGam2JqDJo2xVQrQ1SzEUIu3nNYx7xxb5dHn56vmQenmhf7ZnZLDd4-4AUgPmqub4hDtoTSY2OqBrY9m0leqYeqr9TuflYReios4IP-kXeE8oWrmlS1Yirq4h4HhAvRiEWTwDCZuuGDJpqhA",
-    large: true,
+    image: SITE_IMAGES.construction,
+    layout: "top-left",
   },
   {
-    category: "Logistics" as const,
-    title: "Global Distribution Network",
-    image:
-      "https://lh3.googleusercontent.com/aida/ADBb0uiWVd4j9jlXFmKG0MlhiuhvWN8z4QH9YHt_X1GYxABpAYeE-AnJuYQtz2q4NiDIqYcdbHA34CJ0IqSRekO9XqfNzBMtZuUruYZxvWiryvH9QdjP-78BTCr_7ObmTV01YlDrwvXZgSrflaqbBQqV7L74i66s1ZhxfT-fPTybBzoptcjrPGtxEwQ37tOCeoH6yLgWJJaRIgoxJelLJXIOfVpIxEv9G20ntD1QEyzI_V0NYHpYhlYWHquV1I0",
-    large: false,
+    id: "warehouse",
+    title: "Warehouse Operations",
+    image: SITE_IMAGES.about.screen3,
+    layout: "bottom-left",
   },
   {
-    category: "Facilities" as const,
-    title: "Premium TMT Storage",
-    image:
-      "https://lh3.googleusercontent.com/aida/ADBb0ujNeJfj5wjuiu3qa5PPpnbdTCPvKNZ6N2yri4I15sFCyU37e27ZxTaBi-X_HrEEoMrBQ_Y87Eky8g_cWUxRDlugbnlELvSyUYarJSXBSVn3wUXaFOlujrxI8ykr_gOeXzy-9wgeAJ9fdfdpExYYPQ4PuLncFTJa42kasKT_q9zpCwhLgzElMiOrDPJ6PkodKV-52kPNF3ODoLhOUdTcw0k9CTEY048brLSdv86qeEhwYXr-VqT5vRXSubc",
-    large: false,
+    id: "distribution",
+    title: "Distribution Network",
+    image: SITE_IMAGES.about.screen2,
+    layout: "tall-center",
+  },
+  {
+    id: "storage",
+    title: "Premium Steel Storage",
+    image: SITE_IMAGES.about.screen1,
+    layout: "top-right",
+  },
+  {
+    id: "ctl",
+    title: "Cut-to-Length Processing",
+    image: SITE_IMAGES.about.screen3,
+    layout: "bottom-right",
+  },
+  {
+    id: "capacity",
+    title: "Industrial Capacity",
+    image: SITE_IMAGES.teamMember,
+    layout: "top-far",
+  },
+  {
+    id: "dispatch",
+    title: "Dispatch & Logistics Hub",
+    image: SITE_IMAGES.about.screen2,
+    layout: "bottom-far",
   },
 ];
 
+const layoutStyles: Record<GalleryItem["layout"], string> = {
+  "top-left": "md:col-start-1 md:row-start-1 min-h-[240px] sm:min-h-[280px] md:min-h-[300px]",
+  "bottom-left": "md:col-start-1 md:row-start-2 min-h-[200px] sm:min-h-[240px] md:min-h-[280px]",
+  "tall-center":
+    "md:col-start-2 md:row-start-1 md:row-span-2 min-h-[320px] sm:min-h-[380px] md:min-h-0 md:h-full",
+  "top-right": "md:col-start-3 md:row-start-1 min-h-[220px] sm:min-h-[260px] md:min-h-[300px]",
+  "bottom-right": "md:col-start-3 md:row-start-2 min-h-[220px] sm:min-h-[260px] md:min-h-[280px]",
+  "top-far": "md:col-start-4 md:row-start-1 min-h-[240px] sm:min-h-[280px] md:min-h-[300px]",
+  "bottom-far": "md:col-start-4 md:row-start-2 min-h-[200px] sm:min-h-[240px] md:min-h-[280px]",
+};
+
+const highlights = [
+  "Slitting, cut-to-length, annealing, and coated sheet processing under one roof",
+  "Large-format yards with crane handling, weighing, and ready stock dispatch",
+  "Pan-India logistics from Indore to Mumbai, Gujarat, Rajasthan, and Punjab",
+] as const;
+
 export function IndustrialGallerySection() {
-  const [activeFilter, setActiveFilter] = useState<GalleryFilter>("All");
-
-  const visibleItems = useMemo(
-    () =>
-      activeFilter === "All" ? galleryItems : galleryItems.filter((item) => item.category === activeFilter),
-    [activeFilter],
-  );
-
   return (
-    <section className="w-full bg-surface py-stack-lg">
+    <section className="overflow-hidden bg-white py-16 md:py-24 lg:py-28">
       <div className="mx-auto max-w-container-max px-gutter">
-        <div className="mb-stack-md flex flex-col items-end justify-between gap-4 md:flex-row">
-          <SectionHeading
-            align="left"
-            eyebrow="Visual Showcase"
-            title="Industrial Gallery"
-            lead="Visual documentation of our facilities and logistics capabilities."
-            titleClassName="mb-2"
-            leadClassName="mb-2"
-            className="mb-stack-md"
-          />
-          <div className="flex flex-wrap gap-2">
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                type="button"
-                onClick={() => setActiveFilter(filter)}
-                className={`rounded-lg border px-4 py-2 font-label-md text-label-md transition-all ${
-                  activeFilter === filter
-                    ? "border-transparent bg-primary-container text-on-primary-container"
-                    : "border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low"
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
+        <div className="grid grid-cols-1 items-start gap-12 xl:grid-cols-[minmax(0,400px)_minmax(0,1fr)] xl:gap-16 2xl:gap-20">
+          <div data-scroll-reveal="left" className="xl:sticky xl:top-28 xl:self-start">
+            <span className="font-label-md mb-3 inline-block text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+              Visual Showcase
+            </span>
+            <h2 className="font-display text-[clamp(2.25rem,4.5vw,3.25rem)] font-black leading-[1.05] text-primary">
+              Industrial Gallery
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-on-surface-variant md:text-lg">
+              Visual documentation of our facilities, processing lines, and logistics capabilities — from raw
+              material intake to finished dispatch.
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-on-surface-variant/90 md:text-base">
+              NRK Iron &amp; Steel operates from a multi-acre yard in Indore with slitting lines, CTL machines,
+              annealing furnaces, and dedicated storage for prime and secondary steel. These images reflect the
+              scale, precision, and throughput that support our customers across Central and Western India.
+            </p>
+
+            <ul className="mt-6 space-y-3">
+              {highlights.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm leading-relaxed text-on-surface-variant md:text-base">
+                  <span className="material-symbols-outlined mt-0.5 shrink-0 text-base text-secondary">check_circle</span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-6 text-sm leading-relaxed text-on-surface-variant/80 md:text-base">
+              Every shipment is weighed, inspected, and documented before it leaves our yard — so you receive
+              material that matches your specification, on schedule, and ready for fabrication or site use.
+            </p>
           </div>
-        </div>
-        <div className="grid auto-rows-[250px] grid-cols-1 gap-4 md:grid-cols-3">
-          {visibleItems.map((item) => (
-            <div
-              key={item.title}
-              className={`group relative overflow-hidden rounded-xl border border-outline-variant bg-surface-container ${
-                item.large ? "md:col-span-2 md:row-span-2" : ""
-              }`}
-            >
-              <img
-                alt={item.title}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                src={item.image}
-                onError={(event) => {
-                  event.currentTarget.src = fallbackImage.src;
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-tertiary/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute bottom-0 left-0 translate-y-4 p-6 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="mb-2 inline-block rounded bg-surface/20 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-on-primary backdrop-blur-md">
-                  {item.category}
-                </span>
-                <h3
-                  className={`text-on-primary ${item.large ? "font-headline-md text-headline-md" : "font-label-md text-label-md"}`}
+
+          <div data-scroll-reveal="right" className="relative w-full">
+            <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4 md:grid-rows-2 md:gap-5 md:min-h-[620px] lg:min-h-[680px] xl:min-h-[720px]">
+              {galleryItems.map((item) => (
+                <article
+                  key={item.id}
+                  className={cn(
+                    "group relative overflow-hidden rounded-2xl bg-slate-100 shadow-md ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10",
+                    layoutStyles[item.layout],
+                    item.layout === "tall-center" && "col-span-2 md:col-span-1",
+                  )}
                 >
-                  {item.title}
-                </h3>
-              </div>
+                  <SiteImage
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 320px"
+                    className="transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
+                    <h3 className="font-headline-md text-base font-black text-white md:text-lg lg:text-xl">
+                      {item.title}
+                    </h3>
+                  </div>
+                </article>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

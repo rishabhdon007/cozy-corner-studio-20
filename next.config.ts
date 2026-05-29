@@ -5,8 +5,10 @@ const nextConfig: NextConfig = {
     root: import.meta.dirname,
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
     ],
   },
 };
