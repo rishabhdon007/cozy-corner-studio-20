@@ -10,8 +10,9 @@ export const contactCopy = {
     "Looking for a trusted steel partner? Reach out to NRK Iron & Steel for product queries, specific processing services, and latest steel market insights. Our team is ready to support your needs with reliable solutions.",
 } as const;
 
-export const contactCtaBackgroundImage =
-  "https://lh3.googleusercontent.com/aida/ADBb0uho3J8PK1DxDK2XTCdhFR4hHbGEts4H22MIe-m8oGrD6wvojf4Lj4UBpaLmUNyd_8NOlomRvvQFSnSAcArKyTr4I8fUtjF0LzRGPbi41qzud5wKVuuK9MuKAavjwVdIXrSwv4K1zjWV-XpKbZCVZ8mORQmM2MTUTAJdxImC_yEM0nl6J0y_IRwHOf2lnNIGinCiEP1i4vMagGLl4HlDRcwXvncddvRupxE3gOzvMYQtegTLO9oj4QUlXQk";
+/** Direct download link for NRK Steel Pvt Ltd brochure (Google Drive). */
+export const brochureDownloadUrl =
+  "https://drive.google.com/uc?export=download&id=1T8ImL0kmzVByXivNbbBGPr6jv1fwT6JI";
 
 export function assetSrc(image: StaticImageData | string): string {
   return typeof image === "string" ? image : image.src;
@@ -40,17 +41,25 @@ export function buildWhatsAppHref(message: string): string {
 }
 
 export const contactInfo = {
-  email: "info@nrksteel.com",
-  emailHref: "mailto:info@nrksteel.com",
+  email: "info@nrkind.com",
+  emailHref: "mailto:info@nrkind.com",
   phone: "095757 07070",
   phoneHref: "tel:+919575707070",
   phoneTel: "+919575707070",
+  secondaryPhones: [
+    { display: "0731-2420824", href: "tel:+917312420824" },
+    { display: "0731-2420825", href: "tel:+917312420825" },
+    { display: "+91-9302106507", href: "tel:+919302106507" },
+    { display: "+91-9977777099", href: "tel:+919977777099" },
+  ],
   whatsappNumber: "919575707070",
   whatsappMessage: "Hello NRK Iron & Steel, I want to discuss my steel requirement.",
+  website: "https://www.nrkind.com",
   address: {
-    line1: "S.K.- 1 COMPOUND, PLOT NO. 46, 47, MR 11",
-    line2: "Dewas Naka, Lasudia Mori, Indore, Madhya Pradesh 452010",
-    full: "S.K.- 1 COMPOUND, PLOT NO. 46, 47, MR 11, Dewas Naka, Lasudia Mori, Indore, Madhya Pradesh 452010",
+    line1: "S.K.-1 Compound, Plot No. 46, 47",
+    line2: "Khasra Survey No. 62/3, 62/4, 62/7, Lasudia Mori, M.R.-11, Dewas Naka",
+    line3: "Indore, Madhya Pradesh – 452010",
+    full: "S.K.-1 Compound, Plot No. 46, 47, Khasra Survey No. 62/3, 62/4, 62/7, Lasudia Mori, M.R.-11, Dewas Naka, Indore, Madhya Pradesh – 452010",
     city: "Indore, MP",
     mapQuery:
       "S.K.-+1+COMPOUND,+PLOT+NO.+46,+47,+MR+11,+Dewas+Naka,+Lasudia+Mori,+Indore,+Madhya+Pradesh+452010",
@@ -84,21 +93,30 @@ export const contactLocations = [
     id: "mumbai",
     label: "Node",
     city: "Mumbai",
-    detail: "Andheri East",
+    detail: "Import & Logistics Terminal",
     accent: "outline" as const,
   },
   {
-    id: "rajkot",
+    id: "gujarat",
     label: "Node",
-    city: "Rajkot",
-    detail: "GIDC Metoda",
+    city: "Gujarat",
+    detail: "Distribution Hub",
     accent: "outline" as const,
   },
   {
     id: "bokaro",
     label: "Node",
     city: "Bokaro",
-    detail: "Steel City",
+    detail: "Raw Material Sourcing Base",
     accent: "outline" as const,
   },
+] as const;
+
+/** Service coverage regions from brochure */
+export const serviceRegions = [
+  "Madhya Pradesh",
+  "Gujarat",
+  "Maharashtra",
+  "Rajasthan",
+  "Punjab",
 ] as const;

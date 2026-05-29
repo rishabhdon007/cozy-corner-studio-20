@@ -1,7 +1,7 @@
 import constructionAreaImage from "@/assests/constrution area.webp";
 import { DirectoryProfileLinks } from "@/components/site/DirectoryProfileLinks";
 import { SiteButton } from "@/components/site/SiteButton";
-import { contactCopy, contactCtaBackgroundImage } from "@/data/contact";
+import { brochureDownloadUrl, contactCopy } from "@/data/contact";
 import { cn } from "@/lib/utils";
 
 type ConnectCtaTheme = "blue-gradient" | "primary";
@@ -36,7 +36,7 @@ const themeStyles: Record<
 
 export function ConnectCtaSection({
   theme = "blue-gradient",
-  backgroundImage = contactCtaBackgroundImage,
+  backgroundImage = constructionAreaImage.src,
   backgroundAlt = "High-Rise Steel Architectural Skyscrapers",
   eyebrow = contactCopy.eyebrow,
   title = contactCopy.title,
@@ -95,8 +95,9 @@ export function ConnectCtaSection({
                 Contact Us Now
               </SiteButton>
               <SiteButton
-                href="/NRK_Iron_Steel_Brochure.pdf"
-                download
+                href={brochureDownloadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="glass"
                 icon="download"
                 iconClassName="text-sm"

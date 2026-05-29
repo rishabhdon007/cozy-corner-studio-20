@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { contactInfo } from "@/data/contact";
-import { legalLinks, quickLinks, serviceFooterLinks, siteName, siteTagline, socialLinks } from "@/data/site";
+import { legalLinks, quickLinks, serviceFooterLinks, siteName, siteTaglineExtended, socialLinks } from "@/data/site";
 
 function SocialIcon({ label }: { label: string }) {
   const svgClass = "block size-5 shrink-0 fill-current";
@@ -41,7 +41,7 @@ export function SiteFooter() {
             />
             <span>{siteName}</span>
           </Link>
-          <p className="max-w-xs font-body-md text-body-md text-surface-variant opacity-80">{siteTagline}</p>
+          <p className="max-w-xs font-body-md text-body-md text-surface-variant opacity-80">{siteTaglineExtended}</p>
           <div>
             <h4 className="mb-4 font-headline-md text-sm text-secondary-fixed">Follow Us</h4>
             <div className="flex flex-wrap items-center justify-start gap-3">

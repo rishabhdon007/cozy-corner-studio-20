@@ -1,7 +1,10 @@
 export const siteName = "NRK Iron & Steel";
 
 export const siteTagline =
-  "India's trusted steel distributor and processor, delivering quality and precision.";
+  "We PROVIDE Competitive rates and timely deliveries.";
+
+export const siteTaglineExtended =
+  "India's trusted steel distributor and processor — delivering quality, precision, and timely supply since 1994.";
 
 export const navItems = [
   { label: "Home", href: "/" },

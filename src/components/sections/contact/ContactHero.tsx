@@ -134,7 +134,7 @@ export function ContactHero() {
           </p>
           <p
             className={cn(
-              "font-body-md max-w-2xl text-sm leading-relaxed text-white/75 line-clamp-2 transition-all duration-700 md:text-base",
+              "font-body-md max-w-2xl text-sm leading-relaxed text-white/75 transition-all duration-700 md:text-base",
               !mounted || heroStep >= 3 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
             )}
           >

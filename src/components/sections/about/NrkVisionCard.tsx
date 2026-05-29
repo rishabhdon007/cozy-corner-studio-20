@@ -5,18 +5,18 @@ import { useState } from "react";
 const VISION_QUOTES = [
   {
     quote:
-      "To be recognized as the premier institutional steel supplier, offering uncompromising quality products at highly competitive rates to build the future.",
+      "To become the best steel supplier in the upcoming years — supplying quality steel products and services with cost-effective solutions, professional operations, and genuine business ethics.",
     attribution: "NRK Iron & Steel — Vision Statement",
   },
   {
     quote:
-      "To build enduring partnerships with India's infrastructure leaders by delivering precision-processed steel that forms the backbone of every great structure.",
-    attribution: "NRK Iron & Steel — Mission",
+      "To ensure complete customer satisfaction by providing the best rates among competitors, delivering materials on commitment, and helping customers at every stage of their journey.",
+    attribution: "NRK Iron & Steel — Customer Promise",
   },
   {
     quote:
-      "To pioneer eco-friendly logistics, optimize steel waste recycling systems, and establish low-emission supply corridors for the next generation of industrial India.",
-    attribution: "NRK Iron & Steel — Sustainability Pledge",
+      "To promote entrepreneurship and innovation, ensure full utilization of resources, and follow effective eco-friendly procedures — achieving business excellence as a steel supermarket.",
+    attribution: "NRK Iron & Steel — Mission",
   },
 ] as const;
 

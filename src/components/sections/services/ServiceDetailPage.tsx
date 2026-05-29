@@ -553,40 +553,40 @@ function KeyAdvantagesCompact({
 function WhyChooseNrk() {
   const reasons = [
     {
-      icon: "verified",
-      title: "Quality Assured",
+      icon: "handshake",
+      title: "Customer-Focused Service",
       description:
-        "Every product undergoes rigorous quality checks with mill test certificates provided for complete transparency.",
+        "Customer-focused approach with timely delivery, quality assurance, transparent communication, and high customer satisfaction.",
+    },
+    {
+      icon: "loyalty",
+      title: "Goodwill & Loyalty",
+      description:
+        "Strong business relationships built over 30+ years with long-term trust and a loyal customer ecosystem.",
     },
     {
       icon: "inventory_2",
-      title: "Ready Stock Availability",
+      title: "Complete Range",
       description:
-        "Extensive inventory ensures immediate availability, reducing your project lead times significantly.",
+        "One-stop solution for all steel requirements — prime and secondary materials available with doorstep delivery support.",
+    },
+    {
+      icon: "groups",
+      title: "Client Relationship",
+      description:
+        "30+ years of strong client relationships with a trusted and loyal network — business built on mutual trust and support.",
     },
     {
       icon: "precision_manufacturing",
       title: "Precision Processing",
       description:
-        "State-of-the-art machinery delivers accurate cuts and profiles matching your exact specifications.",
+        "State-of-the-art CTL machines, cranes (10-30 ton capacity), and annealing furnaces for accurate processing.",
     },
     {
       icon: "local_shipping",
       title: "Pan-India Delivery",
       description:
-        "Reliable logistics network ensures timely delivery across India with real-time tracking.",
-    },
-    {
-      icon: "support_agent",
-      title: "Expert Consultation",
-      description:
-        "Our technical team provides guidance on material selection and application-specific solutions.",
-    },
-    {
-      icon: "handshake",
-      title: "Trusted Partnership",
-      description:
-        "30+ years of industry experience building long-term relationships with satisfied customers.",
+        "Transportation services with 10-15 ton capacity ensuring secure and efficient doorstep delivery across MP, Gujarat, Maharashtra, Rajasthan & Punjab.",
     },
   ];
 

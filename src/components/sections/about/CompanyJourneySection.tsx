@@ -22,28 +22,28 @@ type Milestone = {
 const milestones: Milestone[] = [
   {
     year: "1994",
-    title: "Founded",
+    title: "Initial Days",
     description:
-      "Established with a vision to provide premium structural steel solutions for the burgeoning infrastructure sector in Central India.",
+      "Mr. Nimesh Kothari embarked on his entrepreneurial journey by starting retail trading in Indore, gradually expanding into brokerage and cross-border supply while building a strong customer base — a true one-man army without any business background support.",
     icon: "foundation",
     image: journey1994Image,
     accent: "primary",
   },
   {
     year: "2005",
-    title: "Growth & Expansion",
+    title: "Expansion to a Bigger Picture",
     description:
-      "Rapid scaling of warehousing capabilities and establishing direct procurement networks with major national steel producers.",
+      "With a focus on creating a larger trading network, Nimesh successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
     icon: "trending_up",
     image: journey2005Image,
     accent: "secondary",
   },
   {
     year: "2015",
-    title: "ISO 9001 Certification",
+    title: "Generational Leadership",
     description:
-      "Formalising our commitment to operational excellence and quality management systems across trading and delivery operations.",
-    icon: "verified",
+      "The transition to multi-generational leadership saw Nimesh's sons, Nishant and Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
+    icon: "groups",
     image: journey2015Image,
     accent: "emerald",
   },
@@ -75,10 +75,10 @@ const accentMap: Record<
 };
 
 const legacyLines = [
-  "For over three decades, NRK Iron & Steel has stood as a pillar of industry in the steel sector.",
-  "Steel began as a focused trading operation that evolved into a comprehensive institutional supplier underpinned by an unwavering commitment to quality and scale.",
-  "Today, from our headquarters in Indore, we serve clients across construction, manufacturing, and heavy infrastructure.",
-  "Supplying certified steel from TATA, JSW, and AM/NS with precision processing and pan-India logistics.",
+  "NRK Iron and Steel LLP is a 30-year-old trading enterprise that commenced its roots in Indore, Madhya Pradesh.",
+  "This firm was created with a lot of hopes, faith, and trust in the eyes of Mr. Nimesh Kothari. His visionary zeal grew the company into one of the foremost Iron and Steel trading firms in Central India.",
+  "Currently, NRK serves bulk quantities of steel across Madhya Pradesh, Gujarat, Maharashtra, Rajasthan, and Punjab — solidifying the company's presence and growth in the steel industry.",
+  "The company further aims to expand rapidly across India, supplying certified steel from TATA, JSW, and AM/NS with precision processing and pan-India logistics.",
 ] as const;
 
 function useScrollMilestone(total: number) {

@@ -20,22 +20,22 @@ const MISSION_SLIDES: SlideItem[] = [
     icon: "flag",
   },
   {
-    title: "Precision Sourcing",
+    title: "Promote Innovation",
     description:
-      "To partner only with premier mills like TATA, JSW, and AM/NS, guaranteeing that every plate, coil, or sheet we supply is certified to exact industrial grade standards.",
-    icon: "verified_user",
+      "To promote entrepreneurship and innovation while ensuring full utilization of resources through effective and eco-friendly procedures and practices.",
+    icon: "lightbulb",
   },
   {
-    title: "Processing Excellence",
+    title: "Steel Supermarket",
     description:
-      "To maintain cutting-edge slitting and cut-to-length lines that output burr-free materials with minimal dimensional tolerances and zero waste for our fabrication clients.",
-    icon: "precision_manufacturing",
+      "To supply class products like a steel supermarket — offering a complete range of prime and secondary materials with doorstep delivery support.",
+    icon: "store",
   },
   {
-    title: "Nationwide Supply Chains",
+    title: "Business Excellence",
     description:
-      "To leverage structured logistics, heavy-duty warehouse cranes, and strategic delivery fleets to ensure damage-free, on-time delivery across major industrial hubs.",
-    icon: "local_shipping",
+      "To achieve business excellence through efficient resource utilization while following genuine business ethics and ensuring complete customer satisfaction.",
+    icon: "workspace_premium",
   },
 ];
 
@@ -43,20 +43,20 @@ const VISION_SLIDES: SlideItem[] = [
   {
     title: "Our Vision",
     description:
-      "To be the undisputed leader in high-grade steel distribution, setting the benchmark for quality and operational efficiency across the subcontinent.",
+      "To become the best steel supplier in the upcoming years — supplying quality steel products and services with cost-effective solutions and professional operations built on genuine business ethics.",
     icon: "visibility",
   },
   {
-    title: "Sustainable Foundations",
+    title: "Customer First",
     description:
-      "To pioneer eco-friendly logistics, optimize steel waste recycling systems, and establish low-emission supply corridors for the heavy machinery and construction sectors.",
-    icon: "eco",
+      "To ensure complete customer satisfaction and fulfillment by providing the best rates among competitors while delivering materials on commitment and helping customers at every stage.",
+    icon: "support_agent",
   },
   {
-    title: "Technological Frontier",
+    title: "Industry Leadership",
     description:
-      "To digitize inventory transparency, integrate custom sizing calculators, and offer real-time delivery tracking for smart fabrication industries.",
-    icon: "developer_board",
+      "To be the undisputed leader in high-grade steel distribution across Central India, setting the benchmark for quality and operational efficiency in the subcontinent.",
+    icon: "emoji_events",
   },
 ];
 

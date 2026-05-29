@@ -3,38 +3,38 @@ import { ImageFeatureSplitSection } from "@/components/site/ImageFeatureSplitSec
 
 const FEATURES = [
   {
-    icon: "inventory_2",
-    title: "Ready Stock Availability",
+    icon: "support_agent",
+    title: "Customer-Focused Service",
     description:
-      "A broad inventory of steel products helps buyers move faster without waiting on uncertain supply cycles.",
+      "Customer-first approach with timely delivery, quality assurance, transparent communication, and high customer satisfaction.",
     revealDelay: 4,
   },
   {
-    icon: "precision_manufacturing",
-    title: "Precision Processing",
+    icon: "loyalty",
+    title: "Goodwill & Loyalty",
     description:
-      "Slitting, cut-to-length, profiling, and packaging are handled with accuracy to match project requirements.",
+      "Strong business relationships built over 30+ years with long-term trust and a loyal customer ecosystem across India.",
     revealDelay: 5,
   },
   {
-    icon: "verified_user",
-    title: "Consistent Quality",
+    icon: "inventory_2",
+    title: "Complete Range",
     description:
-      "Every order is backed by dependable sourcing, careful handling, and quality checks before dispatch.",
+      "One-stop solution for all steel requirements — prime and secondary materials available with doorstep delivery support.",
     revealDelay: 6,
   },
   {
-    icon: "local_shipping",
-    title: "On-Time Delivery",
+    icon: "groups",
+    title: "30+ Years of Client Trust",
     description:
-      "Coordinated logistics and practical scheduling keep material movement aligned with your site timelines.",
+      "Business built on mutual trust and support — strong, professional relationships with customers across multiple generations.",
     revealDelay: 7,
   },
   {
-    icon: "handshake",
-    title: "Long-Term Partnerships",
+    icon: "local_shipping",
+    title: "Pan-India Delivery",
     description:
-      "Customers stay with NRK because they get transparent communication, dependable service, and practical support.",
+      "Serving MP, Gujarat, Maharashtra, Rajasthan & Punjab with secure transportation and efficient doorstep delivery.",
     revealDelay: 8,
   },
 ] as const;
@@ -54,7 +54,7 @@ export function WhyChooseUsSection() {
           <br className="hidden sm:block" /> Choose Us
         </>
       }
-      lead="We combine ready stock, precise processing, reliable delivery, and long-term service discipline for industrial buyers across India."
+      lead="We PROVIDE competitive rates and timely deliveries — combining ready stock, precise processing, and long-term service discipline for industrial buyers across India."
       features={FEATURES}
     />
   );

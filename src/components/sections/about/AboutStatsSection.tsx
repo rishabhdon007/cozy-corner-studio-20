@@ -10,7 +10,7 @@ const stats = [
     icon: "history",
     value: "30+",
     title: "Years of Excellence",
-    description: "A proven track record of delivering superior steel solutions since 1994.",
+    description: "Founded by Mr. Nimesh Kothari in 1994, growing from a one-man operation into Central India's foremost steel trading firm.",
     accent: "from-amber-500 to-orange-500",
   },
   {
@@ -18,14 +18,14 @@ const stats = [
     value: "4",
     title: "Strategic Hubs",
     description:
-      "State-of-the-art facilities in Indore, Mumbai, Rajkot, and Bokaro ensuring nationwide reach.",
+      "Offices in Indore (HQ), Mumbai, Gujarat, and Bokaro — ensuring nationwide reach across 5 major states.",
     accent: "from-blue-500 to-cyan-500",
   },
   {
     icon: "handshake",
     value: "10k+",
     title: "Projects Empowered",
-    description: "Supplying critical infrastructure across commercial and industrial sectors.",
+    description: "Serving bulk quantities across MP, Gujarat, Maharashtra, Rajasthan & Punjab with CTL machines, cranes, and annealing furnaces.",
     accent: "from-emerald-500 to-teal-500",
   },
 ];

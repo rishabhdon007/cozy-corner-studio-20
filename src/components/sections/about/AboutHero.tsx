@@ -17,7 +17,7 @@ const TITLE_PARTS = {
 } as const;
 const TITLE = `${TITLE_PARTS.before}${TITLE_PARTS.highlight}${TITLE_PARTS.after}`;
 const SUMMARY =
-  "A 30-year legacy of precision, trust, and strong industrial roots in the heart of Central India.";
+  "Founded by Mr. Nimesh Kothari with vision, faith, and trust — NRK Iron & Steel has grown from a one-man operation in Indore into one of the foremost steel trading firms in Central India.";
 
 export function AboutHero() {
   const heroRef = useRef<HTMLElement>(null);
