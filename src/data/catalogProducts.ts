@@ -18,6 +18,10 @@ import {
   pickledCuttingOfferings,
   rollingShutterOfferings,
   roofingSheetOfferings,
+  crSemiHardSheetsStock,
+  crPickledSheetsStock,
+  crSemiHardCuttingStock,
+  crPickledCuttingStock,
 } from "@/data/catalogOfferings";
 import type { ProductRecommendation } from "@/data/catalogTypes";
 
@@ -467,8 +471,8 @@ const secondaryEntries = [
       { label: "Thickness", value: "1.80 to 4.60mm" },
       { label: "Size", value: "3.15ft / 4ft / 4.15ft x 7–11ft" },
     ],
-    variants: hotRolledSheetsOfferings.map((o) => o.title),
-    offerings: hotRolledSheetsOfferings,
+    variants: crPickledSheetsStock.map((o) => o.title),
+    offerings: crPickledSheetsStock,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Soft Material", method: "Batch identification" },
@@ -493,16 +497,8 @@ const secondaryEntries = [
       { label: "Thickness", value: "0.30 to 4.50mm" },
       { label: "Size", value: "4ft / 3.15ft x 8ft / random" },
     ],
-    variants: [
-      coldRolledCoilOfferings[1].title,
-      coldRolledCoilOfferings[2].title,
-      galvanizedPlainCoilOfferings[0].title,
-    ],
-    offerings: [
-      coldRolledCoilOfferings[1],
-      coldRolledCoilOfferings[2],
-      galvanizedPlainCoilOfferings[0],
-    ],
+    variants: crSemiHardSheetsStock.map((o) => o.title),
+    offerings: crSemiHardSheetsStock,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Semi Hard", method: "Batch identification" },
@@ -552,8 +548,8 @@ const secondaryEntries = [
       { label: "Thickness", value: "1.80 to 4.5mm" },
       { label: "Size", value: "6 inch above to 4ft" },
     ],
-    variants: pickledCuttingOfferings.map((o) => o.title),
-    offerings: pickledCuttingOfferings,
+    variants: crPickledCuttingStock.map((o) => o.title),
+    offerings: crPickledCuttingStock,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Soft Material", method: "Batch identification" },
@@ -578,12 +574,8 @@ const secondaryEntries = [
       { label: "Thickness", value: "0.30 to 4mm" },
       { label: "Size", value: "1.5ft and above" },
     ],
-    variants: [
-      coldRolledCoilOfferings[0].title,
-      coldRolledCoilOfferings[2].title,
-      crfhBhattiOfferings[0].title,
-    ],
-    offerings: [coldRolledCoilOfferings[0], coldRolledCoilOfferings[2], ...crfhBhattiOfferings],
+    variants: crSemiHardCuttingStock.map((o) => o.title),
+    offerings: crSemiHardCuttingStock,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Semi Hard Material", method: "Batch identification" },

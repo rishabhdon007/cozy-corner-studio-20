@@ -18,7 +18,12 @@ export function ContactInfoCards({ className, scrollReveal = "right" }: ContactI
         href={contactInfo.phoneHref}
       />
       <ContactInfoCard icon="mail" label="Email Our Partners" value={contactInfo.email} href={contactInfo.emailHref} />
-      <ContactInfoCard icon="location_on" label="Visit Headquarters" value={contactInfo.address.city} />
+      <ContactInfoCard
+        icon="location_on"
+        label="Visit Headquarters"
+        value={contactInfo.address.city}
+        href={contactInfo.address.googleMapsUrl}
+      />
       <GoogleReviewsCard variant="light" />
     </div>
   );

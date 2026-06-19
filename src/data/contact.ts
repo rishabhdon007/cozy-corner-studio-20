@@ -62,6 +62,8 @@ export const contactInfo = {
     city: "Indore, MP",
     mapQuery:
       "S.K.-+1+COMPOUND,+PLOT+NO.+46,+47,+MR+11,+Dewas+Naka,+Lasudia+Mori,+Indore,+Madhya+Pradesh+452010",
+    googleMapsUrl:
+      "https://www.google.com/maps/search/?api=1&query=NRK+Iron+and+Steels+LLP+S.K.-1+Compound+Plot+No.+46+47+MR-11+Dewas+Naka+Lasudia+Mori+Indore+Madhya+Pradesh+452010",
   },
   indiaMartUrl: "https://www.indiamart.com/nrk-ironandsteelsindore/",
   justDialUrl:

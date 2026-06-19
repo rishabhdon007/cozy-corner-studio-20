@@ -102,7 +102,14 @@ export function SiteFooter() {
           <ul className="space-y-3 font-body-md text-sm text-surface-variant opacity-80">
             <li className="flex items-start">
               <span className="material-symbols-outlined mr-2 mt-0.5 text-sm">location_on</span>
-              <span>{contactInfo.address.full}</span>
+              <a
+                href={contactInfo.address.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:text-on-primary hover:opacity-100"
+              >
+                {contactInfo.address.full}
+              </a>
             </li>
             <li className="flex items-center">
               <span className="material-symbols-outlined mr-2 text-sm">call</span>
@@ -121,7 +128,7 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto flex max-w-container-max flex-col items-center justify-between gap-4 px-gutter py-4 font-body-md text-sm text-surface-variant opacity-80 md:flex-row">
-        <p>© 2024 NRK Iron & Steel. All rights reserved.</p>
+        <p>© 2026 NRK Iron & Steel. All rights reserved.</p>
         <p className="text-center md:text-right">
           Design and developed by{" "}
           <a

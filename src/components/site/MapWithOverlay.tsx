@@ -42,7 +42,14 @@ export function MapWithOverlay({
         <div className="flex items-center gap-4">
           <div className="min-w-0 flex-1">
             <p className="mb-2 font-display font-bold text-primary">{title}</p>
-            <p className="text-xs leading-relaxed text-on-surface-variant">{address}</p>
+            <a
+              href={mapsSearchUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs leading-relaxed text-on-surface-variant hover:text-primary transition-colors cursor-pointer block"
+            >
+              {address}
+            </a>
           </div>
 
           <SiteButton

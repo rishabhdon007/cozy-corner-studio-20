@@ -31,6 +31,12 @@ const catalogSections: CatalogSection[] = [
     items: processingServiceCards,
   },
   {
+    id: "secondary",
+    heading: "Secondary Material",
+    description: "Economical coil-end, pickled, CRFH, and construction secondary supply from Indore.",
+    items: secondaryProductCards,
+  },
+  {
     id: "fabrication",
     heading: "Fabrication & Support Services",
     description: "Profiling, purlins, deck sheets, logistics, and secure packaging for complete project support.",
@@ -47,12 +53,6 @@ const catalogSections: CatalogSection[] = [
     heading: "Prime Steel Products",
     description: "Prime HR, CR, MS, coated, and profile materials from leading national manufacturers.",
     items: primeProductCards,
-  },
-  {
-    id: "secondary",
-    heading: "Secondary Material",
-    description: "Economical coil-end, pickled, CRFH, and construction secondary supply from Indore.",
-    items: secondaryProductCards,
   },
 ];
 

@@ -467,6 +467,108 @@ export const newItemsOfferings: CatalogOffering[] = [
   },
 ];
 
+export const crSemiHardSheetsStock: CatalogOffering[] = [
+  {
+    id: "cr-semi-hard-8x4",
+    title: "CR Semi-Hard Sheets (8 x 4 FT)",
+    price: "₹ 48,000 - ₹ 49,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "8 x 4 FT" },
+      { label: "Material", value: "Coil Leader End - CR Secondary" },
+      { label: "Thickness Range", value: "0.30mm to 2.10mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Thickness-wise rates:\n• 1.80 to 2.10 mm : ₹ 48,000 / Tonne\n• 1.40 to 1.60 mm : ₹ 49,000 / Tonne\n• 1.10 to 1.30 mm : ₹ 49,000 / Tonne\n• 0.90 to 1.00 mm : ₹ 49,000 / Tonne\n• 0.70 to 0.85 mm : ₹ 48,000 / Tonne\n• 0.55 to 0.65 mm : ₹ 49,000 / Tonne\n• 0.30 to 0.50 mm : ₹ 49,000 / Tonne"
+  },
+  {
+    id: "cr-semi-hard-8x3",
+    title: "CR Semi-Hard Sheets (8x3 / 3! / 3!! FT)",
+    price: "₹ 49,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "8x3 / 3! / 3!! FT" },
+      { label: "Material", value: "Coil Leader End - CR Secondary" },
+      { label: "Thickness Range", value: "0.70mm to 1.60mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Rate: ₹ 49,000 / Tonne. Arising stock: please check availability before booking."
+  },
+  {
+    id: "cr-semi-hard-random",
+    title: "CR Semi-Hard Sheets (7-10FT x 3! x 4 x 4! FT Random)",
+    price: "₹ 46,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "7 to 10FT x 3! x 4 x 4! FT" },
+      { label: "Material", value: "Semi Hard Random Coil End" },
+      { label: "Thickness Range", value: "2.15mm to 4.50mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Thickness-wise rates:\n• 2.15 to 2.35 mm : ₹ 46,000 / Tonne\n• 2.40 to 2.60 mm : ₹ 46,000 / Tonne\n• 2.70 to 3.10 mm : ₹ 46,000 / Tonne\n• 3.20 to 3.50 mm : ₹ 46,000 / Tonne\n• 3.80 to 4.29 mm : ₹ 46,000 / Tonne\n• 4.20 to 4.50 mm : ₹ 46,000 / Tonne"
+  }
+];
+
+export const crPickledSheetsStock: CatalogOffering[] = [
+  {
+    id: "cr-pickled-sheets-random",
+    title: "CR Pickled Sheets (7-11FT x 3! x 4 x 4! FT Random)",
+    price: "₹ 47,000 - ₹ 48,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "7 to 11FT x 3! x 4 x 4! FT" },
+      { label: "Material", value: "CR - Pickled Sheets Random" },
+      { label: "Thickness Range", value: "1.80mm to 4.50mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Thickness-wise rates:\n• 1.80 to 2.10 mm : ₹ 48,000 / Tonne\n• 2.15 to 2.35 mm : ₹ 47,000 / Tonne\n• 2.40 to 2.60 mm : ₹ 47,000 / Tonne\n• 2.70 to 3.10 mm : ₹ 47,000 / Tonne\n• 3.20 to 3.50 mm : ₹ 47,000 / Tonne\n• 3.50 to 4.50 mm : ₹ 47,000 / Tonne"
+  }
+];
+
+export const crSemiHardCuttingStock: CatalogOffering[] = [
+  {
+    id: "cr-semi-hard-cutting-stock",
+    title: "CR Semi-Hard Cutting",
+    price: "₹ 40,000 - ₹ 45,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "1.5ft to 5ft x 4 / 4! FT" },
+      { label: "Material", value: "CR Semi-Hard Cutting Secondary" },
+      { label: "Thickness Range", value: "0.30mm to 4.00mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Thickness-wise rates:\n• 0.30 to 0.60 mm : ₹ 40,000 / Tonne\n• 1.80 to 4.00 mm : ₹ 45,000 / Tonne"
+  }
+];
+
+export const crPickledCuttingStock: CatalogOffering[] = [
+  {
+    id: "cr-pickled-cutting-stock",
+    title: "CR Pickled Cutting",
+    price: "₹ 45,000",
+    priceUnit: "Tonne",
+    priceNote: "+ GST Ex Indore",
+    specs: [
+      { label: "Size", value: "1.5ft to 5ft x 4 / 4! FT" },
+      { label: "Material", value: "CR Pickled Cutting Secondary" },
+      { label: "Thickness Range", value: "1.80mm to 4.00mm" },
+      { label: "Ready Stock", value: "Ex Indore Yard" },
+      { label: "Payment Terms", value: "Against Delivery" },
+    ],
+    highlight: "Rate: ₹ 45,000 / Tonne. Arising stock: please check availability before booking."
+  }
+];
+
 /** Generic single-line offering when only category-level specs are known */
 export function offeringWithUnknownPrice(
   title: string,
