@@ -21,6 +21,56 @@ export type CatalogInquiryKind = "service" | "product";
 
 export type CatalogInquiryIntent = "inquire" | "sales";
 
+export function buildProductThicknessWhatsAppMessage(
+  productTitle: string,
+  options: {
+    material: string;
+    thickness: string;
+    size: string;
+    make?: string;
+    grade?: string;
+    extraSpecs?: Array<{ label: string; value: string }>;
+    notes?: string[];
+  },
+  intent: "quote" | "inquire" = "inquire",
+): string {
+  const lines =
+    intent === "quote"
+      ? ["Hello NRK Iron & Steel, I would like a free quote for:", ""]
+      : ["Hello NRK Iron & Steel, I would like to inquire about the following product:", ""];
+
+  lines.push(
+    `Product: ${productTitle}`,
+    `Material: ${options.material}`,
+    `Thickness: ${options.thickness} mm`,
+    `Size: ${options.size}`,
+  );
+
+  if (options.make) lines.push(`Make: ${options.make}`);
+  if (options.grade) lines.push(`Grade: ${options.grade}`);
+
+  if (options.extraSpecs?.length) {
+    for (const spec of options.extraSpecs) {
+      lines.push(`${spec.label}: ${spec.value}`);
+    }
+  }
+
+  if (options.notes?.length) {
+    lines.push("", "Notes:");
+    for (const note of options.notes) {
+      lines.push(`• ${note}`);
+    }
+  }
+
+  lines.push(
+    "",
+    intent === "quote"
+      ? "Please share pricing and availability."
+      : "Please share availability and relevant details.",
+  );
+  return lines.join("\n");
+}
+
 export function buildCatalogWhatsAppMessage(
   title: string,
   kind: CatalogInquiryKind,

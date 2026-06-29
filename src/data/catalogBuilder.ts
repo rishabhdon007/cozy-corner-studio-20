@@ -1,4 +1,4 @@
-import type { CatalogOffering, ProductRecommendation } from "@/data/catalogTypes";
+import type { CatalogOffering, ProductRecommendation, ProductThicknessVariant } from "@/data/catalogTypes";
 import { SITE_IMAGES } from "@/lib/siteImages";
 
 export type CatalogIcon = "gauge" | "shield" | "truck";
@@ -23,6 +23,8 @@ export type CatalogDetail = {
   recommendations: ProductRecommendation[];
   /** IndiaMART-style product lines with pricing and per-variant specs */
   offerings?: CatalogOffering[];
+  /** Thickness bands with per-band imagery (product detail pages) */
+  thicknessVariants?: ProductThicknessVariant[];
 };
 
 export type CatalogEntryInput = {
@@ -44,6 +46,7 @@ export type CatalogEntryInput = {
   gallery?: string[];
   recommendations?: ProductRecommendation[];
   offerings?: CatalogOffering[];
+  thicknessVariants?: ProductThicknessVariant[];
 };
 
 export const CATALOG_IMAGES = {
@@ -154,6 +157,7 @@ export function buildCatalogEntry(input: CatalogEntryInput): CatalogDetail {
     process: input.process ?? ["Requirement review", "Material allocation", "Processing if required", "Dispatch and delivery"],
     recommendations: input.recommendations ?? [],
     offerings: input.offerings,
+    thicknessVariants: input.thicknessVariants,
   };
 }
 

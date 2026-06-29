@@ -22,6 +22,19 @@ export type CatalogOffering = {
   highlight?: string;
 };
 
+export type ProductThicknessVariant = {
+  id: string;
+  /** Display label, e.g. "1.80 to 2.10 mm" */
+  label: string;
+  /** Thickness range for specs and WhatsApp, e.g. "1.80 to 2.10" */
+  thickness: string;
+  /** Web-friendly image paths (jpg/png) for this thickness band */
+  images: string[];
+  /** Optional per-thickness detail lines shown in the sidebar */
+  details?: string[];
+  specs?: Array<{ label: string; value: string }>;
+};
+
 export type CatalogCardMeta = {
   id: string;
   slug: string;

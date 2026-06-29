@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
 import { SectionPlaceholder } from "@/components/site/SectionPlaceholder";
-import { featuredServiceCards } from "@/data/serviceCards";
+import { SECONDARY_MATERIAL_SECTION } from "@/data/catalogSections";
+import { featuredServiceCards, secondaryProductCards } from "@/data/serviceCards";
 import { rescanUnrevealedSections } from "@/scrollRevealDom";
 
 const ServicesGridSection = dynamic(
@@ -49,7 +50,15 @@ export function HomeDeferredSections() {
 
   return (
     <>
-      <ServicesGridSection items={featuredServiceCards} showViewAll tone="dark" />
+      <ServicesGridSection
+        sectionId="secondary"
+        items={secondaryProductCards}
+        heading={SECONDARY_MATERIAL_SECTION.heading}
+        description={SECONDARY_MATERIAL_SECTION.description}
+        showViewAll
+        tone="dark"
+      />
+      <ServicesGridSection items={featuredServiceCards} showHeader={false} className="reveal py-stack-lg" />
       <PartnersSection />
       <TestimonialsSection />
       <WhyChooseUsSection />

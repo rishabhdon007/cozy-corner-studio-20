@@ -9,7 +9,7 @@ export const siteTaglineExtended =
 export const navItems = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Services", href: "/services" },
+  { label: "Our Products", href: "/services" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact Us", href: "/contact" },
 ] as const;
@@ -17,7 +17,7 @@ export const navItems = [
 export const quickLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Services", href: "/services" },
+  { label: "Our Products", href: "/services" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -48,5 +48,8 @@ export const socialLinks = [
 
 export function isNavActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
+  if (href === "/services") {
+    return pathname === "/services" || pathname.startsWith("/services/") || pathname.startsWith("/product");
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }

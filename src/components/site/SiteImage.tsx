@@ -11,6 +11,7 @@ import {
   normalizeImageSrc,
   toImageSrc,
 } from "@/lib/siteImages";
+import { isPickleProductImageSrc } from "@/data/crCoiledPickledVariants";
 
 type SiteImageProps = {
   src: ImageSource;
@@ -22,7 +23,7 @@ type SiteImageProps = {
   className?: string;
   priority?: boolean;
   loading?: "lazy" | "eager";
-  fallback?: string;
+  fallback?: string | false;
   unoptimized?: boolean;
 };
 
@@ -41,9 +42,11 @@ export function SiteImage({
 }: SiteImageProps) {
   const initial = normalizeImageSrc(toImageSrc(src));
   const [currentSrc, setCurrentSrc] = useState(initial);
-  const svg = unoptimized ?? isSvgSrc(currentSrc);
+  const isPickleAsset = isPickleProductImageSrc(initial);
+  const svg = unoptimized ?? (isSvgSrc(currentSrc) || isPickleAsset);
 
   const handleError = () => {
+    if (fallback === false || !fallback) return;
     if (currentSrc !== fallback) {
       setCurrentSrc(fallback);
     }

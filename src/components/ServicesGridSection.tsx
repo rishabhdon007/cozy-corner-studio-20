@@ -12,6 +12,7 @@ type ServicesGridSectionProps = {
   heading?: string;
   description?: string;
   tone?: "light" | "dark";
+  sectionId?: string;
 };
 
 export function ServicesGridSection({
@@ -19,14 +20,16 @@ export function ServicesGridSection({
   showHeader = true,
   showViewAll = false,
   className = "reveal py-stack-lg",
-  heading = "Comprehensive Steel Processing Services",
-  description = "We offer advanced steel processing solutions to ensure precision, quality, and optimized use for every requirement.",
+  heading = "Comprehensive Steel Products & Services",
+  description = "Prime steel products and precision processing capabilities for coils, sheets, plates, and coated materials.",
   tone = "light",
+  sectionId,
 }: ServicesGridSectionProps) {
   const isDark = tone === "dark";
 
   return (
     <section
+      id={sectionId}
       className={cn(
         "relative overflow-hidden",
         isDark ? "bg-primary text-on-primary" : "bg-surface-container-low",
@@ -49,7 +52,7 @@ export function ServicesGridSection({
             <SectionHeading
               align="center"
               variant="hero"
-              eyebrow="Our Services"
+              eyebrow="Our Products & Services"
               title={heading}
               lead={description}
               className="mb-stack-md"
@@ -57,7 +60,7 @@ export function ServicesGridSection({
           ) : (
             <div className="site-section-header mb-stack-md text-center">
               <span data-scroll-reveal="top" className="site-section-eyebrow">
-                Our Services
+                Our Products & Services
               </span>
               <h2 data-scroll-reveal="top" className="site-section-title">
                 <span>{heading}</span>
@@ -81,7 +84,7 @@ export function ServicesGridSection({
         {showViewAll ? (
           <div data-scroll-reveal="" className="mt-8 text-center">
             <SiteButton href="/services" variant={isDark ? "white" : "outline"}>
-              View All Services
+              View Full Catalogue
             </SiteButton>
           </div>
         ) : null}

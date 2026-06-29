@@ -9,7 +9,7 @@ import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { cn } from "@/lib/utils";
 
-const EYEBROW = "Steel Processing Services";
+const EYEBROW = "Our Products & Services";
 const TITLE_PARTS = {
   before: "Comprehensive ",
   highlight: "Steel",
@@ -89,7 +89,7 @@ export function ServicesHero() {
             </li>
             <li className="flex items-center gap-2">
               <Link href="/services" className="transition-colors hover:text-white">
-                Services
+                Our Products
               </Link>
               <ChevronRight className="h-3 w-3" aria-hidden="true" />
             </li>

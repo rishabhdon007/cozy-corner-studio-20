@@ -107,7 +107,7 @@ export function HeroSection() {
 
           <HeroCtaGroup
             primary={{ href: "/contact", label: "Get Free Quote" }}
-            secondary={{ href: "/services", label: "Explore Services", icon: "design_services" }}
+            secondary={{ href: "/services", label: "Explore Products & Services", icon: "inventory_2" }}
           />
         </div>
 

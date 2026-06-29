@@ -6,55 +6,8 @@ import { Search, X } from "lucide-react";
 import { ServicesGridSection } from "@/components/ServicesGridSection";
 import { ServiceCard } from "@/components/ServiceCard";
 import { cn } from "@/lib/utils";
-import {
-  allServiceCards,
-  fabricationServiceCards,
-  primeProductCards,
-  processingServiceCards,
-  secondaryProductCards,
-  specialtyServiceCards,
-  type ServiceCardItem,
-} from "@/data/serviceCards";
-
-type CatalogSection = {
-  id: string;
-  heading: string;
-  description: string;
-  items: ServiceCardItem[];
-};
-
-const catalogSections: CatalogSection[] = [
-  {
-    id: "processing",
-    heading: "Steel Processing Services",
-    description: "Precision processing capabilities for coils, sheets, plates, and coated materials.",
-    items: processingServiceCards,
-  },
-  {
-    id: "secondary",
-    heading: "Secondary Material",
-    description: "Economical coil-end, pickled, CRFH, and construction secondary supply from Indore.",
-    items: secondaryProductCards,
-  },
-  {
-    id: "fabrication",
-    heading: "Fabrication & Support Services",
-    description: "Profiling, purlins, deck sheets, logistics, and secure packaging for complete project support.",
-    items: fabricationServiceCards,
-  },
-  {
-    id: "specialty",
-    heading: "Specialty Capabilities",
-    description: "Deck sheets, Z & C purlins, wooden pallet packaging, and custom profiling.",
-    items: specialtyServiceCards,
-  },
-  {
-    id: "prime",
-    heading: "Prime Steel Products",
-    description: "Prime HR, CR, MS, coated, and profile materials from leading national manufacturers.",
-    items: primeProductCards,
-  },
-];
+import { catalogSections } from "@/data/catalogSections";
+import { allServiceCards, type ServiceCardItem } from "@/data/serviceCards";
 
 function matchesQuery(item: ServiceCardItem, query: string): boolean {
   const q = query.trim().toLowerCase();
@@ -174,7 +127,7 @@ export function ServicesCatalogPage() {
             </p>
           ) : (
             <p className="mt-3 text-sm text-gray-600">
-              <span className="font-bold text-primary">{allServiceCards.length}</span> services and products · search
+              <span className="font-bold text-primary">{allServiceCards.length}</span> products and services · search
               by name to find quickly
             </p>
           )}
@@ -212,6 +165,7 @@ export function ServicesCatalogPage() {
         visibleSections.map((section, index) => (
           <ServicesGridSection
             key={section.id}
+            sectionId={section.id}
             items={section.items}
             showHeader
             heading={section.heading}

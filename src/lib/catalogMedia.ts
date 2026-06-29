@@ -6,6 +6,7 @@ import {
   SITE_IMAGES,
   type CatalogMediaItem,
 } from "@/lib/siteImages";
+import { isPickleProductImageSrc } from "@/data/crCoiledPickledVariants";
 
 export type { CatalogMediaItem };
 
@@ -75,4 +76,18 @@ export function buildCatalogMediaItems(item: CatalogMediaSource): CatalogMediaIt
   });
 
   return items;
+}
+
+export function buildThicknessVariantMediaItems(
+  images: string[],
+  variantLabel: string,
+): CatalogMediaItem[] {
+  const pickleImages = images.filter((src) => isPickleProductImageSrc(src));
+
+  return pickleImages.map((src, index) => ({
+    id: `thickness-${index}`,
+    type: "image" as const,
+    src: resolveCatalogImageSrc(src),
+    label: index === 0 ? variantLabel : `View ${index + 1}`,
+  }));
 }

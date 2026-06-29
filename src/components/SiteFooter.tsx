@@ -82,7 +82,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h4 className="mb-4 font-headline-md text-lg text-secondary-fixed">Services</h4>
+          <h4 className="mb-4 font-headline-md text-lg text-secondary-fixed">Our Products</h4>
           <ul className="space-y-2 font-body-md text-sm">
             {serviceFooterLinks.map((service) => (
               <li key={service.href}>

@@ -19,11 +19,14 @@ import {
   rollingShutterOfferings,
   roofingSheetOfferings,
   crSemiHardSheetsStock,
-  crPickledSheetsStock,
   crSemiHardCuttingStock,
   crPickledCuttingStock,
 } from "@/data/catalogOfferings";
 import type { ProductRecommendation } from "@/data/catalogTypes";
+import {
+  crCoiledPickledThicknessVariants,
+  CR_PICKLED_SHEETS_SIZE,
+} from "@/data/crCoiledPickledVariants";
 
 const MAKES_HR = "SAIL, Jindal, AMNS, TATA, Bhushan";
 const MAKES_CR = "SAIL, Jindal, AMNS, TATA, Posco, Bhushan Power, JSW, TATA BSL";
@@ -96,10 +99,10 @@ export const productRecommendations = {
   },
   crPickled: {
     slug: "cr-coiled-pickled",
-    title: "CR Coiled Pickled",
+    title: "CR - Pickled Sheets",
     type: "Secondary Material",
-    image: CATALOG_IMAGES.cr,
-    note: "Secondary pickled coiled material for economical supply.",
+    image: crCoiledPickledThicknessVariants[0].images[0],
+    note: "Pickled secondary sheets in multiple thickness bands — random lengths ex Indore.",
   },
   galvalume: {
     slug: "galvalume-sheets",
@@ -457,27 +460,30 @@ const primeEntries = [
 const secondaryEntries = [
   buildSecondaryProduct({
     slug: "cr-coiled-pickled",
-    title: "CR Coiled Material – Pickled (Secondary)",
+    title: "CR - Pickled Sheets",
     category: "Secondary Material",
-    eyebrow: "Value Supply",
+    eyebrow: "CR Pickled Sheets",
     badge: "Secondary Grade: Soft Pickled",
-    summary: "Secondary pickled CR coiled material for cost-effective fabrication and construction supply.",
+    summary:
+      "CR pickled secondary sheets supplied in multiple thickness bands with random lengths — ready stock ex Indore yard.",
     description:
-      "CR Coiled Material – Pickled is supplied as coil leader end and soft material. Also listed on IndiaMART as CR Pickeled Sheet and CR Coiled Material Pickled Cutting.",
-    mainImage: CATALOG_IMAGES.cr,
+      "CR - Pickled Sheets are coil-end secondary material in soft pickled grades. Select a thickness band below to view actual stock photos. Size remains 7 to 11FT x 3! x 4 x 4! FT (random) across all bands.",
+    mainImage: crCoiledPickledThicknessVariants[0].images[0],
+    processImage: crCoiledPickledThicknessVariants[0].images[0],
+    gallery: [],
     specs: [
-      { label: "Make", value: MAKES_SECONDARY },
+      { label: "Material", value: "CR - Pickled Sheets" },
       { label: "Grade", value: "Coil leader end / Soft" },
-      { label: "Thickness", value: "1.80 to 4.60mm" },
-      { label: "Size", value: "3.15ft / 4ft / 4.15ft x 7–11ft" },
+      { label: "Thickness", value: "1.80 to 4.10 mm (select below)" },
+      { label: "Size", value: CR_PICKLED_SHEETS_SIZE },
     ],
-    variants: crPickledSheetsStock.map((o) => o.title),
-    offerings: crPickledSheetsStock,
+    variants: crCoiledPickledThicknessVariants.map((variant) => variant.label),
+    thicknessVariants: crCoiledPickledThicknessVariants,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Soft Material", method: "Batch identification" },
-      { property: "Thickness", value: "1.80 to 4.60mm", method: "Measurement check" },
-      { property: "Size", value: "Width 3.15ft / 4ft / 4.15ft; Length 7–11ft", method: "Stock allocation" },
+      { property: "Material", value: "CR - Pickled Sheets", method: "Product classification" },
+      { property: "Size", value: CR_PICKLED_SHEETS_SIZE, method: "Stock allocation" },
     ]),
     recommendations: [rec.secondaryCrfh, rec.centering, rec.crCoils],
   }),

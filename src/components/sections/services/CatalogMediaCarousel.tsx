@@ -51,6 +51,7 @@ function MediaSlide({
             alt=""
             fill
             sizes="(max-width: 768px) 100vw, 66vw"
+            fallback={false}
             className="opacity-80 transition-opacity duration-300 group-hover:opacity-60"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/25">
@@ -69,6 +70,7 @@ function MediaSlide({
             alt={`${title} — ${item.label}`}
             fill
             sizes="(max-width: 768px) 100vw, 66vw"
+            fallback={false}
             className="transition-transform duration-500 group-hover:scale-[1.03]"
           />
           {onOpen ? (
@@ -113,6 +115,7 @@ function LightboxMedia({ item, title }: { item: CatalogMediaItem; title: string 
         alt={`${title} — ${item.label}`}
         fill
         sizes="90vw"
+        fallback={false}
         className="rounded-lg object-contain"
       />
     </div>
@@ -241,6 +244,7 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
                     alt=""
                     fill
                     sizes="120px"
+                    fallback={false}
                     className="transition-transform duration-500 hover:scale-110"
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/35">
@@ -253,6 +257,7 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
                   alt=""
                   fill
                   sizes="120px"
+                  fallback={false}
                   className="transition-transform duration-500 hover:scale-110"
                 />
               )}
@@ -322,11 +327,12 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
                         alt=""
                         fill
                         sizes="80px"
+                        fallback={false}
                       />
                       <PlayCircle className="absolute inset-0 m-auto h-5 w-5 text-white drop-shadow" />
                     </>
                   ) : (
-                    <SiteImage src={item.src} alt="" fill sizes="80px" />
+                    <SiteImage src={item.src} alt="" fill sizes="80px" fallback={false} />
                   )}
                 </button>
               ))}

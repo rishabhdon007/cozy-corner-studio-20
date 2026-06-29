@@ -13,22 +13,27 @@ import { useHasMounted } from "@/hooks/useHasMounted";
 import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { cn } from "@/lib/utils";
+import { rescanUnrevealedSections } from "@/scrollRevealDom";
 import type { ServiceCardItem } from "@/data/serviceCards";
 import { getProduct, type ProductDetail, type ProductRecommendation } from "@/data/products";
 import { getService, type ServiceDetail } from "@/data/services";
 import {
   buildCatalogWhatsAppMessage,
+  buildProductThicknessWhatsAppMessage,
   buildWhatsAppHref,
   type CatalogInquiryKind,
 } from "@/data/contact";
+import { CR_PICKLED_SHEETS_SIZE } from "@/data/crCoiledPickledVariants";
 import {
   buildCatalogMediaItems,
+  buildThicknessVariantMediaItems,
   resolveCatalogImageSrc,
 } from "@/lib/catalogMedia";
 import { PRICE_NOT_MENTIONED, ASK_FOR_PRICE } from "@/data/catalogOfferings";
 import type { CatalogOffering } from "@/data/catalogTypes";
 
 import { CatalogMediaCarousel } from "./CatalogMediaCarousel";
+import { ProductThicknessSelector } from "./ProductThicknessSelector";
 
 type CatalogDetail = ServiceDetail | ProductDetail;
 
@@ -54,11 +59,11 @@ export function ServiceDetailPage({ serviceId }: { serviceId: string }) {
   return (
     <CatalogDetailPage
       item={getService(serviceId)}
-      parent={{ label: "Services", href: "/services" }}
+      parent={{ label: "Our Products", href: "/services" }}
       notFound={{
         title: "This service page is not available.",
         backHref: "/services",
-        backLabel: "Back to Services",
+        backLabel: "Back to Our Products",
       }}
       catalogKind="service"
     />
@@ -69,11 +74,11 @@ export function ProductDetailPage({ productId }: { productId: string }) {
   return (
     <CatalogDetailPage
       item={getProduct(productId)}
-      parent={{ label: "Services", href: "/services" }}
+      parent={{ label: "Our Products", href: "/services" }}
       notFound={{
         title: "This product page is not available.",
         backHref: "/services",
-        backLabel: "Back to Services",
+        backLabel: "Back to Our Products",
       }}
       variantsHeading="Available Variants"
       catalogKind="product"
@@ -90,7 +95,27 @@ function CatalogDetailPage({
 }: CatalogDetailPageProps) {
   const pageRef = useRef<HTMLDivElement>(null);
   const mounted = useHasMounted();
+  const thicknessVariants = item?.thicknessVariants;
+  const [selectedThicknessId, setSelectedThicknessId] = useState(
+    () => item?.thicknessVariants?.[0]?.id ?? "",
+  );
+
   useScrollReveal(pageRef, mounted && Boolean(item));
+
+  useEffect(() => {
+    if (thicknessVariants?.[0]) {
+      setSelectedThicknessId(thicknessVariants[0].id);
+    }
+  }, [item?.slug, thicknessVariants]);
+
+  useEffect(() => {
+    if (!mounted || !thicknessVariants?.length) return;
+    const timeoutIds = [
+      window.setTimeout(() => rescanUnrevealedSections(pageRef.current ?? document.body), 150),
+      window.setTimeout(() => rescanUnrevealedSections(pageRef.current ?? document.body), 600),
+    ];
+    return () => timeoutIds.forEach((id) => window.clearTimeout(id));
+  }, [mounted, item?.slug, thicknessVariants?.length]);
 
   if (!item) {
     return (
@@ -110,7 +135,18 @@ function CatalogDetailPage({
     );
   }
 
-  const mediaItems = buildCatalogMediaItems(item);
+  const selectedThickness =
+    thicknessVariants?.find((variant) => variant.id === selectedThicknessId) ?? thicknessVariants?.[0];
+  const hasThicknessVariants = Boolean(thicknessVariants && thicknessVariants.length > 0);
+
+  const activeThickness = hasThicknessVariants
+    ? (selectedThickness ?? thicknessVariants![0])
+    : undefined;
+
+  const mediaItems = hasThicknessVariants && activeThickness
+    ? buildThicknessVariantMediaItems(activeThickness.images, activeThickness.label)
+    : buildCatalogMediaItems(item);
+
   const inquireWhatsAppHref = buildWhatsAppHref(
     buildCatalogWhatsAppMessage(item.title, catalogKind, "inquire"),
   );
@@ -118,21 +154,75 @@ function CatalogDetailPage({
     buildCatalogWhatsAppMessage(item.title, catalogKind, "sales"),
   );
 
+  const thicknessQuoteWhatsAppHref = hasThicknessVariants && activeThickness
+    ? buildWhatsAppHref(
+        buildProductThicknessWhatsAppMessage(
+          item.title,
+          {
+            material: item.specs.find((spec) => spec.label === "Material")?.value ?? "CR - Pickled Sheets",
+            thickness: activeThickness.thickness,
+            size: CR_PICKLED_SHEETS_SIZE,
+            grade: item.specs.find((spec) => spec.label === "Grade")?.value,
+            notes: activeThickness.details,
+          },
+          "quote",
+        ),
+      )
+    : inquireWhatsAppHref;
+
+  const displaySpecs = hasThicknessVariants && activeThickness
+    ? item.specs.map((spec) => {
+        if (spec.label === "Thickness") {
+          return { ...spec, value: `${activeThickness.thickness} mm` };
+        }
+        if (spec.label === "Size") {
+          return { ...spec, value: CR_PICKLED_SHEETS_SIZE };
+        }
+        return spec;
+      })
+    : item.specs;
+
+  const technicalRows = hasThicknessVariants && activeThickness
+    ? [
+        {
+          property: "Thickness",
+          value: `${activeThickness.thickness} mm`,
+          method: "Measurement check",
+        },
+        ...item.technicalSpecs.filter((row) => row.property !== "Thickness"),
+      ]
+    : item.technicalSpecs;
+
   return (
     <div ref={pageRef} className="min-h-screen bg-[#f7fafc] text-gray-900 reveal">
-      <CatalogDetailHero item={item} parent={parent} />
+      <CatalogDetailHero
+        item={item}
+        parent={parent}
+        heroImage={activeThickness?.images[0] ?? item.mainImage}
+      />
 
       <main className="mx-auto max-w-container-max px-gutter py-10 md:py-12">
         <section className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
           <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-2 lg:h-full">
             <div className="shrink-0" data-scroll-reveal="">
-              <CatalogMediaCarousel items={mediaItems} title={item.title} />
+              <CatalogMediaCarousel
+                key={hasThicknessVariants && activeThickness ? activeThickness.id : item.slug}
+                items={mediaItems}
+                title={item.title}
+              />
             </div>
+            {hasThicknessVariants ? (
+              <ProductThicknessSelector
+                variants={thicknessVariants!}
+                selectedId={selectedThickness?.id ?? thicknessVariants![0].id}
+                onSelect={setSelectedThicknessId}
+              />
+            ) : null}
             <KeyAdvantagesCompact cards={item.featureCards} className="lg:flex-1" />
           </div>
 
-          <aside className="flex md:col-span-2 lg:col-span-1 lg:h-full">
-            <div className="flex h-full w-full flex-col rounded-2xl border border-white/10 bg-primary p-8 shadow-2xl shadow-black/20">
+          <aside className="flex md:col-span-2 lg:col-span-1 lg:self-start">
+            <div className="flex w-full flex-col rounded-2xl border border-white/10 bg-primary p-8 shadow-2xl shadow-black/20">
               <div
                 data-scroll-reveal="right"
                 data-scroll-reveal-delay="0"
@@ -159,7 +249,7 @@ function CatalogDetailPage({
               </p>
 
               <div className="mb-8 grid grid-cols-2 gap-x-4 gap-y-6 border-y border-white/15 py-6">
-                {item.specs.map((spec, index) => (
+                {displaySpecs.map((spec, index) => (
                   <div
                     key={spec.label}
                     data-scroll-reveal=""
@@ -179,90 +269,131 @@ function CatalogDetailPage({
                 ))}
               </div>
 
-              <div className="mt-auto space-y-3">
-                <SiteButton
-                  href={inquireWhatsAppHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="detail-primary"
-                  layout="full"
-                  lucideIcon={ArrowRight}
-                  data-scroll-reveal=""
-                  data-scroll-reveal-delay="8"
-                >
-                  Inquire Now
-                </SiteButton>
-                <SiteButton
-                  href="/contact"
-                  variant="detail-outline"
-                  layout="full"
-                  lucideIcon={FileText}
-                  data-scroll-reveal=""
-                  data-scroll-reveal-delay="9"
-                >
-                  Request Spec Sheet
-                </SiteButton>
-                <SiteButton
-                  href={salesWhatsAppHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="detail-outline-muted"
-                  layout="full"
-                  lucideIcon={Phone}
-                  iconPosition="start"
-                  data-scroll-reveal=""
-                  data-scroll-reveal-delay="10"
-                >
-                  Talk to Sales
-                </SiteButton>
+              <div className="space-y-3" data-scroll-reveal="off">
+                {hasThicknessVariants ? (
+                  <>
+                    <SiteButton
+                      href={thicknessQuoteWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="detail-primary"
+                      layout="full"
+                      lucideIcon={ArrowRight}
+                    >
+                      Get Free Quote
+                    </SiteButton>
+                    <SiteButton
+                      href="/contact"
+                      variant="detail-outline"
+                      layout="full"
+                      lucideIcon={FileText}
+                    >
+                      Request Spec Sheet
+                    </SiteButton>
+                    <SiteButton
+                      href={salesWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="detail-outline-muted"
+                      layout="full"
+                      lucideIcon={Phone}
+                      iconPosition="start"
+                    >
+                      Talk to Sales
+                    </SiteButton>
+                  </>
+                ) : (
+                  <>
+                    <SiteButton
+                      href={inquireWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="detail-primary"
+                      layout="full"
+                      lucideIcon={ArrowRight}
+                      data-scroll-reveal=""
+                      data-scroll-reveal-delay="8"
+                    >
+                      Inquire Now
+                    </SiteButton>
+                    <SiteButton
+                      href="/contact"
+                      variant="detail-outline"
+                      layout="full"
+                      lucideIcon={FileText}
+                      data-scroll-reveal=""
+                      data-scroll-reveal-delay="9"
+                    >
+                      Request Spec Sheet
+                    </SiteButton>
+                    <SiteButton
+                      href={salesWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="detail-outline-muted"
+                      layout="full"
+                      lucideIcon={Phone}
+                      iconPosition="start"
+                      data-scroll-reveal=""
+                      data-scroll-reveal-delay="10"
+                    >
+                      Talk to Sales
+                    </SiteButton>
+                  </>
+                )}
               </div>
 
-              <div className="mt-8">
-                <h3
-                  data-scroll-reveal=""
-                  data-scroll-reveal-delay="11"
-                  className="mb-3 text-xs font-bold uppercase tracking-wider text-white/55"
-                >
-                  {item.offerings?.length ? "Offerings & Rates" : variantsHeading}
-                </h3>
-                <ul className="space-y-2">
-                  {item.offerings?.length
-                    ? item.offerings.map((offering, index) => (
-                        <li key={offering.id}>
-                          <SidebarOfferingRow offering={offering} index={index} />
-                        </li>
-                      ))
-                    : item.variants.map((variant, index) => (
-                        <li key={variant}>
-                          <SiteButton
-                            href="/contact"
-                            variant="row-variant"
-                            icon={false}
-                            className="group w-full"
-                            data-scroll-reveal=""
-                            data-scroll-reveal-delay={String(index + 12)}
-                          >
-                            <span className="flex items-center">
-                              <span className="mr-3 rounded-lg bg-white/10 p-2 text-primary-fixed-dim">
-                                <Ruler className="h-4 w-4" aria-hidden="true" />
-                              </span>
-                              <span className="text-sm font-medium text-white">{variant}</span>
-                            </span>
-                            <ChevronRight className="site-btn-icon h-4 w-4 text-white/40 transition-colors group-hover:text-white" aria-hidden="true" />
-                          </SiteButton>
-                        </li>
-                      ))}
-                </ul>
-              </div>
+              {!hasThicknessVariants ? (
+                <div className="mt-8">
+                    <h3
+                      data-scroll-reveal=""
+                      data-scroll-reveal-delay="11"
+                      className="mb-3 text-xs font-bold uppercase tracking-wider text-white/55"
+                    >
+                      {item.offerings?.length ? "Offerings & Rates" : variantsHeading}
+                    </h3>
+                    <ul className="space-y-2">
+                      {item.offerings?.length
+                        ? item.offerings.map((offering, index) => (
+                            <li key={offering.id}>
+                              <SidebarOfferingRow offering={offering} index={index} />
+                            </li>
+                          ))
+                        : item.variants.map((variant, index) => (
+                            <li key={variant}>
+                              <SiteButton
+                                href="/contact"
+                                variant="row-variant"
+                                icon={false}
+                                className="group w-full"
+                                data-scroll-reveal=""
+                                data-scroll-reveal-delay={String(index + 12)}
+                              >
+                                <span className="flex items-center">
+                                  <span className="mr-3 rounded-lg bg-white/10 p-2 text-primary-fixed-dim">
+                                    <Ruler className="h-4 w-4" aria-hidden="true" />
+                                  </span>
+                                  <span className="text-sm font-medium text-white">{variant}</span>
+                                </span>
+                                <ChevronRight
+                                  className="site-btn-icon h-4 w-4 text-white/40 transition-colors group-hover:text-white"
+                                  aria-hidden="true"
+                                />
+                              </SiteButton>
+                            </li>
+                          ))}
+                    </ul>
+                </div>
+              ) : null}
             </div>
           </aside>
         </section>
 
-        {item.offerings?.length ? (
+        {item.offerings?.length && !hasThicknessVariants ? (
           <CatalogOfferingsSection offerings={item.offerings} catalogTitle={item.title} />
         ) : null}
 
-        <TechnicalSpecs rows={item.technicalSpecs} />
+        <TechnicalSpecs rows={technicalRows} isProduct={catalogKind === "product"} />
 
         <CatalogIndiaMartSection
           slug={item.slug}
@@ -284,9 +415,11 @@ function CatalogDetailPage({
 function CatalogDetailHero({
   item,
   parent,
+  heroImage,
 }: {
   item: CatalogDetail;
   parent: { label: string; href: string };
+  heroImage?: string;
 }) {
   const heroRef = useRef<HTMLElement>(null);
   const mounted = useHasMounted();
@@ -328,11 +461,12 @@ function CatalogDetailHero({
     >
       <div className="absolute inset-0 z-0">
         <SiteImage
-          src={resolveCatalogImageSrc(item.mainImage)}
+          src={resolveCatalogImageSrc(heroImage ?? item.mainImage)}
           alt=""
           fill
           sizes="100vw"
           priority
+          fallback={false}
           className="opacity-35"
           aria-hidden
         />
@@ -410,7 +544,7 @@ function Breadcrumb({
   variant?: "light" | "dark";
 }) {
   const isDark = variant === "dark";
-  const root = parent ?? { label: "Services", href: "/services" };
+  const root = parent ?? { label: "Our Products", href: "/services" };
 
   return (
     <nav
@@ -470,7 +604,13 @@ function SidebarOfferingRow({ offering, index }: { offering: CatalogOffering; in
   );
 }
 
-function TechnicalSpecs({ rows }: { rows: ServiceDetail["technicalSpecs"] }) {
+function TechnicalSpecs({
+  rows,
+  isProduct = false,
+}: {
+  rows: ServiceDetail["technicalSpecs"];
+  isProduct?: boolean;
+}) {
   return (
     <section className="mb-16">
       <div className="mb-8 flex flex-col items-center text-center">
@@ -492,7 +632,7 @@ function TechnicalSpecs({ rows }: { rows: ServiceDetail["technicalSpecs"] }) {
           data-scroll-reveal-delay="2"
           className="text-3xl font-black uppercase tracking-wide text-primary"
         >
-          Service Specifications
+          {isProduct ? "Product Specifications" : "Service Specifications"}
         </h2>
       </div>
       <div
