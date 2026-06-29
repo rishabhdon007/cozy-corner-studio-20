@@ -56,6 +56,11 @@ export function ServiceCard({
         Ready for Dispatch
       </span>
       <div className="relative z-10 w-full transform p-4 transition-transform duration-300 sm:p-6 group-hover:-translate-y-2">
+        {item.eyebrow ? (
+          <p className="mb-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-secondary-fixed">
+            {item.eyebrow}
+          </p>
+        ) : null}
         <h3 className="mb-2 font-headline-md text-headline-md text-on-primary">{item.title.toUpperCase()}</h3>
         <p className="mb-4 line-clamp-2 font-body-md text-sm text-surface-container-lowest opacity-90">{item.description}</p>
         <SiteButton

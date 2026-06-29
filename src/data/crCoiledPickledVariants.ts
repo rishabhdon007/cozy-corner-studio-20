@@ -1,4 +1,4 @@
-import type { ProductThicknessVariant } from "@/data/catalogTypes";
+import type { ProductThicknessVariant, ProductVariantCatalog } from "@/data/catalogTypes";
 
 export const CR_PICKLED_SHEETS_SIZE = "7 to 11FT x 3! x 4 x 4! FT (RANDOM)";
 
@@ -65,14 +65,26 @@ export const crCoiledPickledThicknessVariants: ProductThicknessVariant[] = [
     id: "3-50-4-50",
     label: "3.50 to 4.50 mm",
     thickness: "3.50 to 4.50",
-    images: variantImages("Pick 3.80 to 4.10 mm", ["1.png", "2.png"]),
+    images: variantImages("Pick 3.80 to 4.10 mm", ["1.png", "2.png", "3.png"]),
     details: ["Thick pickled secondary band", "Confirm availability before booking"],
   },
-  {
-    id: "3-80-4-10",
-    label: "3.80 to 4.10 mm",
-    thickness: "3.80 to 4.10",
-    images: variantImages("Pick 3.80 to 4.10 mm", ["1.png", "2.png", "3.png"]),
-    details: ["Heavy pickled secondary sheets", "Ex Indore ready stock"],
-  },
 ];
+
+/** CMS-ready catalog: single random size with thickness bands */
+export const crCoiledPickledVariantCatalog: ProductVariantCatalog = {
+  sizeBands: [
+    {
+      id: "pickled-random",
+      label: CR_PICKLED_SHEETS_SIZE,
+      size: CR_PICKLED_SHEETS_SIZE,
+      thicknessBands: crCoiledPickledThicknessVariants.map((variant) => ({
+        id: variant.id,
+        label: variant.label,
+        thickness: variant.thickness,
+        images: variant.images,
+        details: variant.details,
+        specs: variant.specs,
+      })),
+    },
+  ],
+};

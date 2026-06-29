@@ -1,21 +1,45 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import type { ProductThicknessVariant } from "@/data/catalogTypes";
 
-type ProductThicknessSelectorProps = {
-  variants: ProductThicknessVariant[];
+export type ProductBandOption = {
+  id: string;
+  label: string;
+  sublabel?: string;
+};
+
+type ProductBandSelectorProps = {
+  level: "size" | "thickness";
+  options: ProductBandOption[];
   selectedId: string;
   onSelect: (id: string) => void;
   className?: string;
 };
 
-export function ProductThicknessSelector({
-  variants,
+const LEVEL_META = {
+  size: {
+    title: "Select Size",
+    hint: "Choose a size to view available thickness bands",
+    sublabel: "Size",
+    ariaLabel: "Product sizes",
+  },
+  thickness: {
+    title: "Select Thickness",
+    hint: "Tap a band to update photos & specs",
+    sublabel: "Thickness",
+    ariaLabel: "Thickness bands",
+  },
+} as const;
+
+export function ProductBandSelector({
+  level,
+  options,
   selectedId,
   onSelect,
   className,
-}: ProductThicknessSelectorProps) {
+}: ProductBandSelectorProps) {
+  const meta = LEVEL_META[level];
+
   return (
     <div
       data-scroll-reveal="off"
@@ -26,30 +50,28 @@ export function ProductThicknessSelector({
     >
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Select Thickness</span>
+          <span className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{meta.title}</span>
           <span className="rounded-full bg-secondary/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-            {variants.length} bands
+            {options.length} {level === "size" ? "sizes" : "bands"}
           </span>
         </div>
-        <span className="text-[11px] font-semibold text-gray-500">
-          Tap a band to update photos &amp; specs
-        </span>
+        <span className="text-[11px] font-semibold text-gray-500">{meta.hint}</span>
       </div>
       <div
         className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="tablist"
-        aria-label="Thickness bands"
+        aria-label={meta.ariaLabel}
       >
-        {variants.map((variant) => {
-          const isSelected = variant.id === selectedId;
+        {options.map((option) => {
+          const isSelected = option.id === selectedId;
 
           return (
             <button
-              key={variant.id}
+              key={option.id}
               type="button"
               role="tab"
               aria-selected={isSelected}
-              onClick={() => onSelect(variant.id)}
+              onClick={() => onSelect(option.id)}
               className={cn(
                 "shrink-0 rounded-xl border-2 px-4 py-2.5 text-left transition-all",
                 isSelected
@@ -58,9 +80,12 @@ export function ProductThicknessSelector({
               )}
             >
               <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-inherit opacity-70">
-                Thickness
+                {meta.sublabel}
               </span>
-              <span className="block text-sm font-black tracking-tight">{variant.label}</span>
+              <span className="block text-sm font-black tracking-tight">{option.label}</span>
+              {option.sublabel ? (
+                <span className="mt-0.5 block text-[10px] font-semibold opacity-80">{option.sublabel}</span>
+              ) : null}
             </button>
           );
         })}

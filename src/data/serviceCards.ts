@@ -1,5 +1,6 @@
 import { productCardMeta } from "@/data/catalogProducts";
 import { serviceCardMeta, specialtyServiceCardMeta } from "@/data/catalogServices";
+import { isSecondaryCatalogProductVisible } from "@/lib/catalogVisibility";
 
 export type ServiceCardItem = {
   id: string;
@@ -7,6 +8,7 @@ export type ServiceCardItem = {
   title: string;
   description: string;
   image: string;
+  eyebrow?: string;
   kind?: "service" | "product";
 };
 
@@ -16,6 +18,7 @@ const toCard = (item: {
   title: string;
   description: string;
   image: string;
+  eyebrow?: string;
   kind?: "service" | "product";
 }): ServiceCardItem => ({
   id: item.id,
@@ -23,6 +26,7 @@ const toCard = (item: {
   title: item.title,
   description: item.description,
   image: item.image,
+  eyebrow: item.eyebrow,
   kind: item.kind,
 });
 
@@ -39,8 +43,13 @@ export const primeProductCards: ServiceCardItem[] = productCardMeta
   .map((item) => toCard({ ...item, kind: "product" }));
 
 export const secondaryProductCards: ServiceCardItem[] = productCardMeta
-  .filter((item) => item.section === "secondary")
+  .filter((item) => item.section === "secondary" && isSecondaryCatalogProductVisible(item.image))
   .map((item) => toCard({ ...item, kind: "product" }));
+
+/** Secondary material cards after feature-flag / asset visibility rules */
+export function getVisibleSecondaryProductCards(): ServiceCardItem[] {
+  return secondaryProductCards;
+}
 
 /** @deprecated Use primeProductCards or secondaryProductCards */
 export const productCatalogCards: ServiceCardItem[] = [...primeProductCards, ...secondaryProductCards];

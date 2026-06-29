@@ -50,14 +50,16 @@ export function HomeDeferredSections() {
 
   return (
     <>
-      <ServicesGridSection
-        sectionId="secondary"
-        items={secondaryProductCards}
-        heading={SECONDARY_MATERIAL_SECTION.heading}
-        description={SECONDARY_MATERIAL_SECTION.description}
-        showViewAll
-        tone="dark"
-      />
+      {secondaryProductCards.length > 0 ? (
+        <ServicesGridSection
+          sectionId="secondary"
+          items={secondaryProductCards}
+          heading={SECONDARY_MATERIAL_SECTION.heading}
+          description={SECONDARY_MATERIAL_SECTION.description}
+          showViewAll
+          tone="dark"
+        />
+      ) : null}
       <ServicesGridSection items={featuredServiceCards} showHeader={false} className="reveal py-stack-lg" />
       <PartnersSection />
       <TestimonialsSection />

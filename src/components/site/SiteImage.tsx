@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -11,7 +11,7 @@ import {
   normalizeImageSrc,
   toImageSrc,
 } from "@/lib/siteImages";
-import { isPickleProductImageSrc } from "@/data/crCoiledPickledVariants";
+import { isCatalogProductImageSrc } from "@/data/productAssetPaths";
 
 type SiteImageProps = {
   src: ImageSource;
@@ -40,10 +40,15 @@ export function SiteImage({
   fallback = DEFAULT_CATALOG_IMAGE,
   unoptimized,
 }: SiteImageProps) {
-  const initial = normalizeImageSrc(toImageSrc(src));
-  const [currentSrc, setCurrentSrc] = useState(initial);
-  const isPickleAsset = isPickleProductImageSrc(initial);
-  const svg = unoptimized ?? (isSvgSrc(currentSrc) || isPickleAsset);
+  const normalizedSrc = normalizeImageSrc(toImageSrc(src));
+  const [currentSrc, setCurrentSrc] = useState(normalizedSrc);
+
+  useEffect(() => {
+    setCurrentSrc(normalizedSrc);
+  }, [normalizedSrc]);
+
+  const isDirectProductAsset = isCatalogProductImageSrc(normalizedSrc);
+  const svg = unoptimized ?? (isSvgSrc(currentSrc) || isDirectProductAsset);
 
   const handleError = () => {
     if (fallback === false || !fallback) return;

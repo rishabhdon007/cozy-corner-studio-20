@@ -18,15 +18,21 @@ import {
   pickledCuttingOfferings,
   rollingShutterOfferings,
   roofingSheetOfferings,
-  crSemiHardSheetsStock,
   crSemiHardCuttingStock,
   crPickledCuttingStock,
 } from "@/data/catalogOfferings";
 import type { ProductRecommendation } from "@/data/catalogTypes";
+import { isSecondaryCatalogProductVisible } from "@/lib/catalogVisibility";
 import {
   crCoiledPickledThicknessVariants,
+  crCoiledPickledVariantCatalog,
   CR_PICKLED_SHEETS_SIZE,
 } from "@/data/crCoiledPickledVariants";
+import { crPickledCuttingImages } from "@/data/crPickledCuttingAssets";
+import {
+  crSemiHardVariantCatalog,
+  getCrSemiHardPrimaryImage,
+} from "@/data/crSemiHardVariantCatalog";
 
 const MAKES_HR = "SAIL, Jindal, AMNS, TATA, Bhushan";
 const MAKES_CR = "SAIL, Jindal, AMNS, TATA, Posco, Bhushan Power, JSW, TATA BSL";
@@ -474,11 +480,11 @@ const secondaryEntries = [
     specs: [
       { label: "Material", value: "CR - Pickled Sheets" },
       { label: "Grade", value: "Coil leader end / Soft" },
-      { label: "Thickness", value: "1.80 to 4.10 mm (select below)" },
+      { label: "Thickness", value: "1.80 to 4.50 mm (select below)" },
       { label: "Size", value: CR_PICKLED_SHEETS_SIZE },
     ],
-    variants: crCoiledPickledThicknessVariants.map((variant) => variant.label),
-    thicknessVariants: crCoiledPickledThicknessVariants,
+    variants: crCoiledPickledVariantCatalog.sizeBands[0].thicknessBands.map((variant) => variant.label),
+    variantCatalog: crCoiledPickledVariantCatalog,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Soft Material", method: "Batch identification" },
@@ -489,22 +495,27 @@ const secondaryEntries = [
   }),
   buildSecondaryProduct({
     slug: "cr-semi-tempered-crfh",
-    title: "CR Semi Tempered / CRFH (Secondary)",
+    title: "CR - Semi-Hard Sheets",
     category: "Secondary Material",
-    eyebrow: "Coil-End Supply",
+    eyebrow: "COIL LEADER END — CR Secondary Material",
     badge: "Secondary Grade: Semi Hard",
-    summary: "CR coil-end and semi tempered CRFH material for economical semi hard sheet requirements.",
+    summary:
+      "CR semi-hard coil-end secondary sheets in multiple sizes and thickness bands — ready stock ex Indore yard.",
     description:
-      "CR Coil-end Material in semi tempered and CRFH grades serves fabrication and construction needs. Listed on IndiaMART as CR Semi Hard Material, CR Coilend Material, and Cr Cutting Sheet (0.30 to 0.60).",
-    mainImage: CATALOG_IMAGES.cr,
+      "CR Semi-Hard Sheets are coil leader end secondary material in semi hard grades. Select a size and thickness band below to view stock photos. Listed on IndiaMART as CR Semi Hard Material and CR Coilend Material.",
+    mainImage: getCrSemiHardPrimaryImage() || CATALOG_IMAGES.cr,
+    processImage: getCrSemiHardPrimaryImage() || CATALOG_IMAGES.cr,
+    gallery: [],
     specs: [
-      { label: "Make", value: MAKES_SECONDARY },
+      { label: "Material", value: "CR Semi-Hard Sheets" },
       { label: "Grade", value: "Coil leader end / Semi Hard" },
-      { label: "Thickness", value: "0.30 to 4.50mm" },
-      { label: "Size", value: "4ft / 3.15ft x 8ft / random" },
+      { label: "Thickness", value: "0.30 to 4.50 mm (select below)" },
+      { label: "Size", value: "7–11FT random / 8 x 4 FT / 8x3" },
     ],
-    variants: crSemiHardSheetsStock.map((o) => o.title),
-    offerings: crSemiHardSheetsStock,
+    variants: crSemiHardVariantCatalog.sizeBands.flatMap((size) =>
+      size.thicknessBands.map((band) => `${size.label} — ${band.label}`),
+    ),
+    variantCatalog: crSemiHardVariantCatalog,
     technicalSpecs: withPurchaseTerms([
       { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
       { property: "Grade", value: "Coil leader end / Semi Hard", method: "Batch identification" },
@@ -547,7 +558,9 @@ const secondaryEntries = [
     summary: "Pickled cutting secondary material for packaging, fabrication, and construction use.",
     description:
       "CR Coiled Material – Pickled Cutting is supplied in practical cut sizes from coil leader end stock. Listed on IndiaMART under Packaging Material and Cold Rolled Steel Sheets as Pickled sheet Cutting.",
-    mainImage: CATALOG_IMAGES.cr,
+    mainImage: crPickledCuttingImages[0],
+    processImage: crPickledCuttingImages[0],
+    gallery: crPickledCuttingImages.slice(1),
     specs: [
       { label: "Make", value: MAKES_SECONDARY },
       { label: "Grade", value: "Coil leader end / Soft" },
@@ -745,7 +758,15 @@ export const catalogProducts: Record<string, CatalogDetail> = Object.fromEntries
 export const productSlugs = Object.keys(catalogProducts);
 
 export function getCatalogProduct(slug: string): CatalogDetail | undefined {
-  return catalogProducts[slug];
+  const product = catalogProducts[slug];
+  if (!product) return undefined;
+
+  const isSecondary = productCardMeta.some((item) => item.section === "secondary" && item.slug === slug);
+  if (isSecondary && !isSecondaryCatalogProductVisible(product.mainImage)) {
+    return undefined;
+  }
+
+  return product;
 }
 
 export const productCardMeta: Array<{
@@ -754,6 +775,7 @@ export const productCardMeta: Array<{
   title: string;
   description: string;
   image: string;
+  eyebrow?: string;
   section: "prime" | "secondary";
 }> = [
   ...primeEntries.map((p) => ({
@@ -770,6 +792,7 @@ export const productCardMeta: Array<{
     title: p.title,
     description: p.summary,
     image: p.mainImage,
+    eyebrow: p.eyebrow,
     section: "secondary" as const,
   })),
 ];

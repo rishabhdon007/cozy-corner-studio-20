@@ -3,10 +3,9 @@ import {
   DEFAULT_PROCESS_VIDEO,
   isBlockedImageSrc,
   normalizeImageSrc,
-  SITE_IMAGES,
   type CatalogMediaItem,
 } from "@/lib/siteImages";
-import { isPickleProductImageSrc } from "@/data/crCoiledPickledVariants";
+import { isCatalogProductImageSrc, isLocalProductAssetSrc } from "@/data/productAssetPaths";
 
 export type { CatalogMediaItem };
 
@@ -81,11 +80,26 @@ export function buildCatalogMediaItems(item: CatalogMediaSource): CatalogMediaIt
 export function buildThicknessVariantMediaItems(
   images: string[],
   variantLabel: string,
+  fallbackImage?: string,
+  idPrefix = "variant",
 ): CatalogMediaItem[] {
-  const pickleImages = images.filter((src) => isPickleProductImageSrc(src));
+  const catalogImages = images.filter(
+    (src) => isCatalogProductImageSrc(src) || isLocalProductAssetSrc(src),
+  );
 
-  return pickleImages.map((src, index) => ({
-    id: `thickness-${index}`,
+  if (catalogImages.length === 0 && fallbackImage) {
+    return [
+      {
+        id: `${idPrefix}-fallback`,
+        type: "image" as const,
+        src: resolveCatalogImageSrc(fallbackImage),
+        label: variantLabel,
+      },
+    ];
+  }
+
+  return catalogImages.map((src, index) => ({
+    id: `${idPrefix}-img-${index}`,
     type: "image" as const,
     src: resolveCatalogImageSrc(src),
     label: index === 0 ? variantLabel : `View ${index + 1}`,

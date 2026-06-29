@@ -152,6 +152,11 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
   }, [carouselApi]);
 
   useEffect(() => {
+    setSelectedIndex(0);
+    carouselApi?.scrollTo(0, true);
+  }, [items, carouselApi]);
+
+  useEffect(() => {
     if (!lightboxOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowLeft") scrollTo(selectedIndex - 1);
@@ -180,7 +185,7 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
         <Carousel setApi={setCarouselApi} opts={{ align: "start", loop: true }} className="w-full">
           <CarouselContent className="-ml-0">
             {items.map((item) => (
-              <CarouselItem key={item.id} className="basis-full pl-0">
+              <CarouselItem key={`${item.id}-${item.src}`} className="basis-full pl-0">
                 <MediaSlide
                   item={item}
                   title={title}

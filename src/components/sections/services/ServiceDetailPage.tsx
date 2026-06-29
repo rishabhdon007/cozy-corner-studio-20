@@ -23,17 +23,18 @@ import {
   buildWhatsAppHref,
   type CatalogInquiryKind,
 } from "@/data/contact";
-import { CR_PICKLED_SHEETS_SIZE } from "@/data/crCoiledPickledVariants";
+import { useProductVariantSelection } from "@/hooks/useProductVariantSelection";
 import {
   buildCatalogMediaItems,
   buildThicknessVariantMediaItems,
   resolveCatalogImageSrc,
 } from "@/lib/catalogMedia";
+import { hasProductVariantCatalog, resolveProductVariantCatalog } from "@/lib/productVariants";
 import { PRICE_NOT_MENTIONED, ASK_FOR_PRICE } from "@/data/catalogOfferings";
 import type { CatalogOffering } from "@/data/catalogTypes";
 
 import { CatalogMediaCarousel } from "./CatalogMediaCarousel";
-import { ProductThicknessSelector } from "./ProductThicknessSelector";
+import { ProductVariantSelectors } from "./ProductVariantSelectors";
 
 type CatalogDetail = ServiceDetail | ProductDetail;
 
@@ -95,27 +96,28 @@ function CatalogDetailPage({
 }: CatalogDetailPageProps) {
   const pageRef = useRef<HTMLDivElement>(null);
   const mounted = useHasMounted();
-  const thicknessVariants = item?.thicknessVariants;
-  const [selectedThicknessId, setSelectedThicknessId] = useState(
-    () => item?.thicknessVariants?.[0]?.id ?? "",
-  );
+  const variantCatalog = item ? resolveProductVariantCatalog(item) : null;
+  const hasVariantCatalog = item ? hasProductVariantCatalog(item) : false;
+
+  const {
+    selectedSizeId,
+    selectedThicknessId,
+    setSelectedThicknessId,
+    handleSizeSelect,
+    activeSize,
+    activeThickness,
+  } = useProductVariantSelection(variantCatalog, item?.slug);
 
   useScrollReveal(pageRef, mounted && Boolean(item));
 
   useEffect(() => {
-    if (thicknessVariants?.[0]) {
-      setSelectedThicknessId(thicknessVariants[0].id);
-    }
-  }, [item?.slug, thicknessVariants]);
-
-  useEffect(() => {
-    if (!mounted || !thicknessVariants?.length) return;
+    if (!mounted || !hasVariantCatalog) return;
     const timeoutIds = [
       window.setTimeout(() => rescanUnrevealedSections(pageRef.current ?? document.body), 150),
       window.setTimeout(() => rescanUnrevealedSections(pageRef.current ?? document.body), 600),
     ];
     return () => timeoutIds.forEach((id) => window.clearTimeout(id));
-  }, [mounted, item?.slug, thicknessVariants?.length]);
+  }, [mounted, item?.slug, hasVariantCatalog, selectedSizeId, selectedThicknessId]);
 
   if (!item) {
     return (
@@ -135,17 +137,21 @@ function CatalogDetailPage({
     );
   }
 
-  const selectedThickness =
-    thicknessVariants?.find((variant) => variant.id === selectedThicknessId) ?? thicknessVariants?.[0];
-  const hasThicknessVariants = Boolean(thicknessVariants && thicknessVariants.length > 0);
+  const materialLabel =
+    item.specs.find((spec) => spec.label === "Material")?.value ?? item.title;
+  const gradeLabel = item.specs.find((spec) => spec.label === "Grade")?.value;
 
-  const activeThickness = hasThicknessVariants
-    ? (selectedThickness ?? thicknessVariants![0])
-    : undefined;
-
-  const mediaItems = hasThicknessVariants && activeThickness
-    ? buildThicknessVariantMediaItems(activeThickness.images, activeThickness.label)
-    : buildCatalogMediaItems(item);
+  const mediaItems =
+    hasVariantCatalog && activeThickness
+      ? buildThicknessVariantMediaItems(
+          activeThickness.images,
+          activeThickness.label,
+          item.mainImage,
+          activeSize && activeThickness
+            ? `${activeSize.id}-${activeThickness.id}`
+            : "variant",
+        )
+      : buildCatalogMediaItems(item);
 
   const inquireWhatsAppHref = buildWhatsAppHref(
     buildCatalogWhatsAppMessage(item.title, catalogKind, "inquire"),
@@ -154,68 +160,83 @@ function CatalogDetailPage({
     buildCatalogWhatsAppMessage(item.title, catalogKind, "sales"),
   );
 
-  const thicknessQuoteWhatsAppHref = hasThicknessVariants && activeThickness
-    ? buildWhatsAppHref(
-        buildProductThicknessWhatsAppMessage(
-          item.title,
+  const variantQuoteWhatsAppHref =
+    hasVariantCatalog && activeThickness && activeSize
+      ? buildWhatsAppHref(
+          buildProductThicknessWhatsAppMessage(
+            item.title,
+            {
+              material: materialLabel,
+              thickness: activeThickness.thickness,
+              size: activeSize.size,
+              grade: gradeLabel,
+              notes: activeThickness.details,
+            },
+            "quote",
+          ),
+        )
+      : inquireWhatsAppHref;
+
+  const displaySpecs =
+    hasVariantCatalog && activeThickness && activeSize
+      ? item.specs.map((spec) => {
+          if (spec.label === "Thickness") {
+            return { ...spec, value: `${activeThickness.thickness} mm` };
+          }
+          if (spec.label === "Size") {
+            return { ...spec, value: activeSize.size };
+          }
+          return spec;
+        })
+      : item.specs;
+
+  const technicalRows =
+    hasVariantCatalog && activeThickness && activeSize
+      ? [
           {
-            material: item.specs.find((spec) => spec.label === "Material")?.value ?? "CR - Pickled Sheets",
-            thickness: activeThickness.thickness,
-            size: CR_PICKLED_SHEETS_SIZE,
-            grade: item.specs.find((spec) => spec.label === "Grade")?.value,
-            notes: activeThickness.details,
+            property: "Size",
+            value: activeSize.size,
+            method: "Stock allocation",
           },
-          "quote",
-        ),
-      )
-    : inquireWhatsAppHref;
+          {
+            property: "Thickness",
+            value: `${activeThickness.thickness} mm`,
+            method: "Measurement check",
+          },
+          ...item.technicalSpecs.filter(
+            (row) => row.property !== "Thickness" && row.property !== "Size",
+          ),
+        ]
+      : item.technicalSpecs;
 
-  const displaySpecs = hasThicknessVariants && activeThickness
-    ? item.specs.map((spec) => {
-        if (spec.label === "Thickness") {
-          return { ...spec, value: `${activeThickness.thickness} mm` };
-        }
-        if (spec.label === "Size") {
-          return { ...spec, value: CR_PICKLED_SHEETS_SIZE };
-        }
-        return spec;
-      })
-    : item.specs;
-
-  const technicalRows = hasThicknessVariants && activeThickness
-    ? [
-        {
-          property: "Thickness",
-          value: `${activeThickness.thickness} mm`,
-          method: "Measurement check",
-        },
-        ...item.technicalSpecs.filter((row) => row.property !== "Thickness"),
-      ]
-    : item.technicalSpecs;
+  const heroImage =
+    activeThickness?.images[0] ?? activeSize?.thicknessBands[0]?.images[0] ?? item.mainImage;
 
   return (
     <div ref={pageRef} className="min-h-screen bg-[#f7fafc] text-gray-900 reveal">
-      <CatalogDetailHero
-        item={item}
-        parent={parent}
-        heroImage={activeThickness?.images[0] ?? item.mainImage}
-      />
+      <CatalogDetailHero item={item} parent={parent} heroImage={heroImage} />
 
       <main className="mx-auto max-w-container-max px-gutter py-10 md:py-12">
         <section className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
           <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-2 lg:h-full">
             <div className="shrink-0" data-scroll-reveal="">
               <CatalogMediaCarousel
-                key={hasThicknessVariants && activeThickness ? activeThickness.id : item.slug}
+                key={
+                  hasVariantCatalog && activeSize && activeThickness
+                    ? `${activeSize.id}-${activeThickness.id}`
+                    : item.slug
+                }
                 items={mediaItems}
                 title={item.title}
               />
             </div>
-            {hasThicknessVariants ? (
-              <ProductThicknessSelector
-                variants={thicknessVariants!}
-                selectedId={selectedThickness?.id ?? thicknessVariants![0].id}
-                onSelect={setSelectedThicknessId}
+            {hasVariantCatalog && variantCatalog ? (
+              <ProductVariantSelectors
+                catalog={variantCatalog}
+                selectedSizeId={selectedSizeId}
+                selectedThicknessId={selectedThicknessId}
+                onSizeSelect={handleSizeSelect}
+                onThicknessSelect={setSelectedThicknessId}
               />
             ) : null}
             <KeyAdvantagesCompact cards={item.featureCards} className="lg:flex-1" />
@@ -270,10 +291,10 @@ function CatalogDetailPage({
               </div>
 
               <div className="space-y-3" data-scroll-reveal="off">
-                {hasThicknessVariants ? (
+                {hasVariantCatalog ? (
                   <>
                     <SiteButton
-                      href={thicknessQuoteWhatsAppHref}
+                      href={variantQuoteWhatsAppHref}
                       target="_blank"
                       rel="noopener noreferrer"
                       variant="detail-primary"
@@ -314,7 +335,7 @@ function CatalogDetailPage({
                       data-scroll-reveal=""
                       data-scroll-reveal-delay="8"
                     >
-                      Inquire Now
+                      Get Free Quote
                     </SiteButton>
                     <SiteButton
                       href="/contact"
@@ -343,7 +364,7 @@ function CatalogDetailPage({
                 )}
               </div>
 
-              {!hasThicknessVariants ? (
+              {!hasVariantCatalog && catalogKind !== "product" ? (
                 <div className="mt-8">
                     <h3
                       data-scroll-reveal=""
@@ -389,7 +410,7 @@ function CatalogDetailPage({
           </aside>
         </section>
 
-        {item.offerings?.length && !hasThicknessVariants ? (
+        {item.offerings?.length && !hasVariantCatalog && catalogKind !== "product" ? (
           <CatalogOfferingsSection offerings={item.offerings} catalogTitle={item.title} />
         ) : null}
 

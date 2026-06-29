@@ -22,15 +22,46 @@ export type CatalogOffering = {
   highlight?: string;
 };
 
-export type ProductThicknessVariant = {
+/** Thickness band within a size — CMS-friendly leaf node with images and optional rate */
+export type ProductThicknessBand = {
   id: string;
   /** Display label, e.g. "1.80 to 2.10 mm" */
   label: string;
   /** Thickness range for specs and WhatsApp, e.g. "1.80 to 2.10" */
   thickness: string;
-  /** Web-friendly image paths (jpg/png) for this thickness band */
+  /** Web-friendly image paths for this band */
   images: string[];
-  /** Optional per-thickness detail lines shown in the sidebar */
+  details?: string[];
+  specs?: Array<{ label: string; value: string }>;
+  /** Optional per-band pricing (e.g. "₹ 46,000") */
+  price?: string;
+  priceUnit?: string;
+};
+
+/** Size band containing nested thickness bands — matches folder Size > Thickness layout */
+export type ProductSizeBand = {
+  id: string;
+  /** Short tab label, e.g. "8 x 4 FT" */
+  label: string;
+  /** Full size string for specs / WhatsApp */
+  size: string;
+  thicknessBands: ProductThicknessBand[];
+};
+
+/**
+ * Hierarchical product variants for detail pages.
+ * Designed for future CMS: Name → Size → Thickness → images/rates.
+ */
+export type ProductVariantCatalog = {
+  sizeBands: ProductSizeBand[];
+};
+
+/** @deprecated Prefer ProductThicknessBand inside ProductVariantCatalog */
+export type ProductThicknessVariant = {
+  id: string;
+  label: string;
+  thickness: string;
+  images: string[];
   details?: string[];
   specs?: Array<{ label: string; value: string }>;
 };

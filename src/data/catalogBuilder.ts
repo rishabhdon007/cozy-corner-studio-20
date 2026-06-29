@@ -1,4 +1,4 @@
-import type { CatalogOffering, ProductRecommendation, ProductThicknessVariant } from "@/data/catalogTypes";
+import type { CatalogOffering, ProductRecommendation, ProductVariantCatalog, ProductThicknessVariant } from "@/data/catalogTypes";
 import { SITE_IMAGES } from "@/lib/siteImages";
 
 export type CatalogIcon = "gauge" | "shield" | "truck";
@@ -23,7 +23,9 @@ export type CatalogDetail = {
   recommendations: ProductRecommendation[];
   /** IndiaMART-style product lines with pricing and per-variant specs */
   offerings?: CatalogOffering[];
-  /** Thickness bands with per-band imagery (product detail pages) */
+  /** Hierarchical size → thickness variant catalog (CMS-friendly) */
+  variantCatalog?: ProductVariantCatalog;
+  /** @deprecated Use variantCatalog — flat thickness list for legacy products */
   thicknessVariants?: ProductThicknessVariant[];
 };
 
@@ -46,6 +48,7 @@ export type CatalogEntryInput = {
   gallery?: string[];
   recommendations?: ProductRecommendation[];
   offerings?: CatalogOffering[];
+  variantCatalog?: ProductVariantCatalog;
   thicknessVariants?: ProductThicknessVariant[];
 };
 
@@ -157,6 +160,7 @@ export function buildCatalogEntry(input: CatalogEntryInput): CatalogDetail {
     process: input.process ?? ["Requirement review", "Material allocation", "Processing if required", "Dispatch and delivery"],
     recommendations: input.recommendations ?? [],
     offerings: input.offerings,
+    variantCatalog: input.variantCatalog,
     thicknessVariants: input.thicknessVariants,
   };
 }

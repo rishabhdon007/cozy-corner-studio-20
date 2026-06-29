@@ -1,8 +1,8 @@
 import {
   fabricationServiceCards,
+  getVisibleSecondaryProductCards,
   primeProductCards,
   processingServiceCards,
-  secondaryProductCards,
   specialtyServiceCards,
   type ServiceCardItem,
 } from "@/data/serviceCards";
@@ -24,7 +24,7 @@ export const catalogSections: CatalogSection[] = [
     id: "secondary",
     heading: SECONDARY_MATERIAL_SECTION.heading,
     description: SECONDARY_MATERIAL_SECTION.description,
-    items: secondaryProductCards,
+    items: getVisibleSecondaryProductCards(),
   },
   {
     id: "processing",
