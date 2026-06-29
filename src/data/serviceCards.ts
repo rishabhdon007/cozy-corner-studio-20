@@ -58,16 +58,6 @@ export const fabricationServiceCards: ServiceCardItem[] = serviceCardMeta
   .filter((item) => item.section === "fabrication")
   .map((item) => toCard({ ...item, kind: "service" }));
 
-/** Featured cards for home page carousel */
-export const featuredServiceCards: ServiceCardItem[] = [
-  processingServiceCards.find((c) => c.slug === "slitting")!,
-  processingServiceCards.find((c) => c.slug === "cut-to-length")!,
-  specialtyServiceCards.find((c) => c.id === "deck-sheets")!,
-  specialtyServiceCards.find((c) => c.id === "wooden-pallet")!,
-  specialtyServiceCards.find((c) => c.id === "z-c-purlin")!,
-  specialtyServiceCards.find((c) => c.id === "profiling")!,
-];
-
 /** Full catalogue shown on the Services page */
 export const allServiceCards: ServiceCardItem[] = [
   ...processingServiceCards,
