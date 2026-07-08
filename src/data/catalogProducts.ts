@@ -525,6 +525,42 @@ const secondaryEntries = [
     recommendations: [rec.crCoils, rec.centering, rec.annealed],
   }),
   buildSecondaryProduct({
+    slug: "cr-semi-hard-sheets-8x4",
+    title: "CR - SEMI-HARD SHEETS (8 x 4ft)",
+    category: "Secondary Material",
+    eyebrow: "COIL LEADER END — CR Secondary Material",
+    badge: "Secondary Grade: Semi Hard",
+    summary:
+      "CR semi-hard coil-end secondary sheets specifically in 8 x 4 FT size — ready stock ex Indore yard.",
+    description:
+      "CR Semi-Hard Sheets are coil leader end secondary material in semi hard grades. This listing is specifically for the 8 x 4 FT size. Select a thickness band below to view stock photos.",
+    mainImage: getCrSemiHardPrimaryImage() || CATALOG_IMAGES.cr,
+    processImage: getCrSemiHardPrimaryImage() || CATALOG_IMAGES.cr,
+    gallery: [],
+    specs: [
+      { label: "Material", value: "CR Semi-Hard Sheets" },
+      { label: "Grade", value: "Coil leader end / Semi Hard" },
+      { label: "Thickness", value: "0.30 to 2.10 mm (select below)" },
+      { label: "Size", value: "8 x 4 FT" },
+    ],
+    variants: crSemiHardVariantCatalog.sizeBands
+      .filter((size) => size.id === "8x4")
+      .flatMap((size) =>
+        size.thicknessBands.map((band) => `${size.label} — ${band.label}`),
+      ),
+    variantCatalog: {
+      ...crSemiHardVariantCatalog,
+      sizeBands: crSemiHardVariantCatalog.sizeBands.filter((size) => size.id === "8x4"),
+    },
+    technicalSpecs: withPurchaseTerms([
+      { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
+      { property: "Grade", value: "Coil leader end / Semi Hard", method: "Batch identification" },
+      { property: "Thickness", value: "0.30 to 2.10mm", method: "Measurement check" },
+      { property: "Size", value: "8 x 4 FT", method: "Stock allocation" },
+    ]),
+    recommendations: [rec.crCoils, rec.centering, rec.annealed],
+  }),
+  buildSecondaryProduct({
     slug: "cr-mix-annealed",
     title: "CR Mix Annealed Material (Secondary)",
     category: "Secondary Material",
