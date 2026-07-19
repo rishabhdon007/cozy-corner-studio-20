@@ -6,8 +6,7 @@ import { memo, type RefObject, useEffect, useRef, useState } from "react";
 import journey1994Image from "@/assests/aboutus/screen.webp";
 import journey2005Image from "@/assests/aboutus/screen 2.webp";
 import journey2015Image from "@/assests/aboutus/screen 3.webp";
-import companyLogo from "@/assests/company_logo.webp";
-import { useHeroTypewriter } from "@/hooks/useTypewriter";
+import { SITE_IMAGES, LEADERSHIP_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
 
 type Milestone = {
@@ -15,8 +14,7 @@ type Milestone = {
   title: string;
   description: string;
   icon: string;
-  image: StaticImageData;
-  accent: "primary" | "secondary" | "emerald";
+  image: StaticImageData | string;
 };
 
 const milestones: Milestone[] = [
@@ -26,53 +24,25 @@ const milestones: Milestone[] = [
     description:
       "Mr. Nimesh Kothari embarked on his entrepreneurial journey by starting retail trading in Indore, gradually expanding into brokerage and cross-border supply while building a strong customer base — a true one-man army without any business background support.",
     icon: "foundation",
-    image: journey1994Image,
-    accent: "primary",
+    image: SITE_IMAGES.companyOfc2,
   },
   {
     year: "2005",
     title: "Expansion to a Bigger Picture",
     description:
-      "With a focus on creating a larger trading network, Nimesh successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
+      "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
     icon: "trending_up",
-    image: journey2005Image,
-    accent: "secondary",
+    image: SITE_IMAGES.companyOfc2,
   },
   {
     year: "2015",
     title: "Generational Leadership",
     description:
-      "The transition to multi-generational leadership saw Nimesh's sons, Nishant and Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
+      "The transition to multi-generational leadership saw Mr. Nimesh Kothari's sons, Mr. Nishant Kothari and Mr. Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
     icon: "groups",
-    image: journey2015Image,
-    accent: "emerald",
+    image: SITE_IMAGES.godownPhoto,
   },
 ];
-
-const accentMap: Record<
-  Milestone["accent"],
-  {
-    bg: string;
-    text: string;
-    ring: string;
-  }
-> = {
-  primary: {
-    bg: "bg-primary",
-    text: "text-primary",
-    ring: "ring-primary/20",
-  },
-  secondary: {
-    bg: "bg-orange-500",
-    text: "text-orange-600",
-    ring: "ring-orange-500/20",
-  },
-  emerald: {
-    bg: "bg-emerald-600",
-    text: "text-emerald-700",
-    ring: "ring-emerald-600/20",
-  },
-};
 
 const legacyLines = [
   "NRK Iron and Steel LLP is a 30-year-old trading enterprise that commenced its roots in Indore, Madhya Pradesh.",
@@ -151,70 +121,6 @@ function useSectionIntro(sectionRef: RefObject<HTMLElement | null>) {
   return isIntroActive;
 }
 
-/* Ink seal — background watermark, auto-rotates */
-function NrkSeal() {
-  const S = 260;
-  const cx = 130;
-  const cy = 130;
-  const rOuter = 118;
-  const rInner = 105;
-  const rDash = 111;
-  const rText = 96;
-
-  return (
-    <div
-      className="pointer-events-none select-none"
-      style={{ width: S, height: S, animation: "sealSpin 28s linear infinite" }}
-      aria-hidden="true"
-    >
-      <svg viewBox={`0 0 ${S} ${S}`} width={S} height={S}>
-        <defs>
-          <path id="sealTop" d={`M ${cx - rText},${cy} A ${rText},${rText} 0 0,1 ${cx + rText},${cy}`} />
-          <path id="sealBot" d={`M ${cx - rText},${cy} A ${rText},${rText} 0 0,0 ${cx + rText},${cy}`} />
-          <filter id="sealInk" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" seed="8" result="noise" />
-            <feColorMatrix type="saturate" values="0" in="noise" result="grey" />
-            <feComposite operator="in" in="grey" in2="SourceGraphic" result="masked" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-          <filter id="sealBlur">
-            <feGaussianBlur stdDeviation="0.4" />
-          </filter>
-        </defs>
-        <circle cx={cx} cy={cy} r={rOuter} fill="none" stroke="#1e3a58" strokeWidth="2.5" opacity="0.80" filter="url(#sealInk)" />
-        <circle cx={cx} cy={cy} r={rInner} fill="none" stroke="#1e3a58" strokeWidth="1.2" opacity="0.60" filter="url(#sealInk)" />
-        <circle cx={cx} cy={cy} r={rDash} fill="none" stroke="#1e3a58" strokeWidth="0.9" strokeDasharray="4 5" opacity="0.45" filter="url(#sealInk)" />
-        <text fontFamily="'Arial Black', Arial, sans-serif" fontSize="13" fontWeight="900" letterSpacing="4" fill="#1e3a58" opacity="0.85" filter="url(#sealInk)">
-          <textPath href="#sealTop" startOffset="50%" textAnchor="middle">NRK IRON &amp; STEEL</textPath>
-        </text>
-        <text fontFamily="'Arial Black', Arial, sans-serif" fontSize="10" fontWeight="800" letterSpacing="3" fill="#1e3a58" opacity="0.70" filter="url(#sealInk)">
-          <textPath href="#sealBot" startOffset="50%" textAnchor="middle">EST. 1994 · INDORE, M.P.</textPath>
-        </text>
-        {[0, 180].map((deg) => {
-          const rad = (deg * Math.PI) / 180;
-          const x = cx + rText * Math.cos(rad - Math.PI / 2);
-          const y = cy + rText * Math.sin(rad - Math.PI / 2);
-          return (
-            <text key={deg} x={x} y={y + 4} textAnchor="middle" fontSize="7" fill="#1e3a58" opacity="0.55" filter="url(#sealBlur)">✦</text>
-          );
-        })}
-        <circle cx={cx} cy={cy} r={52} fill="none" stroke="#1e3a58" strokeWidth="0.8" opacity="0.35" filter="url(#sealInk)" />
-        <image
-          href={companyLogo.src}
-          x={cx - 34}
-          y={cy - 34}
-          width={68}
-          height={68}
-          opacity="0.55"
-          style={{ filter: "grayscale(1) brightness(0.25) contrast(1.4)" }}
-        />
-        <line x1={cx - 42} y1={cy} x2={cx + 42} y2={cy} stroke="#1e3a58" strokeWidth="0.5" opacity="0.20" />
-        <line x1={cx} y1={cy - 42} x2={cx} y2={cy + 42} stroke="#1e3a58" strokeWidth="0.5" opacity="0.20" />
-      </svg>
-    </div>
-  );
-}
-
 function useCountUp(target: number, duration = 1400) {
   const [count, setCount] = useState(0);
   const [active, setActive] = useState(false);
@@ -256,12 +162,12 @@ function useCountUp(target: number, duration = 1400) {
 function AnimatedStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const { count, ref } = useCountUp(value);
   return (
-    <div ref={ref} className="flex flex-col items-start">
-      <div className="font-display text-4xl font-black tabular-nums text-primary md:text-5xl">
+    <div ref={ref} className="flex flex-col items-start gap-1">
+      <div className="font-display text-4xl font-black tabular-nums tracking-tight text-primary md:text-5xl">
         {count}
-        <span>{suffix}</span>
+        <span className="text-secondary">{suffix}</span>
       </div>
-      <div className="mt-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/70">
+      <div className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant/70">
         {label}
       </div>
     </div>
@@ -269,47 +175,9 @@ function AnimatedStat({ value, suffix, label }: { value: number; suffix: string;
 }
 
 function JourneyStage({ activeIndex }: { activeIndex: number }) {
-  const activeMilestone = milestones[activeIndex];
-  const activeAccent = accentMap[activeMilestone.accent];
-
   return (
-    <div className="relative rounded-[30px] border border-white/55 bg-white/50 p-4 shadow-2xl shadow-primary/12 backdrop-blur-sm">
-      <div className="mb-5 rounded-[22px] border border-primary/10 bg-white/80 p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-5">
-          <div className="flex min-w-0 items-center gap-4">
-            <span className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-black text-white shadow-lg ring-4", activeAccent.bg, activeAccent.ring)}>
-              {activeIndex + 1}
-            </span>
-            <div className="min-w-0">
-              <p className={cn("font-display text-4xl font-black tabular-nums leading-none transition-colors duration-500", activeAccent.text)}>
-                {activeMilestone.year}
-              </p>
-              <p className="mt-1 truncate text-[11px] font-black uppercase tracking-[0.18em] text-on-surface-variant/70">
-                {activeMilestone.title}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2" aria-label={`Milestone ${activeIndex + 1} of ${milestones.length}`}>
-            {milestones.map((milestone, index) => {
-              const accent = accentMap[milestone.accent];
-
-              return (
-                <span
-                  key={milestone.year}
-                  className={cn(
-                    "h-2.5 rounded-full transition-all duration-500",
-                    activeIndex === index ? `w-8 ${accent.bg}` : "w-2.5 bg-primary/18",
-                  )}
-                  aria-hidden="true"
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className="relative h-[360px] overflow-hidden rounded-[26px] border border-white/70 bg-primary shadow-xl shadow-primary/16">
+    <div className="relative w-full overflow-hidden rounded-3xl bg-slate-900 shadow-2xl">
+      <div className="relative aspect-[4/5] w-full lg:aspect-[3/4]">
         {milestones.map((milestone, index) => (
           <Image
             key={milestone.year}
@@ -319,66 +187,64 @@ function JourneyStage({ activeIndex }: { activeIndex: number }) {
             sizes="(min-width: 1024px) 50vw, 100vw"
             priority={index === 0}
             className={cn(
-              "object-cover transition-all duration-700 ease-out",
-              activeIndex === index ? "scale-100 opacity-100" : "scale-105 opacity-0",
+              "object-cover transition-all duration-1000 ease-in-out",
+              activeIndex === index ? "scale-100 opacity-100" : "scale-110 opacity-0",
             )}
           />
         ))}
-      </div>
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-      <div className="relative mt-5 min-h-[236px] rounded-[24px] border border-primary/10 bg-white/92 p-6 shadow-xl shadow-primary/10">
-        {milestones.map((milestone, index) => {
-          const accent = accentMap[milestone.accent];
-
-          return (
-            <article
-              key={milestone.year}
-              className={cn(
-                "absolute inset-6 flex flex-col justify-between transition-all duration-500 ease-out",
-                activeIndex === index
-                  ? "translate-y-0 opacity-100"
-                  : index < activeIndex
-                    ? "-translate-y-6 opacity-0"
-                    : "translate-y-6 opacity-0",
-              )}
-              aria-hidden={activeIndex !== index}
-            >
-              <div>
-                <div className="mb-4 flex items-start gap-4">
-                  <span className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white shadow-lg", accent.bg)}>
-                    <span className="material-symbols-outlined text-[22px]">{milestone.icon}</span>
+        {/* Floating Content Box */}
+        <div className="absolute inset-x-0 bottom-0 p-6 md:p-10">
+          <div className="relative min-h-[160px] mb-6 md:mb-8">
+            {milestones.map((milestone, index) => (
+              <div
+                key={milestone.year}
+                className={cn(
+                  "absolute inset-0 flex flex-col justify-end transition-all duration-700 ease-out",
+                  activeIndex === index
+                    ? "translate-y-0 opacity-100"
+                    : index < activeIndex
+                      ? "-translate-y-8 opacity-0"
+                      : "translate-y-8 opacity-0"
+                )}
+                aria-hidden={activeIndex !== index}
+              >
+                <div className="flex items-center gap-4 mb-3">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white shadow-lg">
+                    <span className="material-symbols-outlined">{milestone.icon}</span>
                   </span>
                   <div>
-                    <p className={cn("text-sm font-black uppercase tracking-[0.2em]", accent.text)}>
-                      {milestone.year}
-                    </p>
-                    <h3 className="mt-1 font-display text-2xl font-black uppercase leading-tight text-primary">
+                    <p className="text-secondary font-bold tracking-wider text-sm">{milestone.year}</p>
+                    <h3 className="font-display text-2xl font-black text-white md:text-3xl tracking-tight">
                       {milestone.title}
                     </h3>
                   </div>
                 </div>
-                <p className="max-w-xl text-sm leading-relaxed text-on-surface-variant md:text-base">
+                <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-lg">
                   {milestone.description}
                 </p>
               </div>
-            </article>
-          );
-        })}
+            ))}
+          </div>
 
-        <div className="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2">
-          {milestones.map((milestone, index) => {
-            const accent = accentMap[milestone.accent];
-
-            return (
-              <span
+          {/* Progress Bars */}
+          <div className="flex gap-2">
+            {milestones.map((milestone, index) => (
+              <div
                 key={milestone.year}
-                className={cn(
-                  "h-1.5 rounded-full transition-colors duration-300",
-                  activeIndex === index ? accent.bg : "bg-primary/12",
-                )}
-              />
-            );
-          })}
+                className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/20"
+              >
+                <div
+                  className={cn(
+                    "h-full bg-secondary transition-all duration-500 ease-out",
+                    index === activeIndex ? "w-full" : index < activeIndex ? "w-full" : "w-0"
+                  )}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -387,90 +253,73 @@ function JourneyStage({ activeIndex }: { activeIndex: number }) {
 
 function MobileMilestones() {
   return (
-    <div className="space-y-6 lg:hidden">
-      {milestones.map((milestone) => {
-        const accent = accentMap[milestone.accent];
-
-        return (
-          <article
-            key={milestone.year}
-            className="overflow-hidden rounded-[24px] border border-white/60 bg-white/90 shadow-lg shadow-primary/10"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden bg-primary">
-              <Image
-                src={milestone.image}
-                alt={`${milestone.title} milestone`}
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
+    <div className="space-y-12 lg:hidden">
+      {milestones.map((milestone) => (
+        <article key={milestone.year} className="group">
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-slate-900 mb-6">
+            <Image
+              src={milestone.image}
+              alt={`${milestone.title} milestone`}
+              fill
+              sizes="100vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </div>
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white shrink-0">
+                <span className="material-symbols-outlined">{milestone.icon}</span>
+              </span>
+              <div className="w-px h-full bg-slate-200 mt-4 group-last:hidden" />
             </div>
-            <div className="p-5">
-              <div className="mb-4 flex items-start gap-3">
-                <span className={cn("flex h-10 w-10 items-center justify-center rounded-full text-white", accent.bg)}>
-                  <span className="material-symbols-outlined text-lg">{milestone.icon}</span>
-                </span>
-                <div>
-                  <p className={cn("text-xs font-black uppercase tracking-[0.18em]", accent.text)}>
-                    {milestone.year}
-                  </p>
-                  <h3 className="mt-1 font-display text-xl font-black uppercase text-primary">
-                    {milestone.title}
-                  </h3>
-                </div>
-              </div>
-              <p className="text-sm leading-relaxed text-on-surface-variant">
+            <div className="pb-8">
+              <p className="text-secondary font-bold tracking-wider text-sm mb-1">{milestone.year}</p>
+              <h3 className="font-display text-2xl font-black text-primary mb-3">
+                {milestone.title}
+              </h3>
+              <p className="text-on-surface-variant text-sm leading-relaxed">
                 {milestone.description}
               </p>
             </div>
-          </article>
-        );
-      })}
+          </div>
+        </article>
+      ))}
     </div>
   );
 }
 
 const LegacyIntro = memo(function LegacyIntro({ isIntroActive }: { isIntroActive: boolean }) {
-  const legacyIntroRef = useRef<HTMLDivElement>(null);
-
-  useHeroTypewriter(legacyIntroRef, isIntroActive, ["company-journey"]);
-
   return (
-    <div ref={legacyIntroRef} className="relative order-1 lg:order-2">
-      <div className="pointer-events-none absolute -right-8 -top-10 opacity-[0.13]" aria-hidden="true">
-        <NrkSeal />
-      </div>
-
-      <div className="mb-7 min-h-[122px]" data-typewriter suppressHydrationWarning>
+    <div className="relative order-1 lg:order-2 flex flex-col justify-center h-full">
+      <div className="mb-8">
         <span
-          className="mb-4 block min-h-[1.4em] font-label-md text-[11px] font-black uppercase tracking-[0.22em] text-orange-600"
-          data-typewriter-line
-          data-typewriter-text="Who We Are"
-          suppressHydrationWarning
+          className={cn(
+            "mb-4 block font-label-md text-xs font-black uppercase tracking-[0.22em] text-secondary transition-all duration-700",
+            isIntroActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          )}
         >
           Who We Are
         </span>
-        <h2 className="font-display text-4xl font-black uppercase leading-tight text-primary md:text-5xl">
-          <span data-typewriter-line data-typewriter-text="Our Legacy" suppressHydrationWarning>
-            Our Legacy
-          </span>
-          <span
-            className="ml-1 inline-block h-[0.78em] w-[0.08em] animate-pulse bg-orange-500 align-[-0.08em]"
-            data-typewriter-cursor
-          />
+        <h2 
+          className={cn(
+            "font-display text-4xl font-black leading-[1.1] text-primary md:text-5xl lg:text-6xl transition-all duration-700 delay-100",
+            isIntroActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          )}
+        >
+          Our Legacy
         </h2>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6 mb-12">
         {legacyLines.map((line, index) => (
           <p
             key={line}
             className={cn(
-              "font-body text-sm leading-relaxed text-on-surface-variant/80 transition-all duration-700 ease-out md:text-base",
-              index === 0 ? "md:text-lg" : "",
+              "font-body leading-relaxed text-on-surface-variant transition-all duration-700 ease-out",
+              index === 0 ? "text-lg md:text-xl font-medium text-primary/80" : "text-base md:text-lg",
               isIntroActive ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
             )}
-            style={{ transitionDelay: `${900 + index * 170}ms` }}
+            style={{ transitionDelay: `${200 + index * 100}ms` }}
           >
             {line}
           </p>
@@ -479,23 +328,13 @@ const LegacyIntro = memo(function LegacyIntro({ isIntroActive }: { isIntroActive
 
       <div
         className={cn(
-          "relative mt-10 overflow-hidden rounded-[24px] border border-primary/20 bg-white/65 p-6 shadow-sm backdrop-blur-sm transition-all duration-700 ease-out",
-          isIntroActive ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+          "grid grid-cols-2 gap-8 md:grid-cols-3 transition-all duration-700 delay-700",
+          isIntroActive ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         )}
-        style={{ transitionDelay: "1650ms" }}
       >
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-orange-500 to-emerald-600" />
-        <div className="grid grid-cols-3 divide-x divide-outline-variant/30">
-          <div className="pr-4">
-            <AnimatedStat value={30} suffix="+" label="Years of Trust" />
-          </div>
-          <div className="px-4">
-            <AnimatedStat value={10} suffix="k+" label="Projects Served" />
-          </div>
-          <div className="pl-4">
-            <AnimatedStat value={4} suffix="" label="Strategic Hubs" />
-          </div>
-        </div>
+        <AnimatedStat value={30} suffix="+" label="Years of Trust" />
+        <AnimatedStat value={10} suffix="k+" label="Projects Served" />
+        <AnimatedStat value={4} suffix="" label="Strategic Hubs" />
       </div>
     </div>
   );
@@ -508,18 +347,20 @@ export function CompanyJourneySection() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-[#dfe9f5] py-16 md:py-20 lg:min-h-[300vh] lg:py-0"
+      className="relative bg-white py-20 lg:min-h-[300vh] lg:py-0"
       data-scroll-reveal="off"
     >
-      <div className="mx-auto max-w-container-max px-gutter lg:sticky lg:top-20 lg:flex lg:min-h-screen lg:items-center">
-        <div className="grid w-full grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)] lg:items-center lg:gap-20">
-          <div className="order-2 lg:order-1">
+      <div className="mx-auto max-w-container-max px-gutter lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
+        <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center lg:gap-24 py-10">
+          <div className="order-2 lg:order-1 h-full flex flex-col justify-center">
             <div className="hidden lg:block">
               <JourneyStage activeIndex={activeIndex} />
             </div>
             <MobileMilestones />
           </div>
-          <LegacyIntro isIntroActive={isIntroActive} />
+          <div className="h-full flex flex-col justify-center">
+            <LegacyIntro isIntroActive={isIntroActive} />
+          </div>
         </div>
       </div>
     </section>

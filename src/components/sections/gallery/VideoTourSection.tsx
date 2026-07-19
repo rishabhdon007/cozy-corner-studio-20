@@ -36,7 +36,7 @@ export function VideoTourSection() {
         >
           <video
             className="h-full w-full object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-60"
-            src="/assests/banner_video.mp4"
+            src="/company/Steel_factory.mp4"
             autoPlay
             muted
             loop
@@ -46,14 +46,7 @@ export function VideoTourSection() {
             aria-label="NRK Iron & Steel facility video tour"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/25 bg-white/15 backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
-              <span className="material-symbols-outlined translate-x-0.5 text-[40px] text-white">play_arrow</span>
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 h-1 w-full bg-white/15">
-            <div className="h-full w-1/3 bg-secondary-fixed" />
-          </div>
+
         </div>
       </div>
     </section>

@@ -43,8 +43,8 @@ export function WhyChooseUsSection() {
   return (
     <ImageFeatureSplitSection
       id="why-choose-us"
-      image={SITE_IMAGES.teamMember}
-      imageAlt="NRK Iron & Steel team member"
+      image="/company/Nimesh_sir.jpg"
+      imageAlt="Mr. Nimesh Kothari"
       useNextImage
       badge={{ value: "30+", label: "Years of Trust" }}
       eyebrow="Industrial Steel Partner"

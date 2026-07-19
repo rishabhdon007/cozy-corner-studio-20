@@ -1,7 +1,7 @@
 import { AboutHero } from "@/components/sections/about/AboutHero";
 import { CompanyJourneySection } from "@/components/sections/about/CompanyJourneySection";
 import { LeadershipSection } from "@/components/sections/about/LeadershipSection";
-import { LifeAtNrkSection } from "@/components/sections/about/LifeAtNrkSection";
+import { MarketingTeamSection } from "@/components/sections/about/MarketingTeamSection";
 import { MissionVisionSection } from "@/components/sections/about/MissionVisionSection";
 import { ContactCtaSection } from "@/components/site/ContactCtaSection";
 
@@ -12,7 +12,7 @@ export default function AboutPage() {
       <CompanyJourneySection />
       <MissionVisionSection />
       <LeadershipSection />
-      <LifeAtNrkSection />
+      <MarketingTeamSection />
       <ContactCtaSection />
     </div>
   );

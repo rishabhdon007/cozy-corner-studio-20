@@ -5,6 +5,8 @@ export const SITE_IMAGES = {
   construction: "/assests/constrution area.webp",
   teamMember: "/assests/team_member.webp",
   companyLogo: "/company_logo.webp",
+  companyOfc2: "/company/ofc2.jpg",
+  godownPhoto: "/company/Godown photos.webp",
   indiaMartLogo: "/assests/IndiaMART_logo.webp",
   justDialLogo: "/assests/jdlogosvg.svg",
   about: {
@@ -67,12 +69,9 @@ export function normalizeImageSrc(src?: string | null): string {
 
 /** Leadership portraits — hosted remotely; keep explicit URLs for SiteImage. */
 export const LEADERSHIP_IMAGES = {
-  nimesh:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuD3TgUu2LrQ9yxbiPLUURPYM_MlspId_DSUN_ng_w2uMLbxA535POuz-nxCKeEkC3DNlUVfqbij1FLw4q0uUviq5T037fr1KboZ3HDy_GCz9x3w-21Z7jjNg3zyEOFMIOU9G8oD48X2Z4TYxgvrNyGajrz9U7PC7i_40U_1g1CFSyVpd0JN4xNTS1LRSkWEp4yW_XvXtMsLWm3ilgdpqky-2zedyBY5hwybPHzPMORDxkrGycHQTVS8X4JxkuzyjMwhHJ9cIDDQoLw",
-  nishant:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAj7n5lAwMcVPrQrg5h8KK0TWK2pKPodYhZ5K3IUr0_UWty9yuZc-WvUimut6KiBphtbJWKxFGId8WJZiiW6-DrsyDMY6g34m7-_I_rXvh6REaiR2qOWYIlQ0EvKC2y7ztv2PPqUqK_S2j2Tq_QEX2b4juiDIy8oWKUre40jJVFpqDvgm_xFJ1XertgyDCWiNNx73XfAA_QCdFEF3eo-8AbdqfdT5jKehqAzXqi5InIxn4T0sDrgcoS6DjRh4iTZtGdVw-RMm_V9Zc",
-  dhaval:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDWBw7mymMo3O9SVSgQxtjOXA5CQIaopTnVqiesY2dAWfReGiRHyg1s5OF7og0raZsEMoA9igZEADmXhKrvMnNeerK54yUByqBJAP99AYrJ08J1uYjNn-zYbJxglejJbxyFyymJLWZGsxNvf8zKJm1tex5FGggweCKeMtMZFPOKQrJc02Avq303grL_QN2yTJJoG4-QwXyKh6dM2qPP_SFJg6Z9Gfkqz2y8fqqMX2zK7R4kd_z1UvlCDn19KsPyCjNUTiYEJVe0sMU",
+  nimesh: "/company/Nimesh_sir.jpg",
+  nishant: "/company/Nishant_sir.png",
+  dhaval: "/company/dhaval_kothari_updated.png",
 } as const;
 
 export const HOMEPAGE_BANNER_VIDEO = "/homepage_banner_bg.mp4";

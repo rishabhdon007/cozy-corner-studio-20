@@ -2,30 +2,24 @@
 
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
-import { LEADERSHIP_IMAGES, SITE_IMAGES } from "@/lib/siteImages";
+import { SITE_IMAGES } from "@/lib/siteImages";
 
-const leaders = [
+const marketers = [
   {
-    name: "Mr. Nimesh Kothari",
-    role: "Founder & Chairman",
-    description: "Guides corporate strategy, industrial scaling, and steel mill relationships with three decades of trust.",
-    image: LEADERSHIP_IMAGES.nimesh,
+    name: "Mr. Ritik Dhanotiya",
+    role: "Marketing Team",
+    description: "Driving brand awareness and expanding market reach through innovative campaigns and strategic communications.",
+    image: "/company/ritik_marketing.png",
   },
   {
-    name: "Mr. Nishant Kothari",
-    role: "Chief Executive Officer",
-    description: "Directs operational workflows, business development, and supply-chain digitisation frameworks.",
-    image: LEADERSHIP_IMAGES.nishant,
-  },
-  {
-    name: "Mr. Dhaval Kothari",
-    role: "Managing Director",
-    description: "Leads technical processing plants, quality control protocols, and nationwide distribution logistics.",
-    image: "/company/dhaval_kothari_updated.png",
+    name: "Mr. Navin Vishwakarama",
+    role: "Marketing Team",
+    description: "Executing data-driven marketing strategies to foster client relationships and drive growth across new territories.",
+    image: "/company/navin_marketing.png",
   },
 ];
 
-export function LeadershipSection() {
+export function MarketingTeamSection() {
   return (
     <section className="bg-[#0f1d30] py-20 md:py-28 relative overflow-hidden">
       <div
@@ -37,35 +31,35 @@ export function LeadershipSection() {
       />
 
       <div className="absolute right-0 bottom-0 opacity-[0.02] translate-x-12 translate-y-12 select-none pointer-events-none">
-        <span className="material-symbols-outlined text-[340px] text-white">shield</span>
+        <span className="material-symbols-outlined text-[340px] text-white">campaign</span>
       </div>
 
       <div className="mx-auto max-w-container-max px-gutter relative z-10 text-white">
         <SectionHeading
           align="left"
           variant="dark"
-          eyebrow="Our Team"
-          title="Leadership"
-          lead="The visionaries steering NRK Iron & Steel towards new horizons of industrial excellence."
+          eyebrow="Our Core Marketing Team"
+          title="Marketing Team"
+          lead="The creative force connecting NRK Iron & Steel with the industry's evolving needs."
           className="max-w-2xl mb-16 text-left"
           titleClassName="text-white font-black text-4xl uppercase tracking-tight md:text-5xl"
           leadClassName="text-surface-variant/80 text-sm md:text-base leading-relaxed"
         />
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {leaders.map((leader, index) => (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:max-w-4xl lg:mx-auto">
+          {marketers.map((marketer, index) => (
             <div
-              key={leader.name}
+              key={marketer.name}
               data-scroll-reveal="top"
               data-scroll-reveal-delay={String(index * 2)}
               className="group flex flex-col overflow-hidden rounded-2xl bg-[#142338]/90 border border-white/5 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-[#18293e]">
                 <SiteImage
-                  src={leader.image}
-                  alt={leader.name}
+                  src={marketer.image}
+                  alt={marketer.name}
                   fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   fallback={SITE_IMAGES.teamMember}
                   className="object-top transition-transform duration-700 group-hover:scale-105"
                 />
@@ -74,13 +68,13 @@ export function LeadershipSection() {
 
               <div className="p-6 md:p-8 flex flex-col flex-1 bg-[#142338]">
                 <h3 className="mb-1 font-display text-xl md:text-2xl font-black tracking-tight text-white group-hover:text-secondary-fixed transition-colors">
-                  {leader.name}
+                  {marketer.name}
                 </h3>
                 <p className="mb-4 text-[11px] font-black uppercase tracking-[0.16em] text-secondary-fixed/90 border-b border-white/5 pb-3">
-                  {leader.role}
+                  {marketer.role}
                 </p>
                 <p className="text-xs md:text-sm leading-relaxed text-surface-variant/70">
-                  {leader.description}
+                  {marketer.description}
                 </p>
               </div>
             </div>

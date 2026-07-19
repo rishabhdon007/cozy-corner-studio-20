@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
 import { SITE_IMAGES } from "@/lib/siteImages";
 
-const STEEL_IMAGE = SITE_IMAGES.construction;
+const STEEL_IMAGE = SITE_IMAGES.godownPhoto;
 
 type SlideItem = {
   title: string;
@@ -93,6 +93,19 @@ export function MissionVisionSection() {
             lead="At NRK Iron & Steel, our philosophy is rooted in industrial precision. We understand that the strength of our steel dictates the integrity of your structures."
             className="mb-0"
           />
+        </div>
+
+        {/* Philosophy Image Grid */}
+        <div className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6" data-scroll-reveal="top">
+          <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-outline-variant shadow-sm group">
+            <SiteImage src="/company/ware house photos.webp" alt="Warehouse Photos" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+          </div>
+          <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-outline-variant shadow-sm group">
+            <SiteImage src="/company/logistic.webp" alt="Logistics" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+          </div>
+          <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-outline-variant shadow-sm group">
+            <SiteImage src="/company/warehouse.webp" alt="Warehouse" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+          </div>
         </div>
 
         {/* Vision & Mission Cards Grid */}
@@ -228,12 +241,13 @@ export function MissionVisionSection() {
 
         {/* Quality Control Banner */}
         <div className="group relative mt-16 h-[600px] overflow-hidden rounded-2xl border border-outline-variant">
-          <SiteImage
-            src={STEEL_IMAGE}
-            alt="Steel processing"
-            fill
-            sizes="100vw"
-            className="transition-transform duration-700 group-hover:scale-105"
+          <video
+            src="/company/factory_tour.mp4"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            autoPlay
+            muted
+            loop
+            playsInline
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
           <div className="absolute bottom-0 left-0 p-8">
