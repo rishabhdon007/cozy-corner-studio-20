@@ -27,7 +27,7 @@ export function QualityControlSection() {
   return (
     <ImageFeatureSplitSection
       id="quality-assurance"
-      image={SITE_IMAGES.construction}
+      image="/Gallary/Dispatch & Logistics Hub.png"
       imageAlt="Quality Control Inspection"
       useNextImage
       badge={{ value: "ISO", label: "9001:2008 Certified" }}

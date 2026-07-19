@@ -32,7 +32,7 @@ const milestones: Milestone[] = [
     description:
       "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
     icon: "trending_up",
-    image: SITE_IMAGES.companyOfc2,
+    image: "/company/company_section2.webp",
   },
   {
     year: "2015",
@@ -197,22 +197,22 @@ function JourneyStage({ activeIndex }: { activeIndex: number }) {
 
         {/* Floating Content Box */}
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-10">
-          <div className="relative min-h-[160px] mb-6 md:mb-8">
+          <div className="relative min-h-[240px] md:min-h-[160px] mb-6 md:mb-8">
             {milestones.map((milestone, index) => (
               <div
                 key={milestone.year}
                 className={cn(
                   "absolute inset-0 flex flex-col justify-end transition-all duration-700 ease-out",
                   activeIndex === index
-                    ? "translate-y-0 opacity-100"
+                    ? "translate-y-0 opacity-100 z-10"
                     : index < activeIndex
-                      ? "-translate-y-8 opacity-0"
-                      : "translate-y-8 opacity-0"
+                      ? "-translate-y-8 opacity-0 z-0 pointer-events-none"
+                      : "translate-y-8 opacity-0 z-0 pointer-events-none"
                 )}
                 aria-hidden={activeIndex !== index}
               >
                 <div className="flex items-center gap-4 mb-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white shadow-lg">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white shadow-lg shrink-0">
                     <span className="material-symbols-outlined">{milestone.icon}</span>
                   </span>
                   <div>
@@ -272,7 +272,7 @@ function MobileMilestones() {
               </span>
               <div className="w-px h-full bg-slate-200 mt-4 group-last:hidden" />
             </div>
-            <div className="pb-8">
+            <div>
               <p className="text-secondary font-bold tracking-wider text-sm mb-1">{milestone.year}</p>
               <h3 className="font-display text-2xl font-black text-primary mb-3">
                 {milestone.title}
@@ -353,7 +353,7 @@ export function CompanyJourneySection() {
       <div className="mx-auto max-w-container-max px-gutter lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
         <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center lg:gap-24 py-10">
           <div className="order-2 lg:order-1 h-full flex flex-col justify-center">
-            <div className="hidden lg:block">
+            <div className="hidden lg:block w-full">
               <JourneyStage activeIndex={activeIndex} />
             </div>
             <MobileMilestones />

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { SiteFooter } from "@/components/SiteFooter";
+import dynamic from "next/dynamic";
+
+const SiteFooter = dynamic(() => import("@/components/SiteFooter").then(mod => mod.SiteFooter));
+const FloatingContactButtons = dynamic(() => import("@/components/site/FloatingContactButtons").then(mod => mod.FloatingContactButtons));
+
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteEffects } from "@/components/site/SiteEffects";
-import { FloatingContactButtons } from "@/components/site/FloatingContactButtons";
 import { ScrollProgressBar } from "@/components/site/ScrollProgressBar";
 
 import "./globals.css";
@@ -26,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`light ${inter.variable}`} suppressHydrationWarning>
-      <head>
+      <head suppressHydrationWarning>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

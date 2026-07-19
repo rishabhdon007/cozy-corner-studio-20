@@ -65,13 +65,13 @@ export function GalleryHero() {
       className="relative w-full overflow-hidden bg-primary"
     >
       <div className="absolute inset-0">
-        <SiteImage
-          src={SITE_IMAGES.construction}
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          className="opacity-35"
+        <video
+          src="/company/factory_tour.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="h-full w-full object-cover opacity-35"
           aria-hidden
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />

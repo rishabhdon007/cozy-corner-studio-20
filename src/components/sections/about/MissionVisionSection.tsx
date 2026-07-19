@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
+import { LazyVideo } from "@/components/site/LazyVideo";
 import { SITE_IMAGES } from "@/lib/siteImages";
 
 const STEEL_IMAGE = SITE_IMAGES.godownPhoto;
@@ -241,8 +242,8 @@ export function MissionVisionSection() {
 
         {/* Quality Control Banner */}
         <div className="group relative mt-16 h-[600px] overflow-hidden rounded-2xl border border-outline-variant">
-          <video
-            src="/company/factory_tour.mp4"
+          <LazyVideo
+            src="/company/Steel_factory.mp4"
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             autoPlay
             muted

@@ -35,8 +35,8 @@ export function VideoTourSection() {
           className="group relative mx-auto aspect-video max-w-4xl cursor-pointer overflow-hidden rounded-[2rem] border border-white/15 bg-black shadow-2xl shadow-black/30"
         >
           <video
-            className="h-full w-full object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-60"
-            src="/company/Steel_factory.mp4"
+            className="absolute top-1/2 left-1/2 w-[56.25%] h-[177.77%] max-w-none -translate-x-1/2 -translate-y-1/2 -rotate-90 object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-60"
+            src="/Gallary/ofc_tour.mp4"
             autoPlay
             muted
             loop

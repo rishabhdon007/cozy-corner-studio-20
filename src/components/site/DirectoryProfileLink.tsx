@@ -36,7 +36,7 @@ export function DirectoryProfileLink({
       <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm ring-1 ring-white/40">
         <SiteImage src={assetSrc(logo)} alt={logoAlt} fill className="object-contain" sizes="36px" />
       </span>
-      <span className="min-w-0 text-left">
+      <span className="min-w-0 flex-1 text-left">
         <span className="block font-label-md text-[8px] font-black uppercase tracking-[0.16em] text-secondary-fixed">
           {eyebrow}
         </span>
@@ -46,7 +46,7 @@ export function DirectoryProfileLink({
       </span>
       <SiteButtonIcon
         name="open_in_new"
-        className="ml-auto text-sm text-white/50 transition-transform duration-300 group-hover:text-white"
+        className="ml-auto shrink-0 text-sm text-white/50 transition-transform duration-300 group-hover:text-white"
       />
     </SiteButton>
   );
