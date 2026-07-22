@@ -3,38 +3,38 @@ import { SITE_IMAGES } from "@/lib/siteImages";
 
 const FEATURES = [
   {
-    icon: "support_agent",
-    title: "Customer-Focused Service",
+    icon: "workspace_premium",
+    title: "Genuine Quality",
     description:
-      "Customer-first approach with timely delivery, quality assurance, transparent communication, and high customer satisfaction.",
+      "100% Original Tata Steel with mill certificates",
     revealDelay: 4,
   },
   {
-    icon: "loyalty",
-    title: "Goodwill & Loyalty",
+    icon: "category",
+    title: "Wide Range",
     description:
-      "Strong business relationships built over 30+ years with long-term trust and a loyal customer ecosystem across India.",
+      "All grades Soft, Medium, Structural available",
     revealDelay: 5,
   },
   {
-    icon: "inventory_2",
-    title: "Complete Range",
+    icon: "local_shipping",
+    title: "Fast Delivery",
     description:
-      "One-stop solution for all steel requirements — prime and secondary materials available with doorstep delivery support.",
+      "Ready stock & quick dispatch from Indore",
     revealDelay: 6,
   },
   {
-    icon: "groups",
-    title: "30+ Years of Client Trust",
+    icon: "price_check",
+    title: "Competitive Pricing",
     description:
-      "Business built on mutual trust and support — strong, professional relationships with customers across multiple generations.",
+      "Best market rates with transparency",
     revealDelay: 7,
   },
   {
-    icon: "local_shipping",
-    title: "Pan-India Delivery",
+    icon: "support_agent",
+    title: "Technical Support",
     description:
-      "Serving MP, Gujarat, Maharashtra, Rajasthan & Punjab with secure transportation and efficient doorstep delivery.",
+      "Right grade selection guidance for your application",
     revealDelay: 8,
   },
 ] as const;
@@ -47,13 +47,8 @@ export function WhyChooseUsSection() {
       imageAlt="Mr. Nimesh Kothari"
       useNextImage
       badge={{ value: "30+", label: "Years of Trust" }}
-      eyebrow="Industrial Steel Partner"
-      title={
-        <>
-          Why Businesses
-          <br className="hidden sm:block" /> Choose Us
-        </>
-      }
+      eyebrow="Why Choose Us"
+      title="Why NRK IRON & STEEL LLP?"
       lead="We PROVIDE competitive rates and timely deliveries — combining ready stock, precise processing, and long-term service discipline for industrial buyers across India."
       features={FEATURES}
     />

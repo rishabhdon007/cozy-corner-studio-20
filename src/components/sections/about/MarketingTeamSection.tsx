@@ -6,16 +6,16 @@ import { SITE_IMAGES } from "@/lib/siteImages";
 
 const marketers = [
   {
-    name: "Mr. Ritik Dhanotiya",
-    role: "Marketing Team",
-    description: "Driving brand awareness and expanding market reach through innovative campaigns and strategic communications.",
-    image: "/company/ritik_marketing.png",
-  },
-  {
     name: "Mr. Navin Vishwakarama",
     role: "Marketing Team",
     description: "Executing data-driven marketing strategies to foster client relationships and drive growth across new territories.",
     image: "/company/navin_marketing.png",
+  },
+  {
+    name: "Mr. Ritik Dhanotiya",
+    role: "Marketing Team",
+    description: "Driving brand awareness and expanding market reach through innovative campaigns and strategic communications.",
+    image: "/company/ritik_marketing.png",
   },
 ];
 
