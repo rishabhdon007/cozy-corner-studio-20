@@ -32,7 +32,7 @@ const milestones: Milestone[] = [
     description:
       "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
     icon: "trending_up",
-    image: "/company/company_section2.webp",
+    image: "/company/company_section2.jpeg",
   },
   {
     year: "2015",

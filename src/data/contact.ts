@@ -90,18 +90,18 @@ export function buildWhatsAppHref(message: string): string {
 }
 
 export const contactInfo = {
-  email: "info@nrkind.com",
-  emailHref: "mailto:info@nrkind.com",
-  phone: "095757 07070",
-  phoneHref: "tel:+919575707070",
-  phoneTel: "+919575707070",
+  email: "nrksteel@gmail.com",
+  emailHref: "mailto:nrksteel@gmail.com",
+  phone: "9770501623",
+  phoneHref: "tel:+919770501623",
+  phoneTel: "+919770501623",
   secondaryPhones: [
     { display: "0731-2420824", href: "tel:+917312420824" },
     { display: "0731-2420825", href: "tel:+917312420825" },
     { display: "+91-9302106507", href: "tel:+919302106507" },
     { display: "+91-9977777099", href: "tel:+919977777099" },
   ],
-  whatsappNumber: "919575707070",
+  whatsappNumber: "919770501623",
   whatsappMessage: "Hello NRK Iron & Steel, I want to discuss my steel requirement.",
   website: "https://www.nrkind.com",
   address: {

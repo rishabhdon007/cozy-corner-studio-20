@@ -15,7 +15,7 @@ const leaders = [
     name: "Mr. Nishant Kothari",
     role: "Chief Executive Officer",
     description: "Directs operational workflows, business development, and supply-chain digitisation frameworks.",
-    image: LEADERSHIP_IMAGES.nishant,
+    image: "/company/Nishant_sir.jpeg",
   },
   {
     name: "Mr. Dhaval Kothari",
