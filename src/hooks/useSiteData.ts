@@ -45,10 +45,41 @@ export function useSiteData<T>(key: string, defaultValue: T): T {
     if (typeof window === "undefined") return;
     const searchParams = new URLSearchParams(window.location.search);
     const isPreview = searchParams.get("preview") === "true";
+
+    // Instant localStorage preview support for serverless deploy
+    if (isPreview) {
+      const localData = localStorage.getItem("nrk_draft_preview_data");
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          if (parsed && parsed.draft && parsed.draft[key] !== undefined) {
+            setData(parsed.draft[key]);
+            return;
+          }
+        } catch (e) {
+          console.error("Failed to parse localStorage preview data", e);
+        }
+      }
+    }
+
     const dataType = isPreview ? "draft" : "published";
 
     // Setup an updater interval or trigger on focus
     const updateData = () => {
+      // Check localStorage again on update/focus
+      if (isPreview) {
+        const localData = localStorage.getItem("nrk_draft_preview_data");
+        if (localData) {
+          try {
+            const parsed = JSON.parse(localData);
+            if (parsed && parsed.draft && parsed.draft[key] !== undefined) {
+              setData(parsed.draft[key]);
+              return;
+            }
+          } catch (_) {}
+        }
+      }
+
       fetchSiteData(dataType).then((db) => {
         if (db && db[key]) {
           setData(db[key]);

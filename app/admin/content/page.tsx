@@ -99,6 +99,9 @@ export default function ContentAdmin() {
 
   const handleSave = async (updatedData = data) => {
     setSaving(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: updatedData }));
+    }
     try {
       await fetch("/api/admin/data?action=save", {
         method: "POST",

@@ -160,6 +160,9 @@ export default function CatalogManager() {
 
   const handleSave = async (updatedDbData = dbData) => {
     setSaving(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: updatedDbData }));
+    }
     try {
       await fetch("/api/admin/data?action=save", {
         method: "POST",
