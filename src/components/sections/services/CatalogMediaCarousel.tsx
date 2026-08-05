@@ -223,7 +223,7 @@ export function CatalogMediaCarousel({ items, title, className }: CatalogMediaCa
         </Carousel>
       </div>
 
-      {bottomThumbs.length > 0 ? (
+      {items.length > 1 && bottomThumbs.length > 0 ? (
         <div className="grid grid-cols-3 gap-3">
           {bottomThumbs.map((item) => {
             const index = items.findIndex((entry) => entry.id === item.id);

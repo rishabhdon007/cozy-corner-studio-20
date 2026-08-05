@@ -30,9 +30,14 @@ const toCard = (item: {
   kind: item.kind,
 });
 
-export const processingServiceCards: ServiceCardItem[] = serviceCardMeta
-  .filter((item) => item.section === "processing")
-  .map((item) => toCard({ ...item, kind: "service" }));
+export const processingServiceCards: ServiceCardItem[] = [
+  ...serviceCardMeta
+    .filter((item) => item.section === "processing")
+    .map((item) => toCard({ ...item, kind: "service" as const })),
+  ...productCardMeta
+    .filter((item) => item.section === "processing")
+    .map((item) => toCard({ ...item, kind: "product" as const })),
+];
 
 export const specialtyServiceCards: ServiceCardItem[] = specialtyServiceCardMeta.map((item) =>
   toCard(item),
@@ -44,6 +49,10 @@ export const primeProductCards: ServiceCardItem[] = productCardMeta
 
 export const secondaryProductCards: ServiceCardItem[] = productCardMeta
   .filter((item) => item.section === "secondary" && isSecondaryCatalogProductVisible(item.image))
+  .map((item) => toCard({ ...item, kind: "product" }));
+
+export const manufacturingProductCards: ServiceCardItem[] = productCardMeta
+  .filter((item) => item.section === "manufacturing")
   .map((item) => toCard({ ...item, kind: "product" }));
 
 /** Secondary material cards after feature-flag / asset visibility rules */
@@ -65,4 +74,5 @@ export const allServiceCards: ServiceCardItem[] = [
   ...specialtyServiceCards,
   ...primeProductCards,
   ...secondaryProductCards,
+  ...manufacturingProductCards,
 ];

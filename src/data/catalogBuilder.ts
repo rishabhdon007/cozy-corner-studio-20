@@ -27,6 +27,7 @@ export type CatalogDetail = {
   variantCatalog?: ProductVariantCatalog;
   /** @deprecated Use variantCatalog — flat thickness list for legacy products */
   thicknessVariants?: ProductThicknessVariant[];
+  section?: string;
 };
 
 export type CatalogEntryInput = {
@@ -50,6 +51,7 @@ export type CatalogEntryInput = {
   offerings?: CatalogOffering[];
   variantCatalog?: ProductVariantCatalog;
   thicknessVariants?: ProductThicknessVariant[];
+  section?: string;
 };
 
 export const CATALOG_IMAGES = {
@@ -152,7 +154,7 @@ export function buildCatalogEntry(input: CatalogEntryInput): CatalogDetail {
     mainImage: input.mainImage ?? SITE_IMAGES.construction,
     processImage: input.processImage ?? processImage,
     processVideo: input.processVideo,
-    gallery: input.gallery ?? gallerySet,
+    gallery: input.gallery ?? [],
     specs: input.specs,
     variants: input.variants,
     technicalSpecs: input.technicalSpecs ?? defaultPurchaseTerms,
@@ -162,6 +164,7 @@ export function buildCatalogEntry(input: CatalogEntryInput): CatalogDetail {
     offerings: input.offerings,
     variantCatalog: input.variantCatalog,
     thicknessVariants: input.thicknessVariants,
+    section: input.section,
   };
 }
 

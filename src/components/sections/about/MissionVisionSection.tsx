@@ -5,82 +5,34 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
 import { LazyVideo } from "@/components/site/LazyVideo";
 import { SITE_IMAGES } from "@/lib/siteImages";
-
-const STEEL_IMAGE = SITE_IMAGES.godownPhoto;
-
-type SlideItem = {
-  title: string;
-  description: string;
-  icon: string;
-};
-
-const MISSION_SLIDES: SlideItem[] = [
-  {
-    title: "Our Mission",
-    description:
-      "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
-    icon: "flag",
-  },
-  {
-    title: "Promote Innovation",
-    description:
-      "To promote entrepreneurship and innovation while ensuring full utilization of resources through effective and eco-friendly procedures and practices.",
-    icon: "lightbulb",
-  },
-  {
-    title: "Steel Supermarket",
-    description:
-      "To supply class products like a steel supermarket — offering a complete range of prime and secondary materials with doorstep delivery support.",
-    icon: "store",
-  },
-  {
-    title: "Business Excellence",
-    description:
-      "To achieve business excellence through efficient resource utilization while following genuine business ethics and ensuring complete customer satisfaction.",
-    icon: "workspace_premium",
-  },
-];
-
-const VISION_SLIDES: SlideItem[] = [
-  {
-    title: "Our Vision",
-    description:
-      "To become the best steel supplier in the upcoming years — supplying quality steel products and services with cost-effective solutions and professional operations built on genuine business ethics.",
-    icon: "visibility",
-  },
-  {
-    title: "Customer First",
-    description:
-      "To ensure complete customer satisfaction and fulfillment by providing the best rates among competitors while delivering materials on commitment and helping customers at every stage.",
-    icon: "support_agent",
-  },
-  {
-    title: "Industry Leadership",
-    description:
-      "To be the undisputed leader in high-grade steel distribution across Central India, setting the benchmark for quality and operational efficiency in the subcontinent.",
-    icon: "emoji_events",
-  },
-];
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 export function MissionVisionSection() {
   const [missionIndex, setMissionIndex] = useState(0);
   const [visionIndex, setVisionIndex] = useState(0);
 
+  const mvData = useSiteData("missionVision", db.published.missionVision);
+  const missionSlides = mvData?.mission || [];
+  const visionSlides = mvData?.vision || [];
+
   // Auto-scroll loop for Mission card
   useEffect(() => {
+    if (!missionSlides.length) return;
     const timer = setInterval(() => {
-      setMissionIndex((prev) => (prev + 1) % MISSION_SLIDES.length);
+      setMissionIndex((prev) => (prev + 1) % missionSlides.length);
     }, 5500); // changes every 5.5 seconds
     return () => clearInterval(timer);
-  }, []);
+  }, [missionSlides]);
 
   // Auto-scroll loop for Vision card
   useEffect(() => {
+    if (!visionSlides.length) return;
     const timer = setInterval(() => {
-      setVisionIndex((prev) => (prev + 1) % VISION_SLIDES.length);
-    }, 6000); // changes every 6.0 seconds (slightly offset so they don't sync exactly, which looks nicer)
+      setVisionIndex((prev) => (prev + 1) % visionSlides.length);
+    }, 6000); // changes every 6.0 seconds
     return () => clearInterval(timer);
-  }, []);
+  }, [visionSlides]);
 
   return (
     <section className="bg-surface py-stack-lg">
@@ -137,7 +89,7 @@ export function MissionVisionSection() {
 
             {/* Content Container with key-based transition trigger */}
             <div className="relative z-10 max-w-lg flex-1 flex flex-col justify-center">
-              {MISSION_SLIDES.map((slide, index) => (
+              {missionSlides.map((slide: any, index: number) => (
                 <div
                   key={slide.title}
                   className={`transition-all duration-700 ease-in-out ${
@@ -166,7 +118,7 @@ export function MissionVisionSection() {
 
             {/* Bottom Carousel Indicator dots */}
             <div className="mt-8 flex items-center gap-2 relative z-10">
-              {MISSION_SLIDES.map((_, index) => (
+              {missionSlides.map((_: any, index: number) => (
                 <button
                   key={index}
                   onClick={() => setMissionIndex(index)}
@@ -194,7 +146,7 @@ export function MissionVisionSection() {
 
             {/* Content Container with key-based transition trigger */}
             <div className="relative z-10 flex-1 flex flex-col justify-center">
-              {VISION_SLIDES.map((slide, index) => (
+              {visionSlides.map((slide: any, index: number) => (
                 <div
                   key={slide.title}
                   className={`transition-all duration-700 ease-in-out ${
@@ -224,7 +176,7 @@ export function MissionVisionSection() {
 
             {/* Bottom Carousel Indicator dots */}
             <div className="mt-8 flex items-center gap-2 relative z-10">
-              {VISION_SLIDES.map((_, index) => (
+              {visionSlides.map((_: any, index: number) => (
                 <button
                   key={index}
                   onClick={() => setVisionIndex(index)}

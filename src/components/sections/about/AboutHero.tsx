@@ -10,20 +10,17 @@ import { useHeroTypewriter } from "@/hooks/useTypewriter";
 import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
 
-const EYEBROW = "Our Legacy";
-const TITLE_PARTS = {
-  before: "Forging Industrial ",
-  highlight: "Excellence",
-  after: " Since 1994",
-} as const;
-const TITLE = `${TITLE_PARTS.before}${TITLE_PARTS.highlight}${TITLE_PARTS.after}`;
-const SUMMARY =
-  "Founded by Mr. Nimesh Kothari with vision, faith, and trust — NRK Iron & Steel has grown from a one-man operation in Indore into one of the foremost steel trading firms in Central India.";
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 export function AboutHero() {
   const heroRef = useRef<HTMLElement>(null);
   const mounted = useHasMounted();
   const [heroStep, setHeroStep] = useState(0);
+
+  const aboutData = useSiteData("about", db.published.about);
+
+  const titleText = `${aboutData.titleBefore}${aboutData.titleHighlight}${aboutData.titleAfter}`;
 
   useHeroTypewriter(heroRef, mounted, ["about-page"]);
 
@@ -34,7 +31,7 @@ export function AboutHero() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) { setHeroStep(2); return; }
 
-    const typeDuration = 250 + (EYEBROW.length + TITLE.length) * 42 + 180 + 200;
+    const typeDuration = 250 + (aboutData.eyebrow.length + titleText.length) * 42 + 180 + 200;
 
     const timers = [
       window.setTimeout(() => setHeroStep(1), typeDuration),
@@ -42,7 +39,7 @@ export function AboutHero() {
     ];
 
     return () => { timers.forEach(clearTimeout); };
-  }, [mounted]);
+  }, [mounted, aboutData.eyebrow, titleText]);
 
   return (
     <section
@@ -52,15 +49,26 @@ export function AboutHero() {
     >
       {/* Background */}
       <div className="absolute inset-0">
-        <video
-          src="/company/factory_tour.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover opacity-35"
-          aria-hidden
-        />
+        {aboutData.image && aboutData.image.endsWith(".mp4") ? (
+          <video
+            src={aboutData.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover opacity-35"
+            aria-hidden
+          />
+        ) : (
+          aboutData.image && (
+            <img
+              src={aboutData.image}
+              alt=""
+              className="h-full w-full object-cover opacity-35"
+              aria-hidden
+            />
+          )
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/92 to-primary/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
       </div>
@@ -83,8 +91,8 @@ export function AboutHero() {
         <div className="max-w-3xl text-on-primary">
           <div className="mb-5" data-typewriter suppressHydrationWarning>
             <p className="font-label-md mb-3 min-h-[1.4em] text-sm font-black uppercase tracking-[0.18em] text-primary-fixed-dim md:text-base">
-              <span data-typewriter-line data-typewriter-text={EYEBROW} suppressHydrationWarning>
-                {EYEBROW}
+              <span data-typewriter-line data-typewriter-text={aboutData.eyebrow} suppressHydrationWarning>
+                {aboutData.eyebrow}
               </span>
             </p>
             <div className={cn(
@@ -92,9 +100,9 @@ export function AboutHero() {
               !mounted || heroStep >= 1 ? "opacity-100" : "opacity-0",
             )} />
             <h1 className="font-display mb-4 text-[32px] font-black uppercase leading-[0.98] tracking-[-0.055em] text-white sm:text-[40px] md:text-[48px] lg:text-[64px] xl:text-[76px]">
-              <span data-typewriter-line data-typewriter-text={TITLE_PARTS.before} suppressHydrationWarning>{TITLE_PARTS.before}</span>
-              <span data-typewriter-line data-typewriter-text={TITLE_PARTS.highlight} className="text-orange-400" suppressHydrationWarning>{TITLE_PARTS.highlight}</span>
-              <span data-typewriter-line data-typewriter-text={TITLE_PARTS.after} suppressHydrationWarning>{TITLE_PARTS.after}</span>
+              <span data-typewriter-line data-typewriter-text={aboutData.titleBefore} suppressHydrationWarning>{aboutData.titleBefore}</span>
+              <span data-typewriter-line data-typewriter-text={aboutData.titleHighlight} className="text-orange-400" suppressHydrationWarning>{aboutData.titleHighlight}</span>
+              <span data-typewriter-line data-typewriter-text={aboutData.titleAfter} suppressHydrationWarning>{aboutData.titleAfter}</span>
               <span className="ml-1 inline-block h-[0.82em] w-[0.08em] animate-pulse bg-primary-fixed-dim align-[-0.08em]" data-typewriter-cursor />
             </h1>
           </div>
@@ -103,7 +111,7 @@ export function AboutHero() {
             "font-body-lg mb-8 max-w-2xl text-base leading-relaxed text-surface-variant/90 transition-all duration-700 md:text-lg",
             !mounted || heroStep >= 2 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
           )}>
-            {SUMMARY}
+            {aboutData.summary}
           </p>
         </div>
 

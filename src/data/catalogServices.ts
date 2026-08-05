@@ -18,7 +18,7 @@ const processingServices = [
     summary: "Precision coil slitting for accurate widths, clean edges, and consistent output across production batches.",
     description:
       "Our slitting lines convert master coils into narrow-width slit coils with controlled edge quality and tight width tolerance. The service supports HR, CR, galvanized, coated, and mild steel material for fabrication, component manufacturing, and repeat industrial supply.",
-    mainImage: CATALOG_IMAGES.slitting,
+    mainImage: "/Gallary/Heavy_Slitting_Operations.png",
     specs: [
       { label: "Width Range", value: "Custom Coil Widths" },
       { label: "Edge Finish", value: "Clean / Burr-Controlled" },
@@ -44,7 +44,7 @@ const processingServices = [
     summary: "Coil-to-sheet cutting on our CTL machine for accurate sizes, flatness control, and reduced wastage.",
     description:
       "Our cut-to-length (CTL) machine converts coils into sheets according to project and production requirements. It is suited for CR, HR, coated, and mild steel material where predictable length, clean stacking, and dispatch-ready packaging matter.",
-    mainImage: CATALOG_IMAGES.cutToLength,
+    mainImage: "/Gallary/Cut_to_Length_Processing.png",
     specs: [
       { label: "Length", value: "Up to 10000mm" },
       { label: "Output", value: "Sheets / Blanks" },
@@ -70,7 +70,7 @@ const processingServices = [
     summary: "Annealing furnaces on-premises for improved ductility, softness, and workability in forming applications.",
     description:
       "Annealing processing at NRK involves heating steel to a particular temperature and cooling it at a controlled rate. We serve clients who need thinner and softer materials for manufacturing, drawing, and component forming.",
-    mainImage: CATALOG_IMAGES.annealing,
+    mainImage: "/assests/products/cr-annealed-sheets.jpeg",
     specs: [
       { label: "Purpose", value: "Softness & Formability" },
       { label: "Treatment", value: "Controlled Heating" },
@@ -96,7 +96,7 @@ const processingServices = [
     summary: "Heavy-duty crane handling for safe loading, unloading, and movement of coils, sheets, and plates.",
     description:
       "NRK maintains cranes on-premises with approximately 10 to 30-ton load bearing capacity each. Cranes help in loading and unloading while reducing damage risk to prime and processed steel products.",
-    mainImage: CATALOG_IMAGES.logistics,
+    mainImage: "/assests/products/crane-handling.png",
     specs: [
       { label: "Capacity", value: "10–30 Ton Cranes" },
       { label: "Purpose", value: "Loading / Unloading" },
@@ -122,7 +122,7 @@ const processingServices = [
     summary: "High-accuracy industrial weighing for transparent transactions and in-house customer service.",
     description:
       "Our weighing scale assists in high-accuracy weighing with industrial bench scales and platforms. This supports transparent working with clients and helps deliver dependable in-house service at NRK Indore.",
-    mainImage: CATALOG_IMAGES.ms,
+    mainImage: "/Gallary/Dispatch_Logistics_Hub.png",
     specs: [
       { label: "Equipment", value: "Bench & Platform Scales" },
       { label: "Purpose", value: "Transparent Weighing" },
@@ -151,7 +151,7 @@ const fabricationServices = [
     summary: "Deck sheets, Z & C purlins, and custom profiling for roofing and steel building frameworks.",
     description:
       "NRK offers profiling and fabrication support including deck sheets, Z and C purlins, and custom corrugation for roofing and construction needs. This complements our profile sheets, color coated, and GC product range.",
-    mainImage: CATALOG_IMAGES.profile,
+    mainImage: "/assests/products/profiling.png",
     specs: [
       { label: "Products", value: "Deck / Purlin / Profiles" },
       { label: "Application", value: "Roofing & PEB" },
@@ -166,7 +166,7 @@ const fabricationServices = [
       { property: "Material", value: "Coated or plain steel", method: "Order specification" },
     ]),
     process: ["Profile specification", "Material selection", "Profiling or roll forming", "Bundling and dispatch"],
-    recommendations: [rec.profileSheets, rec.colorCoated, rec.gcSheets],
+    recommendations: [rec.galvalume, rec.colorCoated, rec.gcSheets],
   }),
   buildServiceEntry({
     slug: "logistics-warehousing",
@@ -177,7 +177,7 @@ const fabricationServices = [
     summary: "Warehousing, wooden pallet packaging, and doorstep delivery across Madhya Pradesh and pan-India.",
     description:
       "NRK provides dedicated warehousing, wooden pallet packaging, and transportation with approximately 10–15 ton capacity for doorstep delivery. Combined with crane handling and weighing, this completes the supply path from inventory to customer site.",
-    mainImage: CATALOG_IMAGES.logistics,
+    mainImage: "/Gallary/Dispatch_Logistics_Hub.png",
     processVideo: "/assests/banner_video.mp4",
     specs: [
       { label: "Transport", value: "10–15 Ton Capacity" },
@@ -207,7 +207,7 @@ const supplyCategoryServices = [
     summary: "Wholesale supply of HR, CR, and MS plates from trusted manufacturers including SAIL, Jindal, and AMNS.",
     description:
       "NRK Iron & Steel is a prominent wholesale distributor from Indore for Hot Rolled Sheet Plate, CR sheets, and MS plates. Material is checked for grade, size, and order fit before dispatch with payment against delivery terms.",
-    mainImage: CATALOG_IMAGES.hr,
+    mainImage: "/assests/products/COIL LEADER END (CR Semi Hard)/8 x 4 FT/0.55 to 0.60 mm/2.jpeg",
     specs: [
       { label: "Grades", value: "1079 / 2062 / E250 / E350 / CRCA" },
       { label: "Supply", value: "Sheets, Coils, Plates" },
@@ -223,32 +223,6 @@ const supplyCategoryServices = [
     ]),
     process: ["Requirement mapping", "Grade and stock selection", "Optional processing", "Bundling and dispatch"],
     recommendations: [rec.hrSheets, rec.crCoils, rec.msPlates],
-  }),
-  buildServiceEntry({
-    slug: "coated-profile-sheets",
-    title: "Coated & Profile Sheets Supply",
-    category: "Corrosion Resistant",
-    eyebrow: "Coated Material Supply",
-    badge: "Industrial Grade: GP / GC / Color / Profile",
-    summary: "Galvanized, galvalume, color-coated, zincro, and profile sheet solutions for durable applications.",
-    description:
-      "Our coated and profile sheet range supports roofing, cladding, industrial panels, and iron sheet supplier requirements from IndiaMART. Material can be supplied in plain, corrugated, coated, or profile formats based on project needs.",
-    mainImage: CATALOG_IMAGES.coated,
-    specs: [
-      { label: "Products", value: "GP, GC, GL, Color, Zincro, Profile" },
-      { label: "Coating", value: "AZ70 / AZ150 / GSM options" },
-      { label: "Formats", value: "Plain / Corrugated / Profile" },
-      { label: "Use Case", value: "Roofing & Panels" },
-    ],
-    variants: ["Galvanized sheets", "Galvalume sheets", "Color coated profile sheets", "Iron Sheet Suppliers"],
-    technicalSpecs: withPurchaseTerms([
-      { property: "Coating Type", value: "Zinc / Al-Zn / Color coated", method: "Product documentation" },
-      { property: "Profile Options", value: "Project-specific profiles", method: "Order specification" },
-      { property: "Surface Finish", value: "Clean visual finish", method: "Visual inspection" },
-      { property: "Length Supply", value: "Custom lengths available", method: "CTL & profiling services" },
-    ]),
-    process: ["Application review", "Coating and profile selection", "Cutting or profiling", "Packing and dispatch"],
-    recommendations: [rec.gpSheets, rec.gcSheets, rec.profileSheets],
   }),
 ] as const;
 
@@ -299,7 +273,7 @@ export const specialtyServiceCardMeta = [
     slug: "profiling-fabrication",
     title: "Deck Sheets",
     description: "Durable structural deck sheets ideal for roofing and floor applications.",
-    image: CATALOG_IMAGES.profile,
+    image: "/assests/products/deck-sheets.png",
     kind: "service" as const,
     section: "fabrication" as const,
   },
@@ -308,7 +282,7 @@ export const specialtyServiceCardMeta = [
     slug: "profiling-fabrication",
     title: "Z & C Purlin",
     description: "High-strength Z and C purlins for steel building frameworks and pre-engineered structures.",
-    image: CATALOG_IMAGES.purlin,
+    image: "/assests/products/z-c-purlin.png",
     kind: "service" as const,
     section: "fabrication" as const,
   },
@@ -317,7 +291,7 @@ export const specialtyServiceCardMeta = [
     slug: "profiling-fabrication",
     title: "Profiling",
     description: "Custom profile and corrugation services for roofing and construction needs.",
-    image: CATALOG_IMAGES.profile,
+    image: "/assests/products/profiling.png",
     kind: "service" as const,
     section: "fabrication" as const,
   },
@@ -326,7 +300,7 @@ export const specialtyServiceCardMeta = [
     slug: "logistics-warehousing",
     title: "Wooden Pallet Packaging",
     description: "Secure wooden pallet packaging for damage-free steel dispatch and site delivery.",
-    image: CATALOG_IMAGES.logistics,
+    image: "/assests/products/wooden-pallet.png",
     kind: "service" as const,
     section: "fabrication" as const,
   },

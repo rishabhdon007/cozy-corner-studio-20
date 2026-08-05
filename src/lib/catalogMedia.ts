@@ -39,7 +39,6 @@ export function buildCatalogMediaItems(item: CatalogMediaSource): CatalogMediaIt
   };
 
   const mainImage = resolveCatalogImageSrc(item.mainImage);
-  const processImage = resolveCatalogImageSrc(item.processImage);
 
   push({
     id: "main",
@@ -48,7 +47,14 @@ export function buildCatalogMediaItems(item: CatalogMediaSource): CatalogMediaIt
     label: "Overview",
   });
 
-  if (processImage !== mainImage) {
+  const isPlaceholder = (src: string) =>
+    src === "/assests/constrution area.webp" ||
+    src === "/assests/products/colled.png" ||
+    src === "/assests/products/iron.png" ||
+    src === "/assests/products/plate.png";
+
+  const processImage = item.processImage ? resolveCatalogImageSrc(item.processImage) : null;
+  if (processImage && processImage !== mainImage && !isPlaceholder(processImage)) {
     push({
       id: "process-image",
       type: "image",
@@ -57,22 +63,29 @@ export function buildCatalogMediaItems(item: CatalogMediaSource): CatalogMediaIt
     });
   }
 
-  push({
-    id: "process-video",
-    type: "video",
-    src: item.processVideo ?? DEFAULT_PROCESS_VIDEO,
-    poster: processImage,
-    label: "Process Video",
-  });
-
-  item.gallery.forEach((src, index) => {
+  if (item.processVideo) {
     push({
-      id: `gallery-${index}`,
-      type: "image",
-      src: resolveCatalogImageSrc(src),
-      label: `Gallery ${index + 1}`,
+      id: "process-video",
+      type: "video",
+      src: item.processVideo,
+      poster: processImage || mainImage,
+      label: "Process Video",
     });
-  });
+  }
+
+  if (item.gallery && item.gallery.length > 0) {
+    item.gallery.forEach((src, index) => {
+      const resolved = resolveCatalogImageSrc(src);
+      if (src && src.trim() !== "" && !isPlaceholder(resolved)) {
+        push({
+          id: `gallery-${index}`,
+          type: "image",
+          src: resolved,
+          label: `Gallery ${index + 1}`,
+        });
+      }
+    });
+  }
 
   return items;
 }

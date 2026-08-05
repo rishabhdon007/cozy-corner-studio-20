@@ -5,34 +5,15 @@ import { useRef } from "react";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useCountUp } from "@/hooks/useCountUp";
 
-const STATS = [
-  {
-    value: "30+",
-    label: "Years Experience",
-    description:
-      "Since 1994, delivering trusted steel solutions nationwide with excellence.",
-    icon: "workspace_premium",
-  },
-  {
-    value: "4000+",
-    label: "Annual Reach",
-    description:
-      "Serving 4000+ clients yearly across diverse industries nationwide with reliability, and counting.",
-    icon: "public",
-  },
-  {
-    value: "90%",
-    label: "Retention Rate",
-    description:
-      "Maintaining 90% loyal customers through unmatched quality and service.",
-    icon: "handshake",
-  },
-] as const;
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const mounted = useHasMounted();
   useCountUp(sectionRef, mounted);
+
+  const stats = useSiteData("stats", db.published.stats);
 
   return (
     <section
@@ -42,7 +23,7 @@ export function StatsSection() {
     >
       <div className="max-w-container-max mx-auto rounded-[32px] bg-white/95 p-4 md:p-6 shadow-2xl shadow-primary/10 ring-1 ring-outline-variant/40 backdrop-blur-sm">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {STATS.map((stat) => (
+          {stats.map((stat: any) => (
             <div
               key={stat.label}
               className="bg-primary text-on-primary p-7 rounded-[22px] min-h-[170px] flex flex-col items-center justify-center text-center shadow-lg shadow-primary/15 border border-white/10 relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"

@@ -68,6 +68,10 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
+
+
 function StarRating() {
   return (
     <div className="mb-6 flex text-sm text-[#b7791f]">
@@ -131,7 +135,8 @@ function TestimonialCard({
 }
 
 export function TestimonialsSection() {
-  const marqueeTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
+  const testimonials = useSiteData<Testimonial[]>("testimonials", db.published.testimonials);
+  const marqueeTestimonials = [...testimonials, ...testimonials];
 
   return (
     <section className="reveal relative w-full overflow-hidden bg-[#dfeaf6] py-20 md:py-28">

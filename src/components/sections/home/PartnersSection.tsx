@@ -1,41 +1,21 @@
+"use client";
+
 import Image, { type StaticImageData } from "next/image";
 
 import { SectionHeading } from "@/components/site/SectionHeading";
-import essarSteelLogo from "@/assests/client_logo/essar_steel.webp";
-import jindalSteelLogo from "@/assests/client_logo/Jindal_Steel_Limited_Logo.webp";
-import sailLogo from "@/assests/client_logo/sail.webp";
-import tataSteelLogo from "@/assests/client_logo/Tata_Steel_Logo.webp";
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 type Partner = {
   name: string;
-  logo: StaticImageData;
+  logo: string | StaticImageData;
   alt: string;
 };
 
-const PARTNERS: Partner[] = [
-  {
-    name: "Jindal Steel Limited",
-    logo: jindalSteelLogo,
-    alt: "Jindal Steel Limited",
-  },
-  {
-    name: "Tata Steel",
-    logo: tataSteelLogo,
-    alt: "Tata Steel",
-  },
-  {
-    name: "Essar Steel",
-    logo: essarSteelLogo,
-    alt: "Essar Steel",
-  },
-  {
-    name: "Steel Authority of India Limited",
-    logo: sailLogo,
-    alt: "Steel Authority of India Limited",
-  },
-];
-
 function PartnerCard({ partner, ariaHidden = false }: { partner: Partner; ariaHidden?: boolean }) {
+  const logoWidth = typeof partner.logo === "object" ? partner.logo.width : 200;
+  const logoHeight = typeof partner.logo === "object" ? partner.logo.height : 80;
+
   return (
     <div
       className="flex h-36 w-64 shrink-0 flex-col items-center justify-center gap-4 p-5 bg-white rounded-xl border border-outline-variant shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300"
@@ -44,8 +24,8 @@ function PartnerCard({ partner, ariaHidden = false }: { partner: Partner; ariaHi
       <Image
         src={partner.logo}
         alt={ariaHidden ? "" : partner.alt}
-        width={partner.logo.width}
-        height={partner.logo.height}
+        width={logoWidth}
+        height={logoHeight}
         loading="lazy"
         className="max-h-16 w-auto h-auto object-contain"
       />
@@ -55,7 +35,8 @@ function PartnerCard({ partner, ariaHidden = false }: { partner: Partner; ariaHi
 }
 
 export function PartnersSection() {
-  const marqueePartners = [...PARTNERS, ...PARTNERS];
+  const partners = useSiteData<Partner[]>("partners", db.published.partners as any);
+  const marqueePartners = [...partners, ...partners];
 
   return (
     <section className="py-stack-lg bg-surface-container-low reveal">
@@ -75,7 +56,7 @@ export function PartnersSection() {
               <PartnerCard
                 key={`${partner.name}-${index}`}
                 partner={partner}
-                ariaHidden={index >= PARTNERS.length}
+                ariaHidden={index >= partners.length}
               />
             ))}
           </div>

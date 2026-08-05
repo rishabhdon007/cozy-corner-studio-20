@@ -23,8 +23,71 @@ function filterItems(items: ServiceCardItem[], query: string): ServiceCardItem[]
   return items.filter((item) => matchesQuery(item, query));
 }
 
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
+
 export function ServicesCatalogPage() {
   const [query, setQuery] = useState("");
+  const dynamicProducts = useSiteData<any[]>("products", db.published.products);
+  const dynamicServices = useSiteData<any[]>("services", db.published.services || []);
+
+  const mergedServiceCards = useMemo(() => {
+    const dynamicProductCards = (dynamicProducts || []).map((p) => ({
+      id: p.slug || p.id,
+      slug: p.slug || p.id,
+      title: p.title || p.name,
+      description: p.summary || p.description,
+      image: p.mainImage || p.image,
+      eyebrow: p.eyebrow || p.category,
+      kind: "product" as const,
+    }));
+
+    const dynamicServiceCards = (dynamicServices || []).map((s) => ({
+      id: s.slug || s.id,
+      slug: s.slug || s.id,
+      title: s.title || s.name,
+      description: s.summary || s.description,
+      image: s.mainImage || s.image,
+      eyebrow: s.eyebrow || s.category,
+      kind: "service" as const,
+    }));
+
+    return [...allServiceCards, ...dynamicProductCards, ...dynamicServiceCards];
+  }, [dynamicProducts, dynamicServices]);
+
+  const mergedCatalogSections = useMemo(() => {
+    const dynamicProductCards = (dynamicProducts || []).map((p) => ({
+      id: p.slug || p.id,
+      slug: p.slug || p.id,
+      title: p.title || p.name,
+      description: p.summary || p.description,
+      image: p.mainImage || p.image,
+      eyebrow: p.eyebrow || p.category,
+      kind: "product" as const,
+      section: p.section || (p.category === "Prime Material" ? "prime" : "secondary"),
+    }));
+
+    const dynamicServiceCards = (dynamicServices || []).map((s) => ({
+      id: s.slug || s.id,
+      slug: s.slug || s.id,
+      title: s.title || s.name,
+      description: s.summary || s.description,
+      image: s.mainImage || s.image,
+      eyebrow: s.eyebrow || s.category,
+      kind: "service" as const,
+      section: s.section || "processing",
+    }));
+
+    const allDynamic = [...dynamicProductCards, ...dynamicServiceCards];
+
+    return catalogSections.map((section) => {
+      const sectionCards = allDynamic.filter((card) => card.section === section.id);
+      return {
+        ...section,
+        items: [...section.items, ...sectionCards],
+      };
+    });
+  }, [dynamicProducts, dynamicServices]);
 
   const trimmedQuery = query.trim();
   const isSearching = trimmedQuery.length > 0;
@@ -32,24 +95,24 @@ export function ServicesCatalogPage() {
   const searchResults = useMemo(() => {
     if (!isSearching) return [];
     const seen = new Set<string>();
-    return allServiceCards.filter((item) => {
+    return mergedServiceCards.filter((item) => {
       if (!matchesQuery(item, trimmedQuery)) return false;
       const key = `${item.kind ?? "service"}-${item.slug}-${item.id}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
-  }, [isSearching, trimmedQuery]);
+  }, [isSearching, trimmedQuery, mergedServiceCards]);
 
   const visibleSections = useMemo(
     () =>
-      catalogSections
+      mergedCatalogSections
         .map((section) => ({
           ...section,
           items: filterItems(section.items, trimmedQuery),
         }))
         .filter((section) => section.items.length > 0),
-    [trimmedQuery],
+    [trimmedQuery, mergedCatalogSections],
   );
 
   return (
@@ -74,7 +137,7 @@ export function ServicesCatalogPage() {
               Search Catalogue
             </span>
             <span className="rounded-full bg-secondary/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-              {allServiceCards.length} items
+              {mergedServiceCards.length} items
             </span>
           </div>
 
@@ -127,7 +190,7 @@ export function ServicesCatalogPage() {
             </p>
           ) : (
             <p className="mt-3 text-sm text-gray-600">
-              <span className="font-bold text-primary">{allServiceCards.length}</span> products and services · search
+              <span className="font-bold text-primary">{mergedServiceCards.length}</span> products and services · search
               by name to find quickly
             </p>
           )}

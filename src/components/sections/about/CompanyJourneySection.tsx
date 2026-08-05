@@ -2,11 +2,10 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { memo, type RefObject, useEffect, useRef, useState } from "react";
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
-import journey1994Image from "@/assests/aboutus/screen.webp";
-import journey2005Image from "@/assests/aboutus/screen 2.webp";
-import journey2015Image from "@/assests/aboutus/screen 3.webp";
-import { SITE_IMAGES, LEADERSHIP_IMAGES } from "@/lib/siteImages";
+import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
 
 type Milestone = {
@@ -16,40 +15,6 @@ type Milestone = {
   icon: string;
   image: StaticImageData | string;
 };
-
-const milestones: Milestone[] = [
-  {
-    year: "1994",
-    title: "Initial Days",
-    description:
-      "Mr. Nimesh Kothari embarked on his entrepreneurial journey by starting retail trading in Indore, gradually expanding into brokerage and cross-border supply while building a strong customer base — a true one-man army without any business background support.",
-    icon: "foundation",
-    image: SITE_IMAGES.companyOfc2,
-  },
-  {
-    year: "2005",
-    title: "Expansion to a Bigger Picture",
-    description:
-      "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
-    icon: "trending_up",
-    image: "/company/company_section2.jpeg",
-  },
-  {
-    year: "2015",
-    title: "Generational Leadership",
-    description:
-      "The transition to multi-generational leadership saw Mr. Nimesh Kothari's sons, Mr. Nishant Kothari and Mr. Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
-    icon: "groups",
-    image: SITE_IMAGES.godownPhoto,
-  },
-];
-
-const legacyLines = [
-  "NRK Iron and Steel LLP is a 30-year-old trading enterprise that commenced its roots in Indore, Madhya Pradesh.",
-  "This firm was created with a lot of hopes, faith, and trust in the eyes of Mr. Nimesh Kothari. His visionary zeal grew the company into one of the foremost Iron and Steel trading firms in Central India.",
-  "Currently, NRK serves bulk quantities of steel across Madhya Pradesh, Gujarat, Maharashtra, Rajasthan, and Punjab — solidifying the company's presence and growth in the steel industry.",
-  "The company further aims to expand rapidly across India, supplying certified steel from TATA, JSW, and AM/NS with precision processing and pan-India logistics.",
-] as const;
 
 function useScrollMilestone(total: number) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -174,7 +139,7 @@ function AnimatedStat({ value, suffix, label }: { value: number; suffix: string;
   );
 }
 
-function JourneyStage({ activeIndex }: { activeIndex: number }) {
+function JourneyStage({ activeIndex, milestones }: { activeIndex: number; milestones: Milestone[] }) {
   return (
     <div className="relative w-full overflow-hidden rounded-3xl bg-slate-900 shadow-2xl">
       <div className="relative aspect-[4/5] w-full lg:aspect-[3/4]">
@@ -251,7 +216,7 @@ function JourneyStage({ activeIndex }: { activeIndex: number }) {
   );
 }
 
-function MobileMilestones() {
+function MobileMilestones({ milestones }: { milestones: Milestone[] }) {
   return (
     <div className="space-y-12 lg:hidden">
       {milestones.map((milestone) => (
@@ -288,7 +253,7 @@ function MobileMilestones() {
   );
 }
 
-const LegacyIntro = memo(function LegacyIntro({ isIntroActive }: { isIntroActive: boolean }) {
+const LegacyIntro = memo(function LegacyIntro({ isIntroActive, legacyLines }: { isIntroActive: boolean; legacyLines: string[] }) {
   return (
     <div className="relative order-1 lg:order-2 flex flex-col justify-center h-full">
       <div className="mb-8">
@@ -341,7 +306,8 @@ const LegacyIntro = memo(function LegacyIntro({ isIntroActive }: { isIntroActive
 });
 
 export function CompanyJourneySection() {
-  const { sectionRef, activeIndex } = useScrollMilestone(milestones.length);
+  const data = useSiteData("journey", db.published.journey);
+  const { sectionRef, activeIndex } = useScrollMilestone(data.milestones.length);
   const isIntroActive = useSectionIntro(sectionRef);
 
   return (
@@ -354,12 +320,12 @@ export function CompanyJourneySection() {
         <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center lg:gap-24 py-10">
           <div className="order-2 lg:order-1 h-full flex flex-col justify-center">
             <div className="hidden lg:block w-full">
-              <JourneyStage activeIndex={activeIndex} />
+              <JourneyStage activeIndex={activeIndex} milestones={data.milestones} />
             </div>
-            <MobileMilestones />
+            <MobileMilestones milestones={data.milestones} />
           </div>
           <div className="h-full flex flex-col justify-center">
-            <LegacyIntro isIntroActive={isIntroActive} />
+            <LegacyIntro isIntroActive={isIntroActive} legacyLines={data.legacyLines} />
           </div>
         </div>
       </div>

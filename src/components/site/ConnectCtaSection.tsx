@@ -1,3 +1,5 @@
+"use client";
+
 import { DirectoryProfileLinks } from "@/components/site/DirectoryProfileLinks";
 import { GoogleReviewsCard } from "@/components/site/GoogleReviewsCard";
 import { SiteButton } from "@/components/site/SiteButton";
@@ -5,6 +7,9 @@ import { SiteImage } from "@/components/site/SiteImage";
 import { brochureDownloadUrl, contactCopy } from "@/data/contact";
 import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
+
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 type ConnectCtaTheme = "blue-gradient" | "primary";
 
@@ -40,13 +45,19 @@ export function ConnectCtaSection({
   theme = "blue-gradient",
   backgroundImage = SITE_IMAGES.construction,
   backgroundAlt = "High-Rise Steel Architectural Skyscrapers",
-  eyebrow = contactCopy.eyebrow,
-  title = contactCopy.title,
-  description = contactCopy.description,
+  eyebrow,
+  title,
+  description,
   showDirectoryLinks = true,
   className,
 }: ConnectCtaSectionProps) {
   const styles = themeStyles[theme];
+  const ctaData = useSiteData("connectCta", db.published.connectCta);
+
+  const displayEyebrow = eyebrow || ctaData.eyebrow || contactCopy.eyebrow;
+  const displayTitle = title || ctaData.title || contactCopy.title;
+  const displayDescription = description || ctaData.description || contactCopy.description;
+  const displayBrochureUrl = ctaData.brochureUrl || brochureDownloadUrl;
 
   return (
     <section className={cn("relative overflow-hidden bg-surface py-12 md:py-16", className)}>
@@ -85,17 +96,17 @@ export function ConnectCtaSection({
 
           <div className="relative z-10 max-w-2xl text-left lg:flex-1">
             <span className="mb-2 inline-block font-label-md text-[10px] font-black uppercase tracking-[0.25em] text-secondary-fixed">
-              {eyebrow}
+              {displayEyebrow}
             </span>
             <h2 className="mb-4 font-display text-2xl font-black uppercase leading-tight tracking-tight text-white drop-shadow-sm sm:text-3xl md:text-4xl">
-              {title}
+              {displayTitle}
             </h2>
-            <p className="font-body text-xs leading-relaxed text-surface-variant/85 md:text-sm">{description}</p>
+            <p className="font-body text-xs leading-relaxed text-surface-variant/85 md:text-sm">{displayDescription}</p>
           </div>
 
           <div className="relative z-10 flex w-full flex-col gap-4 lg:w-[480px] lg:shrink-0">
             <SiteButton
-              href={brochureDownloadUrl}
+              href={displayBrochureUrl}
               target="_blank"
               rel="noopener noreferrer"
               variant="glass"

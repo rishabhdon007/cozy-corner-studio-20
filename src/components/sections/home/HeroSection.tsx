@@ -1,35 +1,19 @@
 "use client";
 
 import { useRef } from "react";
-
 import { HeroCtaGroup } from "@/components/site/HeroCtaGroup";
 import { useHasMounted } from "@/hooks/useHasMounted";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useHeroTypewriter, useLoopingTaglineTypewriter } from "@/hooks/useTypewriter";
-
-const DISPATCH_FEATURES = [
-  {
-    icon: "inventory_2",
-    title: "Ready Stock Availability",
-    description:
-      "Material availability that helps buyers move without uncertain delays.",
-  },
-  {
-    icon: "precision_manufacturing",
-    title: "Precision Processing",
-    description:
-      "Slitting, cut-to-length, profiling, and packaging for project-fit supply.",
-  },
-  {
-    icon: "local_shipping",
-    title: "Direct Site Delivery",
-    description: "Coordinated dispatch support aligned to your project timelines.",
-  },
-] as const;
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const mounted = useHasMounted();
+  
+  const heroData = useSiteData("hero", db.published.hero);
+
   useHeroTypewriter(sectionRef, mounted);
   useLoopingTaglineTypewriter(sectionRef, mounted);
   useCountUp(sectionRef, mounted);
@@ -62,7 +46,7 @@ export function HeroSection() {
             <p
               className="font-label-md mb-3 min-h-[1.6em] text-sm font-black tracking-tight text-white md:text-base"
               data-typewriter-loop
-              data-typewriter-text="India's Trusted Steel Distribution & Processing Partner"
+              data-typewriter-text={heroData.tagline}
               data-typewriter-highlight="Trusted"
               suppressHydrationWarning
             >
@@ -79,20 +63,20 @@ export function HeroSection() {
           </div>
 
           <h1 className="font-display mb-7 text-[34px] font-black leading-[0.98] tracking-[-0.055em] text-white sm:text-[44px] md:text-[56px] lg:text-[72px] xl:text-[92px]" data-typewriter>
-            <span data-typewriter-line data-typewriter-text="You build the">
-              You build the
+            <span data-typewriter-line data-typewriter-text={heroData.headingLine1}>
+              {heroData.headingLine1}
             </span>
             <br />
-            <span data-typewriter-line data-typewriter-text="landmarks.">
-              landmarks.
+            <span data-typewriter-line data-typewriter-text={heroData.headingLine2}>
+              {heroData.headingLine2}
             </span>
             <br />
             <span
               className="text-primary-fixed-dim"
               data-typewriter-line
-              data-typewriter-text="We deliver the steel."
+              data-typewriter-text={heroData.headingLine3}
             >
-              We deliver the steel.
+              {heroData.headingLine3}
             </span>
             <span
               className="ml-2 inline-block h-[0.82em] w-[0.08em] animate-pulse bg-primary-fixed-dim align-[-0.08em]"
@@ -101,8 +85,7 @@ export function HeroSection() {
           </h1>
 
           <p className="font-body-lg mb-9 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">
-            Ready stock, precision processing, transparent pricing, and direct site delivery for
-            industrial buyers across India.
+            {heroData.description}
           </p>
 
           <HeroCtaGroup
@@ -132,7 +115,7 @@ export function HeroSection() {
               <span className="material-symbols-outlined text-5xl text-white/20">factory</span>
             </div>
             <div className="space-y-5">
-              {DISPATCH_FEATURES.map((feature) => (
+              {heroData.features.map((feature) => (
                 <div key={feature.title} className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-primary-fixed-dim">
                     <span className="material-symbols-outlined">{feature.icon}</span>

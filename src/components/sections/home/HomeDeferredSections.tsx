@@ -39,7 +39,12 @@ const ContactCtaSection = dynamic(
   { loading: () => <SectionPlaceholder minHeight={360} />, ssr: false },
 );
 
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
+
 export function HomeDeferredSections() {
+  const servicesSection = useSiteData("servicesSection", db.published.servicesSection);
+
   useEffect(() => {
     const timeoutIds = [
       window.setTimeout(() => rescanUnrevealedSections(document.body), 150),
@@ -54,8 +59,8 @@ export function HomeDeferredSections() {
         <ServicesGridSection
           sectionId="secondary"
           items={secondaryProductCards}
-          heading={SECONDARY_MATERIAL_SECTION.heading}
-          description={SECONDARY_MATERIAL_SECTION.description}
+          heading={servicesSection.heading}
+          description={servicesSection.description}
           showViewAll
           tone="dark"
         />

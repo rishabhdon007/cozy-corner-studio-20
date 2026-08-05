@@ -4,6 +4,7 @@ import {
   primeProductCards,
   processingServiceCards,
   specialtyServiceCards,
+  manufacturingProductCards,
   type ServiceCardItem,
 } from "@/data/serviceCards";
 
@@ -25,6 +26,12 @@ export const catalogSections: CatalogSection[] = [
     heading: SECONDARY_MATERIAL_SECTION.heading,
     description: SECONDARY_MATERIAL_SECTION.description,
     items: getVisibleSecondaryProductCards(),
+  },
+  {
+    id: "manufacturing",
+    heading: "Manufacturing Products",
+    description: "High-quality centering plates, shutter channels, AC stands, and steel components manufactured in-house.",
+    items: manufacturingProductCards,
   },
   {
     id: "processing",

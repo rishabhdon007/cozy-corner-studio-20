@@ -9,6 +9,7 @@ const FloatingContactButtons = dynamic(() => import("@/components/site/FloatingC
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteEffects } from "@/components/site/SiteEffects";
 import { ScrollProgressBar } from "@/components/site/ScrollProgressBar";
+import { PreviewBanner } from "@/components/site/PreviewBanner";
 
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="site-body bg-background font-body text-on-background antialiased" suppressHydrationWarning>
+        <PreviewBanner />
         <SiteHeader />
         <ScrollProgressBar />
         <SiteEffects />

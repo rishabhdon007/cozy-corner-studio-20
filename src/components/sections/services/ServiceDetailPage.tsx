@@ -56,10 +56,46 @@ const SPEC_ROW_ICONS = [
 
 const SIDEBAR_SPEC_ICONS = ["straighten", "content_cut", "category", "factory"] as const;
 
+import db from "@/data/db.json";
+import { useSiteData } from "@/hooks/useSiteData";
+
+function useCatalogDetail(slug: string, staticItem: any, kind: "product" | "service") {
+  const dynamicProducts = useSiteData<any[]>("products", db.published.products);
+  const dynamicServices = useSiteData<any[]>("services", db.published.services || []);
+  
+  const list = kind === "product" ? dynamicProducts : dynamicServices;
+  const dynamicItem = list?.find((p: any) => p.slug === slug || p.id === slug);
+
+  if (dynamicItem) {
+    return {
+      slug: dynamicItem.slug || dynamicItem.id,
+      title: dynamicItem.title || dynamicItem.name,
+      category: dynamicItem.category || dynamicItem.type,
+      eyebrow: dynamicItem.eyebrow || "",
+      badge: dynamicItem.badge || "",
+      summary: dynamicItem.summary || dynamicItem.description,
+      description: dynamicItem.description,
+      mainImage: dynamicItem.mainImage || dynamicItem.image,
+      processImage: dynamicItem.processImage || dynamicItem.mainImage || dynamicItem.image,
+      gallery: dynamicItem.gallery || [],
+      specs: dynamicItem.specs || [],
+      variants: dynamicItem.variants || [],
+      technicalSpecs: dynamicItem.technicalSpecs || [],
+      featureCards: dynamicItem.featureCards || [],
+      process: dynamicItem.process || [],
+      offerings: dynamicItem.offerings || [],
+      recommendations: dynamicItem.recommendations || [],
+    };
+  }
+
+  return staticItem;
+}
+
 export function ServiceDetailPage({ serviceId }: { serviceId: string }) {
+  const item = useCatalogDetail(serviceId, getService(serviceId), "service");
   return (
     <CatalogDetailPage
-      item={getService(serviceId)}
+      item={item}
       parent={{ label: "Our Products", href: "/services" }}
       notFound={{
         title: "This service page is not available.",
@@ -72,9 +108,10 @@ export function ServiceDetailPage({ serviceId }: { serviceId: string }) {
 }
 
 export function ProductDetailPage({ productId }: { productId: string }) {
+  const item = useCatalogDetail(productId, getProduct(productId), "product");
   return (
     <CatalogDetailPage
-      item={getProduct(productId)}
+      item={item}
       parent={{ label: "Our Products", href: "/services" }}
       notFound={{
         title: "This product page is not available.",
@@ -728,7 +765,7 @@ function KeyAdvantagesCompact({
     <div
       data-scroll-reveal=""
       className={cn(
-        "flex flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5 lg:h-full",
+        "flex flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5 lg:h-[300px] lg:max-h-[300px]",
         className,
       )}
     >
@@ -752,7 +789,7 @@ function KeyAdvantagesCompact({
             key={card.title}
             data-scroll-reveal=""
             data-scroll-reveal-delay={String(index + 1)}
-            className="flex h-full gap-2.5 rounded-xl border border-gray-100 bg-[#f7fafc] p-3 sm:p-4"
+            className="flex h-full gap-2.5 rounded-xl border border-gray-100 bg-[#f7fafc] p-3 sm:p-4 min-h-[90px] sm:min-h-[100px] lg:min-h-[110px]"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white shadow-sm sm:h-9 sm:w-9">
               <span className="material-symbols-outlined text-base">{icons[card.icon]}</span>
@@ -933,13 +970,16 @@ function WhyChooseNrk() {
 }
 
 function RelatedProducts({ products }: { products: ProductRecommendation[] }) {
-  const productCards: ServiceCardItem[] = products.map((product) => ({
-    id: product.slug,
-    slug: product.slug,
-    title: product.title,
-    description: product.note,
-    image: resolveCatalogImageSrc(product.image),
-  }));
+  const productCards: ServiceCardItem[] = products.map((product) => {
+    const actualProduct = getProduct(product.slug);
+    return {
+      id: product.slug,
+      slug: product.slug,
+      title: actualProduct ? actualProduct.title : product.title,
+      description: actualProduct ? actualProduct.summary : product.note,
+      image: actualProduct ? resolveCatalogImageSrc(actualProduct.mainImage) : resolveCatalogImageSrc(product.image),
+    };
+  });
 
   return (
     <section className="mb-10">

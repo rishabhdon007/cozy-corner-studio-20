@@ -1,0 +1,540 @@
+{
+  "draft": {
+    "hero": {
+      "tagline": "India's Trusted Steel Distribution & Processing Partner",
+      "headingLine1": "You build the",
+      "headingLine2": "landmarks.",
+      "headingLine3": "We deliver the steel.",
+      "description": "Ready stock, precision processing, transparent pricing, and direct site delivery for industrial buyers across India.",
+      "features": [
+        {
+          "icon": "inventory_2",
+          "title": "Ready Stock Availability",
+          "description": "Material availability that helps buyers move without uncertain delays."
+        },
+        {
+          "icon": "precision_manufacturing",
+          "title": "Precision Processing",
+          "description": "Slitting, cut-to-length, profiling, and packaging for project-fit supply."
+        },
+        {
+          "icon": "local_shipping",
+          "title": "Direct Site Delivery",
+          "description": "Coordinated dispatch support aligned to your project timelines."
+        }
+      ]
+    },
+    "servicesSection": {
+      "heading": "Secondary Material",
+      "description": "Economical coil-end, pickled, CRFH, and construction secondary supply from Indore."
+    },
+    "partners": [
+      {
+        "name": "Jindal Steel Limited",
+        "logo": "/assests/client_logo/Jindal_Steel_Limited_Logo.webp",
+        "alt": "Jindal Steel Limited"
+      },
+      {
+        "name": "Tata Steel",
+        "logo": "/assests/client_logo/Tata_Steel_Logo.webp",
+        "alt": "Tata Steel"
+      },
+      {
+        "name": "Essar Steel",
+        "logo": "/assests/client_logo/essar_steel.webp",
+        "alt": "Essar Steel"
+      },
+      {
+        "name": "Steel Authority of India Limited",
+        "logo": "/assests/client_logo/sail.webp",
+        "alt": "Steel Authority of India Limited"
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Very good company, the vehicle gets unloaded as soon as it leaves and Sethji also behaves very well with the driver brother.",
+        "name": "Bhagirath Bishnoi Jakhar",
+        "role": "Avi Steel Processor",
+        "initials": "BJ",
+        "avatarIcon": "engineering",
+        "avatarClass": "bg-[#1f4b99] text-white"
+      },
+      {
+        "quote": "Very good service with wide range of product. Owners' nature is very nice.",
+        "name": "Jayesh Jha",
+        "role": "Avi Steel Processor",
+        "initials": "JJ",
+        "avatarIcon": "factory",
+        "avatarClass": "bg-[#48626e] text-white"
+      },
+      {
+        "quote": "Superb quality and branded metal product here.",
+        "name": "Raj Maheta",
+        "role": "Avi Steel Processor",
+        "initials": "RM",
+        "avatarIcon": "verified",
+        "avatarClass": "bg-[#b7791f] text-white"
+      },
+      {
+        "quote": "Their team keeps dispatch planning simple. Material reaches our site on time, and communication is clear from quote to delivery.",
+        "name": "Amit Patel",
+        "role": "Fabrication Partner",
+        "initials": "AP",
+        "avatarIcon": "local_shipping",
+        "avatarClass": "bg-[#2563eb] text-white"
+      },
+      {
+        "quote": "We regularly need processed steel in specific sizes. NRK handles the requirements carefully and gives dependable support.",
+        "name": "Nilesh Shah",
+        "role": "Industrial Buyer",
+        "initials": "NS",
+        "avatarIcon": "inventory_2",
+        "avatarClass": "bg-[#0f766e] text-white"
+      },
+      {
+        "quote": "The biggest benefit is reliability. Stock updates, pricing, and delivery timelines are handled professionally every time.",
+        "name": "Priya Mehta",
+        "role": "Project Procurement",
+        "initials": "PM",
+        "avatarIcon": "account_circle",
+        "avatarClass": "bg-[#7c3aed] text-white"
+      }
+    ],
+    "about": {
+      "eyebrow": "Our Legacy",
+      "titleBefore": "Forging Industrial ",
+      "titleHighlight": "Excellence",
+      "titleAfter": " Since 1994",
+      "summary": "Founded by Mr. Nimesh Kothari with vision, faith, and trust — NRK Iron & Steel has grown from a one-man operation in Indore into one of the foremost steel trading firms in Central India.",
+      "image": "/assests/aboutus/aboutus_banner.webp"
+    },
+    "stats": [
+      {
+        "value": "30+",
+        "label": "Years Experience",
+        "description": "Since 1994, delivering trusted steel solutions nationwide with excellence.",
+        "icon": "workspace_premium"
+      },
+      {
+        "value": "4000+",
+        "label": "Annual Reach",
+        "description": "Serving 4000+ clients yearly across diverse industries nationwide with reliability, and counting.",
+        "icon": "public"
+      },
+      {
+        "value": "90%",
+        "label": "Retention Rate",
+        "description": "Maintaining 90% loyal customers through unmatched quality and service.",
+        "icon": "handshake"
+      }
+    ],
+    "whyChooseUs": {
+      "image": "/company/Nimesh_sir.jpg",
+      "imageAlt": "Mr. Nimesh Kothari",
+      "badgeValue": "30+",
+      "badgeLabel": "Years of Trust",
+      "eyebrow": "Why Choose Us",
+      "title": "Why NRK IRON & STEEL LLP?",
+      "lead": "We PROVIDE competitive rates and timely deliveries — combining ready stock, precise processing, and long-term service discipline for industrial buyers across India.",
+      "features": [
+        {
+          "icon": "workspace_premium",
+          "title": "Genuine Quality",
+          "description": "100% Original Tata Steel with mill certificates"
+        },
+        {
+          "icon": "category",
+          "title": "Wide Range",
+          "description": "All grades Soft, Medium, Structural available"
+        },
+        {
+          "icon": "local_shipping",
+          "title": "Fast Delivery",
+          "description": "Ready stock & quick dispatch from Indore"
+        },
+        {
+          "icon": "price_check",
+          "title": "Competitive Pricing",
+          "description": "Best market rates with transparency"
+        },
+        {
+          "icon": "support_agent",
+          "title": "Technical Support",
+          "description": "Right grade selection guidance for your application"
+        }
+      ]
+    },
+    "connectCta": {
+      "eyebrow": "Trusted Distributors",
+      "title": "Dependable steel sourcing for industrial builders & buyers",
+      "description": "We regularly stock and process certified structural and sheet material with doorstep dispatch from Indore.",
+      "brochureUrl": "https://nrkironsteel.com/brochure.pdf"
+    },
+    "journey": {
+      "legacyLines": [
+        "NRK Iron and Steel LLP is a 30-year-old trading enterprise that commenced its roots in Indore, Madhya Pradesh.",
+        "This firm was created with a lot of hopes, faith, and trust in the eyes of Mr. Nimesh Kothari. His visionary zeal grew the company into one of the foremost Iron and Steel trading firms in Central India.",
+        "Currently, NRK serves bulk quantities of steel across Madhya Pradesh, Gujarat, Maharashtra, Rajasthan, and Punjab — solidifying the company's presence and growth in the steel industry.",
+        "The company further aims to expand rapidly across India, supplying certified steel from TATA, JSW, and AM/NS with precision processing and pan-India logistics."
+      ],
+      "milestones": [
+        {
+          "year": "1994",
+          "title": "Initial Days",
+          "description": "Mr. Nimesh Kothari embarked on his entrepreneurial journey by starting retail trading in Indore, gradually expanding into brokerage and cross-border supply while building a strong customer base — a true one-man army without any business background support.",
+          "icon": "foundation",
+          "image": "/company/ofc2.jpg"
+        },
+        {
+          "year": "2005",
+          "title": "Expansion to a Bigger Picture",
+          "description": "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
+          "icon": "trending_up",
+          "image": "/company/company_section2.jpeg"
+        },
+        {
+          "year": "2015",
+          "title": "Generational Leadership",
+          "description": "The transition to multi-generational leadership saw Mr. Nimesh Kothari's sons, Mr. Nishant Kothari and Mr. Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
+          "icon": "groups",
+          "image": "/company/Godown photos.webp"
+        }
+      ]
+    },
+    "missionVision": {
+      "mission": [
+        {
+          "title": "Our Mission",
+          "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
+          "icon": "flag"
+        },
+        {
+          "title": "Promote Innovation",
+          "description": "To promote entrepreneurship and innovation while ensuring full utilization of resources through effective and eco-friendly procedures and practices.",
+          "icon": "lightbulb"
+        },
+        {
+          "title": "Steel Supermarket",
+          "description": "To supply class products like a steel supermarket — offering a complete range of prime and secondary materials with doorstep delivery support.",
+          "icon": "store"
+        },
+        {
+          "title": "Business Excellence",
+          "description": "To achieve business excellence through efficient resource utilization while following genuine business ethics and ensuring complete customer satisfaction.",
+          "icon": "workspace_premium"
+        }
+      ],
+      "vision": [
+        {
+          "title": "Our Vision",
+          "description": "To become the best steel supplier in the upcoming years — supplying quality steel products and services with cost-effective solutions and professional operations built on genuine business ethics.",
+          "icon": "visibility"
+        }
+      ]
+    },
+    "products": [
+      {
+        "slug": "hr-sheets-coils",
+        "title": "Hot Rolled (HR) Sheets & Coils",
+        "category": "Prime Material",
+        "eyebrow": "Prime Supply",
+        "badge": "Industrial Grade: HR Prime Stock",
+        "summary": "Prime hot rolled sheets and coils from leading national mills for structural and fabrication demand.",
+        "description": "Hot Rolled (HR) Sheets and Coils from NRK Iron & Steel are sourced from SAIL, Jindal, AMNS, TATA, and Bhushan. Suitable for fabrication, infrastructure, and general industrial applications with payment against delivery and bulk dispatch from Indore.",
+        "mainImage": "/assests/products/plate.webp",
+        "specs": [
+          {
+            "label": "Make",
+            "value": "SAIL, Jindal, AMNS, TATA, Bhushan"
+          },
+          {
+            "label": "Grade",
+            "value": "1079 / 2062"
+          },
+          {
+            "label": "Thickness",
+            "value": "1.5mm to 25mm"
+          },
+          {
+            "label": "Size",
+            "value": "1250 / 1500 x 2500 / 5000 / 6300"
+          }
+        ],
+        "variants": [
+          "HR sheets",
+          "HR coils"
+        ]
+      }
+    ],
+    "services": []
+  },
+  "published": {
+    "hero": {
+      "tagline": "India's Trusted Steel Distribution & Processing Partner",
+      "headingLine1": "You build the",
+      "headingLine2": "landmarks.",
+      "headingLine3": "We deliver the steel.",
+      "description": "Ready stock, precision processing, transparent pricing, and direct site delivery for industrial buyers across India.",
+      "features": [
+        {
+          "icon": "inventory_2",
+          "title": "Ready Stock Availability",
+          "description": "Material availability that helps buyers move without uncertain delays."
+        },
+        {
+          "icon": "precision_manufacturing",
+          "title": "Precision Processing",
+          "description": "Slitting, cut-to-length, profiling, and packaging for project-fit supply."
+        },
+        {
+          "icon": "local_shipping",
+          "title": "Direct Site Delivery",
+          "description": "Coordinated dispatch support aligned to your project timelines."
+        }
+      ]
+    },
+    "servicesSection": {
+      "heading": "Secondary Material",
+      "description": "Economical coil-end, pickled, CRFH, and construction secondary supply from Indore."
+    },
+    "partners": [
+      {
+        "name": "Jindal Steel Limited",
+        "logo": "/assests/client_logo/Jindal_Steel_Limited_Logo.webp",
+        "alt": "Jindal Steel Limited"
+      },
+      {
+        "name": "Tata Steel",
+        "logo": "/assests/client_logo/Tata_Steel_Logo.webp",
+        "alt": "Tata Steel"
+      },
+      {
+        "name": "Essar Steel",
+        "logo": "/assests/client_logo/essar_steel.webp",
+        "alt": "Essar Steel"
+      },
+      {
+        "name": "Steel Authority of India Limited",
+        "logo": "/assests/client_logo/sail.webp",
+        "alt": "Steel Authority of India Limited"
+      }
+    ],
+    "testimonials": [
+      {
+        "quote": "Very good company, the vehicle gets unloaded as soon as it leaves and Sethji also behaves very well with the driver brother.",
+        "name": "Bhagirath Bishnoi Jakhar",
+        "role": "Avi Steel Processor",
+        "initials": "BJ",
+        "avatarIcon": "engineering",
+        "avatarClass": "bg-[#1f4b99] text-white"
+      },
+      {
+        "quote": "Very good service with wide range of product. Owners' nature is very nice.",
+        "name": "Jayesh Jha",
+        "role": "Avi Steel Processor",
+        "initials": "JJ",
+        "avatarIcon": "factory",
+        "avatarClass": "bg-[#48626e] text-white"
+      },
+      {
+        "quote": "Superb quality and branded metal product here.",
+        "name": "Raj Maheta",
+        "role": "Avi Steel Processor",
+        "initials": "RM",
+        "avatarIcon": "verified",
+        "avatarClass": "bg-[#b7791f] text-white"
+      },
+      {
+        "quote": "Their team keeps dispatch planning simple. Material reaches our site on time, and communication is clear from quote to delivery.",
+        "name": "Amit Patel",
+        "role": "Fabrication Partner",
+        "initials": "AP",
+        "avatarIcon": "local_shipping",
+        "avatarClass": "bg-[#2563eb] text-white"
+      },
+      {
+        "quote": "We regularly need processed steel in specific sizes. NRK handles the requirements carefully and gives dependable support.",
+        "name": "Nilesh Shah",
+        "role": "Industrial Buyer",
+        "initials": "NS",
+        "avatarIcon": "inventory_2",
+        "avatarClass": "bg-[#0f766e] text-white"
+      },
+      {
+        "quote": "The biggest benefit is reliability. Stock updates, pricing, and delivery timelines are handled professionally every time.",
+        "name": "Priya Mehta",
+        "role": "Project Procurement",
+        "initials": "PM",
+        "avatarIcon": "account_circle",
+        "avatarClass": "bg-[#7c3aed] text-white"
+      }
+    ],
+    "about": {
+      "eyebrow": "Our Legacy",
+      "titleBefore": "Forging Industrial ",
+      "titleHighlight": "Excellence",
+      "titleAfter": " Since 1994",
+      "summary": "Founded by Mr. Nimesh Kothari with vision, faith, and trust — NRK Iron & Steel has grown from a one-man operation in Indore into one of the foremost steel trading firms in Central India.",
+      "image": "/assests/aboutus/aboutus_banner.webp"
+    },
+    "stats": [
+      {
+        "value": "30+",
+        "label": "Years Experience",
+        "description": "Since 1994, delivering trusted steel solutions nationwide with excellence.",
+        "icon": "workspace_premium"
+      },
+      {
+        "value": "4000+",
+        "label": "Annual Reach",
+        "description": "Serving 4000+ clients yearly across diverse industries nationwide with reliability, and counting.",
+        "icon": "public"
+      },
+      {
+        "value": "90%",
+        "label": "Retention Rate",
+        "description": "Maintaining 90% loyal customers through unmatched quality and service.",
+        "icon": "handshake"
+      }
+    ],
+    "whyChooseUs": {
+      "image": "/company/Nimesh_sir.jpg",
+      "imageAlt": "Mr. Nimesh Kothari",
+      "badgeValue": "30+",
+      "badgeLabel": "Years of Trust",
+      "eyebrow": "Why Choose Us",
+      "title": "Why NRK IRON & STEEL LLP?",
+      "lead": "We PROVIDE competitive rates and timely deliveries — combining ready stock, precise processing, and long-term service discipline for industrial buyers across India.",
+      "features": [
+        {
+          "icon": "workspace_premium",
+          "title": "Genuine Quality",
+          "description": "100% Original Tata Steel with mill certificates"
+        },
+        {
+          "icon": "category",
+          "title": "Wide Range",
+          "description": "All grades Soft, Medium, Structural available"
+        },
+        {
+          "icon": "local_shipping",
+          "title": "Fast Delivery",
+          "description": "Ready stock & quick dispatch from Indore"
+        },
+        {
+          "icon": "price_check",
+          "title": "Competitive Pricing",
+          "description": "Best market rates with transparency"
+        },
+        {
+          "icon": "support_agent",
+          "title": "Technical Support",
+          "description": "Right grade selection guidance for your application"
+        }
+      ]
+    },
+    "connectCta": {
+      "eyebrow": "Trusted Distributors",
+      "title": "Dependable steel sourcing for industrial builders & buyers",
+      "description": "We regularly stock and process certified structural and sheet material with doorstep dispatch from Indore.",
+      "brochureUrl": "https://nrkironsteel.com/brochure.pdf"
+    },
+    "journey": {
+      "legacyLines": [
+        "NRK Iron and Steel LLP is a 30-year-old trading enterprise that commenced its roots in Indore, Madhya Pradesh.",
+        "This firm was created with a lot of hopes, faith, and trust in the eyes of Mr. Nimesh Kothari. His visionary zeal grew the company into one of the foremost Iron and Steel trading firms in Central India.",
+        "Currently, NRK serves bulk quantities of steel across Madhya Pradesh, Gujarat, Maharashtra, Rajasthan, and Punjab — solidifying the company's presence and growth in the steel industry.",
+        "The company further aims to expand rapidly across India, supplying certified steel from TATA, JSW, and AM/NS with precision processing and pan-India logistics."
+      ],
+      "milestones": [
+        {
+          "year": "1994",
+          "title": "Initial Days",
+          "description": "Mr. Nimesh Kothari embarked on his entrepreneurial journey by starting retail trading in Indore, gradually expanding into brokerage and cross-border supply while building a strong customer base — a true one-man army without any business background support.",
+          "icon": "foundation",
+          "image": "/company/ofc2.jpg"
+        },
+        {
+          "year": "2005",
+          "title": "Expansion to a Bigger Picture",
+          "description": "With a focus on creating a larger trading network, Mr. Nimesh Kothari successfully established a significant presence across India — marking a major milestone in the company's growth through persistent perseverance in pursuit of excellence.",
+          "icon": "trending_up",
+          "image": "/company/company_section2.jpeg"
+        },
+        {
+          "year": "2015",
+          "title": "Generational Leadership",
+          "description": "The transition to multi-generational leadership saw Mr. Nimesh Kothari's sons, Mr. Nishant Kothari and Mr. Dhaval Kothari, actively leading the firm with modern practices and smart decision-making, ensuring continuity and progression.",
+          "icon": "groups",
+          "image": "/company/Godown photos.webp"
+        }
+      ]
+    },
+    "missionVision": {
+      "mission": [
+        {
+          "title": "Our Mission",
+          "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
+          "icon": "flag"
+        },
+        {
+          "title": "Promote Innovation",
+          "description": "To promote entrepreneurship and innovation while ensuring full utilization of resources through effective and eco-friendly procedures and practices.",
+          "icon": "lightbulb"
+        },
+        {
+          "title": "Steel Supermarket",
+          "description": "To supply class products like a steel supermarket — offering a complete range of prime and secondary materials with doorstep delivery support.",
+          "icon": "store"
+        },
+        {
+          "title": "Business Excellence",
+          "description": "To achieve business excellence through efficient resource utilization while following genuine business ethics and ensuring complete customer satisfaction.",
+          "icon": "workspace_premium"
+        }
+      ],
+      "vision": [
+        {
+          "title": "Our Vision",
+          "description": "To become the best steel supplier in the upcoming years — supplying quality steel products and services with cost-effective solutions and professional operations built on genuine business ethics.",
+          "icon": "visibility"
+        }
+      ]
+    },
+    "products": [
+      {
+        "slug": "hr-sheets-coils",
+        "title": "Hot Rolled (HR) Sheets & Coils",
+        "category": "Prime Material",
+        "eyebrow": "Prime Supply",
+        "badge": "Industrial Grade: HR Prime Stock",
+        "summary": "Prime hot rolled sheets and coils from leading national mills for structural and fabrication demand.",
+        "description": "Hot Rolled (HR) Sheets and Coils from NRK Iron & Steel are sourced from SAIL, Jindal, AMNS, TATA, and Bhushan. Suitable for fabrication, infrastructure, and general industrial applications with payment against delivery and bulk dispatch from Indore.",
+        "mainImage": "/assests/products/plate.webp",
+        "specs": [
+          {
+            "label": "Make",
+            "value": "SAIL, Jindal, AMNS, TATA, Bhushan"
+          },
+          {
+            "label": "Grade",
+            "value": "1079 / 2062"
+          },
+          {
+            "label": "Thickness",
+            "value": "1.5mm to 25mm"
+          },
+          {
+            "label": "Size",
+            "value": "1250 / 1500 x 2500 / 5000 / 6300"
+          }
+        ],
+        "variants": [
+          "HR sheets",
+          "HR coils"
+        ]
+      }
+    ],
+    "services": []
+  }
+}

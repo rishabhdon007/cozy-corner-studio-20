@@ -33,6 +33,14 @@ import {
   crSemiHardVariantCatalog,
   getCrSemiHardPrimaryImage,
 } from "@/data/crSemiHardVariantCatalog";
+import {
+  crSemiHardCuttingVariantCatalog,
+  getCrSemiHardCuttingPrimaryImage,
+} from "@/data/crSemiHardCuttingVariantCatalog";
+import { bpSheetImages } from "@/data/bpSheetVariantCatalog";
+import { centeringPlateImages } from "@/data/centeringPlateVariantCatalog";
+import { shutterChannelImages } from "@/data/shutterChannelVariantCatalog";
+import { acStandImages } from "@/data/acStandVariantCatalog";
 
 const MAKES_HR = "SAIL, Jindal, AMNS, TATA, Bhushan";
 const MAKES_CR = "SAIL, Jindal, AMNS, TATA, Posco, Bhushan Power, JSW, TATA BSL";
@@ -93,7 +101,7 @@ export const productRecommendations = {
     slug: "centering-plates",
     title: "Centering Plates",
     type: "Construction",
-    image: CATALOG_IMAGES.centering,
+    image: centeringPlateImages[0] || CATALOG_IMAGES.centering,
     note: "In-house centering and shuttering plates for construction sites.",
   },
   secondaryCrfh: {
@@ -102,6 +110,34 @@ export const productRecommendations = {
     type: "Secondary Material",
     image: CATALOG_IMAGES.cr,
     note: "Value coil-end and semi hard material for cost-effective supply.",
+  },
+  crSemiHardCutting: {
+    slug: "cr-semi-hard-cutting",
+    title: "CR Semi-Hard Cutting",
+    type: "Secondary Material",
+    image: getCrSemiHardCuttingPrimaryImage() || CATALOG_IMAGES.cr,
+    note: "CRFH and CR semi hard cutting sheets in multiple sizes and thickness bands.",
+  },
+  bpSheet: {
+    slug: "bp-sheet",
+    title: "BP Sheet (Bhatti Material)",
+    type: "Steel Processing",
+    image: bpSheetImages[0] || CATALOG_IMAGES.cr,
+    note: "BP Sheets (Bhatti Material) for high-heat and industrial processing.",
+  },
+  acStand: {
+    slug: "ac-stand",
+    title: "AC Stand",
+    type: "Manufacturing Product",
+    image: acStandImages[0] || CATALOG_IMAGES.centering,
+    note: "Heavy-duty outdoor air conditioner stands manufactured in-house.",
+  },
+  shutterChannel: {
+    slug: "shutter-channel",
+    title: "Shutter Channel",
+    type: "Manufacturing Product",
+    image: shutterChannelImages[0] || CATALOG_IMAGES.purlin,
+    note: "High-strength rolling shutter channels manufactured in-house.",
   },
   crPickled: {
     slug: "cr-coiled-pickled",
@@ -138,7 +174,7 @@ const primeEntries = [
     summary: "Prime hot rolled sheets and coils from leading national mills for structural and fabrication demand.",
     description:
       "Hot Rolled (HR) Sheets and Coils from NRK Iron & Steel are sourced from SAIL, Jindal, AMNS, TATA, and Bhushan. Suitable for fabrication, infrastructure, and general industrial applications with payment against delivery and bulk dispatch from Indore.",
-    mainImage: CATALOG_IMAGES.hr,
+    mainImage: "/assests/products/HR sheet coils.webp",
     specs: [
       { label: "Make", value: MAKES_HR },
       { label: "Grade", value: "1079 / 2062" },
@@ -189,7 +225,7 @@ const primeEntries = [
     summary: "Precision-finished CRCA and CRFH coils for fabrication, component manufacturing, and industrial supply.",
     description:
       "Cold Rolled (CR) Sheets and Coils are supplied in CRCA and CRFH grades from leading mills. Also listed on IndiaMART as Cr Sheet Cutting, CR Semi Hard Material, and CR Cutting Sheet (0.30 to 0.60). Ideal for forming, cutting, and repeat production schedules.",
-    mainImage: CATALOG_IMAGES.cr,
+    mainImage: "/Gallary/Industrial_Capacity.png",
     specs: [
       { label: "Make", value: MAKES_CR },
       { label: "Grade", value: "CRCA / CRFH" },
@@ -215,7 +251,7 @@ const primeEntries = [
     summary: "Soft, ductile annealed sheets for drawing, bending, and component manufacturing.",
     description:
       "Annealed Sheets from NRK are supplied in cold rolled annealed grades for applications requiring improved formability. Listed on IndiaMART as CR Annealed Sheets, CR semi hard sheet, and CR Sheets Semi Hard.",
-    mainImage: CATALOG_IMAGES.cr,
+    mainImage: "/assests/products/cr-annealed-sheets.jpeg",
     specs: [
       { label: "Make", value: MAKES_CR },
       { label: "Thickness", value: "0.25mm to 1.6mm" },
@@ -241,7 +277,7 @@ const primeEntries = [
     summary: "Prime mild steel plates for machining, fabrication, shuttering, and heavy-duty frames.",
     description:
       "MS Plates from NRK support structural fabrication, machining, and construction applications. Also relevant for Ms Shuttering Plate and secondary MS sheet requirements from IndiaMART listings.",
-    mainImage: CATALOG_IMAGES.ms,
+    mainImage: "/Gallary/Warehouse_Operations.png",
     specs: [
       { label: "Make", value: MAKES_MS },
       { label: "Grade", value: "E250, E350" },
@@ -267,7 +303,7 @@ const primeEntries = [
     summary: "Galvanized plain sheets for roofing, cladding, and corrosion-resistant panel work.",
     description:
       "Galvanized Plain (GP) Sheets from Poco, Uttam, and Tata combine zinc coating with practical formability. Listed on IndiaMART under Galvanized Plain Coils alongside coil-end material options.",
-    mainImage: CATALOG_IMAGES.coated,
+    mainImage: "/Gallary/Premium_Steel_Storage.png",
     specs: [
       { label: "Make", value: "Poco / Uttam / Tata" },
       { label: "Grade", value: "90 / 80 / 120 GSM" },
@@ -293,7 +329,7 @@ const primeEntries = [
     summary: "GC sheets for durable roofing, cladding, and industrial building applications.",
     description:
       "Galvanized Corrugated (GC) Sheets are available in soft and hard grades with spangle or skin pass finish. Also aligned with IndiaMART Roofing Sheet and Iron Sheet Suppliers listings.",
-    mainImage: CATALOG_IMAGES.profile,
+    mainImage: "/assests/products/gc-sheets.webp",
     specs: [
       { label: "Make", value: "TATA, AMNS, JSW & more" },
       { label: "Grade", value: "Soft / Hard" },
@@ -319,7 +355,7 @@ const primeEntries = [
     summary: "Color coated sheets and coils in project colors for roofing, cladding, and pre-engineered buildings.",
     description:
       "Color Coated Sheets and Coils from AMNS, Uttam, JSW, and TATA offer aesthetic and corrosion-resistant options for modern construction and industrial cladding.",
-    mainImage: CATALOG_IMAGES.coated,
+    mainImage: "/Gallary/Premium_Steel_Storage.png",
     specs: [
       { label: "Make", value: "AMNS / Uttam / JSW / TATA" },
       { label: "Grade", value: "Soft & all colors" },
@@ -335,31 +371,7 @@ const primeEntries = [
     ]),
     recommendations: [rec.gcSheets, rec.gpSheets, rec.crCoils],
   }),
-  buildPrimeProduct({
-    slug: "profile-sheets",
-    title: "Profile Sheets",
-    category: "Prime Material",
-    eyebrow: "Profiled Roofing",
-    badge: "Industrial Grade: Corrugated Profiles",
-    summary: "Profiled and corrugated sheets for roofing, cladding, and long-span building applications.",
-    description:
-      "Profile Sheets from AMNS, Uttam, JSW, and TATA are supplied in soft grades with color options. Width after corrugation ranges from 1000mm to 1060mm with lengths up to 10000mm.",
-    mainImage: CATALOG_IMAGES.profile,
-    specs: [
-      { label: "Make", value: "AMNS / Uttam / JSW / TATA" },
-      { label: "Grade", value: "Soft & all colours" },
-      { label: "Thickness", value: "0.40mm to 1.00mm" },
-      { label: "Profile Width", value: "1000–1060mm x up to 10000mm" },
-    ],
-    variants: ["Deck sheets", "Corrugated profiles", "Roofing profile sheets"],
-    technicalSpecs: withPurchaseTerms([
-      { property: "Make", value: "AMNS / Uttam / JSW / TATA", method: "Brochure specification" },
-      { property: "Thickness", value: "0.40mm to 1.00mm", method: "Order verification" },
-      { property: "Profile Width", value: "1000–1060mm (after corrugation)", method: "Template verification" },
-      { property: "Length", value: "Up to 10000mm", method: "Cut-to-length service" },
-    ]),
-    recommendations: [rec.colorCoated, rec.gcSheets, rec.gpSheets],
-  }),
+
   buildPrimeProduct({
     slug: "hrpo-coil",
     title: "HRPO Coil",
@@ -369,7 +381,7 @@ const primeEntries = [
     summary: "Hot rolled pickled and oiled coils for cleaner surface finish and improved downstream processing.",
     description:
       "HRPO Coil from SAIL, Jindal, AMNS, TATA, JSW, and JSPL is supplied in E250 and E350 grades for fabrication shops requiring improved surface condition over standard HR.",
-    mainImage: CATALOG_IMAGES.hr,
+    mainImage: "/Gallary/Premium_Steel_Storage.png",
     specs: [
       { label: "Make", value: MAKES_MS },
       { label: "Grade", value: "E250, E350" },
@@ -394,7 +406,7 @@ const primeEntries = [
     summary: "Bare galvalume sheets and coils with AZ70 and AZ150 coating for long-life roofing and cladding.",
     description:
       "Bare Galvalume Sheets and Coils from Jindal India and JSW offer aluminium-zinc coating for superior corrosion resistance in exposed building applications.",
-    mainImage: CATALOG_IMAGES.coated,
+    mainImage: "/Gallary/Premium_Steel_Storage.png",
     specs: [
       { label: "Make", value: "Jindal India / JSW" },
       { label: "Grade", value: "AZ70 / AZ150" },
@@ -419,7 +431,7 @@ const primeEntries = [
     summary: "Zincro coated sheets and coils from AMNS and JSW for durable exposed applications.",
     description:
       "Zincro Sheets and Coils combine specialty coating performance with practical sizing for roofing, cladding, and industrial panel requirements.",
-    mainImage: CATALOG_IMAGES.coated,
+    mainImage: "/Gallary/Premium_Steel_Storage.png",
     specs: [
       { label: "Make", value: "AMNS / JSW" },
       { label: "Thickness", value: "0.40mm & above" },
@@ -434,32 +446,6 @@ const primeEntries = [
       { property: "Application", value: "Roofing & cladding", method: "Project specification" },
     ]),
     recommendations: [rec.galvalume, rec.colorCoated, rec.gpSheets],
-  }),
-  buildPrimeProduct({
-    slug: "centering-plates",
-    title: "Centering Plates",
-    category: "Prime Material",
-    eyebrow: "Construction Supply",
-    badge: "Industrial Grade: NRK In-House Make",
-    summary: "Centering and shuttering plates for construction with consistent weight and timely delivery.",
-    description:
-      "Centering Plates from NRK are manufactured in-house using CR secondary material. Listed on IndiaMART as Centering Sheets, Mild Steel Shuttering Plate, Shuttering Plates, and Mild Steel Centering Plate.",
-    mainImage: CATALOG_IMAGES.centering,
-    specs: [
-      { label: "Make", value: "NRK / In-House" },
-      { label: "Grade", value: "CR Secondary Material" },
-      { label: "Size", value: "1 / 1.5 / 2ft x 3ft" },
-      { label: "Weight", value: "10Kg to 13Kg" },
-    ],
-    variants: centeringPlateOfferings.map((o) => o.title),
-    offerings: centeringPlateOfferings,
-    technicalSpecs: withPurchaseTerms([
-      { property: "Make", value: "NRK / In-House Make", method: "Brochure specification" },
-      { property: "Grade", value: "CR Secondary Material", method: "In-house production" },
-      { property: "Size", value: "1 / 1.5 / 2ft x 3ft", method: "Standard sizes" },
-      { property: "Weight", value: "10Kg to 13Kg", method: "Weighing scale verification" },
-    ]),
-    recommendations: [rec.msPlates, rec.secondaryCrfh, rec.hrSheets],
   }),
 ] as const;
 
@@ -523,6 +509,37 @@ const secondaryEntries = [
       { property: "Size", value: "4ft / 3.15ft x 8ft / Random Size", method: "Stock allocation" },
     ]),
     recommendations: [rec.crCoils, rec.centering, rec.annealed],
+  }),
+  buildSecondaryProduct({
+    slug: "cr-semi-hard-cutting",
+    title: "CR Semi-Hard Cutting",
+    category: "Secondary Material",
+    eyebrow: "CRFH & CR SEMI-HARD CUTTING",
+    badge: "Secondary Grade: Semi Hard Cutting",
+    summary:
+      "CR semi-hard and CRFH cutting sheets in multiple sizes and thickness bands — ready stock ex Indore yard.",
+    description:
+      "CR Semi-Hard Cutting sheets are secondary coil-end cut materials in semi-hard and CRFH grades. Select a size and thickness band below to view stock photos. Listed on IndiaMART as CR Semi Hard Cutting and CRFH Cutting.",
+    mainImage: getCrSemiHardCuttingPrimaryImage() || CATALOG_IMAGES.cr,
+    processImage: getCrSemiHardCuttingPrimaryImage() || CATALOG_IMAGES.cr,
+    gallery: [],
+    specs: [
+      { label: "Material", value: "CR Semi-Hard / CRFH Cutting" },
+      { label: "Grade", value: "Coil leader end / Semi Hard" },
+      { label: "Thickness", value: "0.30 to 4.00 mm (select below)" },
+      { label: "Size", value: "1ft to 5ft Length / Random Widths" },
+    ],
+    variants: crSemiHardCuttingVariantCatalog.sizeBands.flatMap((size) =>
+      size.thicknessBands.map((band) => `${size.label} — ${band.label}`),
+    ),
+    variantCatalog: crSemiHardCuttingVariantCatalog,
+    technicalSpecs: withPurchaseTerms([
+      { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
+      { property: "Grade", value: "Coil leader end / Semi Hard / CRFH", method: "Batch identification" },
+      { property: "Thickness", value: "0.30 to 4.00mm", method: "Measurement check" },
+      { property: "Size", value: "1.5-5ft x 4ft / 1-5ft / 3-5ft x 3-12 inch", method: "Stock allocation" },
+    ]),
+    recommendations: [rec.secondaryCrfh, rec.centering, rec.crCoils],
   }),
   buildSecondaryProduct({
     slug: "cr-semi-hard-sheets-8x4",
@@ -692,30 +709,119 @@ const secondaryEntries = [
     recommendations: [rec.centering, rec.msPlates, rec.secondaryCrfh],
   }),
   buildSecondaryProduct({
-    slug: "rolling-shutter-channel",
-    title: "Rolling Shutter Channel",
+    slug: "bp-sheet",
+    title: "BP Sheet (Bhatti Material)",
     category: "Secondary Material",
-    eyebrow: "Shutter Supply",
-    badge: "Shutter Components",
-    summary: "Shutter channel and side channel supply for rolling shutter fabrication.",
+    eyebrow: "BP SHEET - (BHATTI MATERIAL)",
+    badge: "Bhatti Material",
+    summary:
+      "BP sheets (Bhatti Material) specifically for heat treatment bhattis — ready stock ex Indore yard.",
     description:
-      "Rolling Shutter Channel from NRK includes shutter channel supplier listings from IndiaMART and iron shutter side channel from the HR Sheet category.",
-    mainImage: CATALOG_IMAGES.purlin,
+      "BP Sheets are specialized Bhatti Material suitable for heat treatment ovens and annealing bhattis. Ready stock available ex Indore in multiple thicknesses.",
+    mainImage: bpSheetImages[0] || CATALOG_IMAGES.cr,
+    processImage: bpSheetImages[0] || CATALOG_IMAGES.cr,
+    gallery: bpSheetImages,
     specs: [
-      { label: "Product", value: "Shutter channel / side channel" },
-      { label: "Material", value: "Mild Steel" },
-      { label: "Application", value: "Rolling shutter fabrication" },
-      { label: "Supply", value: "Indore wholesale" },
+      { label: "Material", value: "BP Sheet (Bhatti Material)" },
+      { label: "Grade", value: "Bhatti Grade" },
+      { label: "Thickness", value: "0.30 to 0.50 mm, 0.55 to 0.60 mm, 0.70 to 0.80 mm, 0.90 to 1.10 mm" },
+      { label: "Size", value: "8 x 4 FT" },
     ],
-    variants: [rollingShutterOfferings[0].title, hrSheetOfferings[1].title],
-    offerings: [...rollingShutterOfferings, hrSheetOfferings[1]],
+    variants: [".30 TO .50MM", ".55 TO .60MM", ".70 to .80 MM", ".90 TO 1.1 MM"],
     technicalSpecs: withPurchaseTerms([
-      { property: "Product", value: "Shutter channel / side channel", method: "IndiaMART listing" },
-      { property: "Material", value: "Mild Steel", method: "Batch identification" },
-      { property: "Application", value: "Rolling shutter fabrication", method: "Project specification" },
+      { property: "Make", value: MAKES_SECONDARY, method: "Brochure specification" },
+      { property: "Grade", value: "Bhatti Material", method: "Batch identification" },
+      { property: "Thickness Bands", value: "0.30-0.50mm / 0.55-0.60mm / 0.70-0.80mm / 0.90-1.10mm", method: "Measurement check" },
+      { property: "Size", value: "8 x 4 FT", method: "Stock allocation" },
+    ]),
+    recommendations: [rec.secondaryCrfh, rec.centering, rec.crCoils],
+    section: "processing",
+  }),
+  buildSecondaryProduct({
+    slug: "centering-plates",
+    title: "Centering Plates",
+    category: "Manufacturing Product",
+    eyebrow: "NRK IRON AND STEELS LLP",
+    badge: "Ready Stock Ex Indore yard",
+    summary:
+      "Centering and shuttering plates manufactured in-house by NRK using high-quality CR material.",
+    description:
+      "Centering Plates from NRK are manufactured in-house with single & double support. Available in standard 3x2 and 2x1 sizes with consistent weight and structure.",
+    mainImage: centeringPlateImages[0] || CATALOG_IMAGES.centering,
+    processImage: centeringPlateImages[0] || CATALOG_IMAGES.centering,
+    gallery: centeringPlateImages,
+    specs: [
+      { label: "Make", value: "NRK" },
+      { label: "Product", value: "Centering Plate" },
+      { label: "Size", value: "3 x 2 FT / 2 x 1 FT" },
+      { label: "Weight", value: "11 to 12 kg (for 3x2)" },
+      { label: "Support", value: "Single & Double Support Both available" },
+    ],
+    variants: ["3 x 2 FT (Single Support)", "3 x 2 FT (Double Support)", "2 x 1 FT (Single Support)", "2 x 1 FT (Double Support)"],
+    technicalSpecs: withPurchaseTerms([
+      { property: "Make", value: "NRK (In-House Make)", method: "Manufacturer label" },
+      { property: "Size Options", value: "3 x 2 FT / 2 x 1 FT", method: "Standard size check" },
+      { property: "Weight Range", value: "11 to 12 kg (for 3x2)", method: "Weighing scale verification" },
+      { property: "Support Type", value: "Single & Double Support", method: "Structural inspection" },
+    ]),
+    recommendations: [rec.msPlates, rec.secondaryCrfh, rec.shutterChannel],
+    section: "manufacturing",
+  }),
+  buildSecondaryProduct({
+    slug: "shutter-channel",
+    title: "Shutter Channel",
+    category: "Manufacturing Product",
+    eyebrow: "NRK IRON AND STEELS LLP",
+    badge: "Ready Stock Ex Indore yard",
+    summary: "In-house manufactured rolling shutter channels and side channels for secure fabrication.",
+    description:
+      "Shutter Channels from NRK are manufactured in-house using heavy-duty steel to provide strength and stability for rolling shutters. Sourced directly from our Indore yard.",
+    mainImage: shutterChannelImages[0] || CATALOG_IMAGES.purlin,
+    processImage: shutterChannelImages[0] || CATALOG_IMAGES.purlin,
+    gallery: shutterChannelImages,
+    specs: [
+      { label: "Make", value: "NRK (In-house)" },
+      { label: "Product", value: "Shutter Channel / Side Channel" },
+      { label: "Material", value: "Mild Steel (HR/CR)" },
+      { label: "Application", value: "Rolling Shutter Fabrication" },
+    ],
+    variants: ["Standard Shutter Channel", "Heavy Side Channel"],
+    technicalSpecs: withPurchaseTerms([
+      { property: "Make", value: "NRK (In-House)", method: "Manufacturer label" },
+      { property: "Material", value: "Mild Steel (HR/CR)", method: "Batch identification" },
+      { property: "Application", value: "Rolling shutter fabrication", method: "Structural specification" },
       { property: "Dispatch", value: "Bundled supply", method: "Logistics planning" },
     ]),
     recommendations: [rec.centering, rec.msPlates, rec.secondaryCrfh],
+    section: "manufacturing",
+  }),
+  buildSecondaryProduct({
+    slug: "ac-stand",
+    title: "AC Stand",
+    category: "Manufacturing Product",
+    eyebrow: "NRK IRON AND STEELS LLP",
+    badge: "In-House Manufactured",
+    summary: "Heavy-duty outdoor air conditioner stands and wall mounting brackets.",
+    description:
+      "AC Stands from NRK are manufactured in-house using durable structural steel. Designed to withstand heavy loads and harsh weather conditions to support AC outdoor units securely.",
+    mainImage: acStandImages[0] || CATALOG_IMAGES.centering,
+    processImage: acStandImages[0] || CATALOG_IMAGES.centering,
+    gallery: acStandImages,
+    specs: [
+      { label: "Make", value: "NRK (In-house)" },
+      { label: "Product", value: "AC Outdoor Unit Stand / Bracket" },
+      { label: "Material", value: "Mild Steel (Heavy-Duty)" },
+      { label: "Finish", value: "Anti-Rust Coated / Painted" },
+    ],
+    variants: ["Heavy Duty AC Stand", "Standard Wall Bracket"],
+    technicalSpecs: withPurchaseTerms([
+      { property: "Make", value: "NRK (In-House)", method: "Manufacturer label" },
+      { property: "Material", value: "Mild Steel (Heavy-Duty)", method: "Batch identification" },
+      { property: "Finish", value: "Anti-Rust Paint / Powder Coated", method: "Finish inspection" },
+      { property: "Application", value: "AC Outdoor Unit Mounting", method: "Installation SOP" },
+    ]),
+    recommendations: [rec.centering, rec.secondaryCrfh, rec.shutterChannel],
+    section: "manufacturing",
   }),
   buildSecondaryProduct({
     slug: "crc-metal-scrap",
@@ -812,7 +918,7 @@ export const productCardMeta: Array<{
   description: string;
   image: string;
   eyebrow?: string;
-  section: "prime" | "secondary";
+  section: string;
 }> = [
   ...primeEntries.map((p) => ({
     id: p.slug,
@@ -820,7 +926,7 @@ export const productCardMeta: Array<{
     title: p.title,
     description: p.summary,
     image: p.mainImage,
-    section: "prime" as const,
+    section: p.section || ("prime" as const),
   })),
   ...secondaryEntries.map((p) => ({
     id: p.slug,
@@ -829,6 +935,6 @@ export const productCardMeta: Array<{
     description: p.summary,
     image: p.mainImage,
     eyebrow: p.eyebrow,
-    section: "secondary" as const,
+    section: p.section || ("secondary" as const),
   })),
 ];
