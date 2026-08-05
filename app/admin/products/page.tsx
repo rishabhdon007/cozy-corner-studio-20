@@ -778,6 +778,7 @@ export default function CatalogManager() {
               <ul className="text-xs text-blue-700/90 list-disc list-inside space-y-1.5 pl-1 leading-relaxed">
                 <li>Make sure to preview the product or service page using the <strong>Preview Page</strong> button in the toolbar.</li>
                 <li>Verify specifications table, variant tags, and manufacturing process steps look correct.</li>
+                <li className="font-bold text-amber-800">Note: Committed changes will take up to 2-5 minutes to reflect in production.</li>
               </ul>
             </div>
 

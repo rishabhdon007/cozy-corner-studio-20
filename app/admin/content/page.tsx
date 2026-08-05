@@ -804,6 +804,7 @@ export default function ContentAdmin() {
               <ul className="text-xs text-blue-700/90 list-disc list-inside space-y-1.5 pl-1 leading-relaxed">
                 <li>Make sure to preview the pages using the <strong>Live Preview</strong> button.</li>
                 <li>Verify that all updated texts, metrics, and images look correct.</li>
+                <li className="font-bold text-amber-800">Note: Committed changes will take up to 2-5 minutes to reflect in production.</li>
               </ul>
             </div>
 

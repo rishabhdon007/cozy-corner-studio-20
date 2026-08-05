@@ -10,7 +10,34 @@ export function PreviewBanner() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
-      setIsPreview(searchParams.get("preview") === "true");
+      const activePreview = searchParams.get("preview") === "true";
+      setIsPreview(activePreview);
+
+      if (activePreview) {
+        const handleAnchorClick = (e: MouseEvent) => {
+          const target = e.target as HTMLElement;
+          const anchor = target.closest("a");
+          if (!anchor) return;
+
+          const href = anchor.getAttribute("href");
+          if (!href) return;
+
+          if (href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/admin")) {
+            try {
+              const url = new URL(href, window.location.origin);
+              if (!url.searchParams.has("preview")) {
+                url.searchParams.set("preview", "true");
+                anchor.setAttribute("href", url.pathname + url.search);
+              }
+            } catch (err) {
+              console.error("Failed to append preview param", err);
+            }
+          }
+        };
+
+        window.addEventListener("click", handleAnchorClick, { capture: true });
+        return () => window.removeEventListener("click", handleAnchorClick, { capture: true });
+      }
     }
   }, []);
 
