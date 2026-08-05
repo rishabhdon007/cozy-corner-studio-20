@@ -1,22 +1,83 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import dbJson from '@/data/db.json';
 
 export const dynamic = 'force-dynamic';
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 const dbPath = path.join(process.cwd(), 'src/data/db.json');
+
+// Helper to write file content directly to GitHub repo via REST API
+async function commitFileToGithub(filePath: string, contentBuffer: Buffer, message: string) {
+  const token = process.env.GITHUB_TOKEN;
+  const repoUrl = process.env.GITHUB_REPO_URL;
+  if (!token || !repoUrl) {
+    throw new Error('Missing GITHUB_TOKEN or GITHUB_REPO_URL env variables');
+  }
+
+  // Parse owner and repo name from GITHUB_REPO_URL
+  const cleanUrl = repoUrl.replace(/^(https?:\/\/)?(www\.)?github\.com\//, '');
+  const parts = cleanUrl.split('/');
+  const owner = parts[0];
+  const repo = parts[1]?.replace(/\.git$/, '');
+
+  if (!owner || !repo) {
+    throw new Error('Invalid GITHUB_REPO_URL format. Expected: github.com/owner/repo');
+  }
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+
+  // Get current file sha if it exists
+  let sha: string | undefined;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      sha = data.sha;
+    }
+  } catch (_) {
+    // Ignore error if file doesn't exist yet
+  }
+
+  // Put new file content
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message,
+      content: contentBuffer.toString('base64'),
+      sha,
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`GitHub REST API failed: ${errText}`);
+  }
+}
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type') || 'draft'; // default to draft
 
-    const fileContent = await fs.readFile(dbPath, 'utf8');
-    const data = JSON.parse(fileContent);
+    let data;
+    try {
+      const fileContent = await fs.readFile(dbPath, 'utf8');
+      data = JSON.parse(fileContent);
+    } catch (_) {
+      // Fallback to static bundled import on Vercel
+      data = dbJson;
+    }
 
     if (type === 'published') {
       return NextResponse.json(data.published);
@@ -33,51 +94,46 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action') || 'save'; // default to save draft
 
-    const fileContent = await fs.readFile(dbPath, 'utf8');
-    const data = JSON.parse(fileContent);
+    let data;
+    try {
+      const fileContent = await fs.readFile(dbPath, 'utf8');
+      data = JSON.parse(fileContent);
+    } catch (_) {
+      // Fallback to static bundled import on Vercel
+      data = dbJson;
+    }
 
     if (action === 'commit') {
       // Copy draft to published
       data.published = JSON.parse(JSON.stringify(data.draft));
-      await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
+      
+      // Write locally if possible (will work in local dev)
+      try {
+        await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
+      } catch (_) {
+        // Ignore write failures on read-only environments (Vercel)
+      }
 
       // Check if automatic GitHub push is enabled
-      if (process.env.GITHUB_PUSH === 'true') {
+      const token = process.env.GITHUB_TOKEN;
+      const repoUrl = process.env.GITHUB_REPO_URL;
+      
+      if (token && repoUrl) {
         try {
-          // Stage modified db.json and any uploads
-          await execAsync('git add src/data/db.json');
-          
-          // Check if there are public/uploads folder to add
-          try {
-            await execAsync('git add public/uploads/');
-          } catch (_) {
-            // Ignore if uploads directory doesn't exist yet
-          }
-
-          // Commit changes
-          await execAsync('git commit -m "chore: content updates from admin panel"');
-
-          const token = process.env.GITHUB_TOKEN;
-          const repoUrl = process.env.GITHUB_REPO_URL; // e.g. github.com/owner/repo
-
-          if (token && repoUrl) {
-            // Clean up repoUrl format (remove https:// or git@ if present)
-            const cleanUrl = repoUrl.replace(/^(https?:\/\/)?(git@)?/, '').replace(/:/g, '/');
-            await execAsync(`git push https://${token}@${cleanUrl} main`);
-          } else {
-            // Fallback to standard push using system git credentials
-            await execAsync('git push origin main');
-          }
-
-          return NextResponse.json({ 
-            success: true, 
-            message: 'Committed & pushed to GitHub successfully! Production build triggered.' 
+          await commitFileToGithub(
+            'src/data/db.json',
+            Buffer.from(JSON.stringify(data, null, 2), 'utf8'),
+            'chore: publish catalog updates from admin panel'
+          );
+          return NextResponse.json({
+            success: true,
+            message: 'Committed & pushed to GitHub successfully! Production build triggered.'
           });
         } catch (gitErr: any) {
-          console.error("Git operation failed:", gitErr);
-          return NextResponse.json({ 
-            success: true, 
-            message: 'Saved changes, but GitHub push failed: ' + (gitErr.stderr || gitErr.message) 
+          console.error("Git REST API operation failed:", gitErr);
+          return NextResponse.json({
+            success: true,
+            message: 'Saved changes, but GitHub push failed: ' + gitErr.message
           });
         }
       }
@@ -86,7 +142,29 @@ export async function POST(request: Request) {
     } else {
       // Save to draft
       data.draft = body;
-      await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
+      
+      // Write locally if possible (will work in local dev)
+      try {
+        await fs.writeFile(dbPath, JSON.stringify(data, null, 2), 'utf8');
+      } catch (_) {
+        // Ignore write failures on read-only environments (Vercel)
+      }
+
+      // In Vercel serverless environment, draft state must be committed to git to persist
+      const token = process.env.GITHUB_TOKEN;
+      const repoUrl = process.env.GITHUB_REPO_URL;
+      if (token && repoUrl && process.env.VERCEL) {
+        try {
+          await commitFileToGithub(
+            'src/data/db.json',
+            Buffer.from(JSON.stringify(data, null, 2), 'utf8'),
+            'chore: save catalog draft from admin panel'
+          );
+        } catch (err: any) {
+          console.error("Failed to commit draft to GitHub:", err);
+        }
+      }
+
       return NextResponse.json({ success: true, message: 'Draft saved successfully' });
     }
   } catch (error) {
