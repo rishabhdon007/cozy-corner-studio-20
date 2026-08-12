@@ -204,7 +204,7 @@
     "missionVision": {
       "mission": [
         {
-          "title": "Our Mission",
+          "title": "Our Missionn",
           "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
           "icon": "flag"
         },
@@ -264,66 +264,6 @@
           "HR sheets",
           "HR coils"
         ]
-      },
-      {
-        "slug": "hr-checkered-sheets",
-        "title": "Hot Rolled Checkered Sheets & Coils",
-        "category": "Prime Material",
-        "eyebrow": "Prime Supply",
-        "badge": "Industrial Grade: HR Checkered",
-        "summary": "Anti-slip checkered HR sheets and coils for flooring, platforms, and industrial walkways.",
-        "description": "Hot Rolled Checkered Sheets and Coils combine the strength of HR material with a raised pattern for grip and safety. Supplied from prime manufacturers for industrial flooring, stair treads, and platform applications.",
-        "mainImage": "/uploads/1786522030579-iron.png",
-        "kind": "product",
-        "section": "prime",
-        "specs": [
-          {
-            "label": "Make",
-            "value": "SAIL, Jindal, AMNS, TATA, Bhushan Power"
-          },
-          {
-            "label": "Grade",
-            "value": "1079 / 2062"
-          },
-          {
-            "label": "Thickness",
-            "value": "1.6mm & above"
-          },
-          {
-            "label": "Size",
-            "value": "1250 / 1500 x 2500 / 5000 / 6300"
-          }
-        ],
-        "variants": [
-          "Checkered sheets",
-          "Checkered coils",
-          "HR chequered plate"
-        ],
-        "process": [
-          "Requirement review",
-          "Material allocation",
-          "Processing if required",
-          "Dispatch and delivery"
-        ],
-        "featureCards": [
-          {
-            "icon": "gauge",
-            "title": "Prime Quality",
-            "body": "Material sourced from leading national brands with grade and size verification before dispatch."
-          },
-          {
-            "icon": "shield",
-            "title": "Verified Supply",
-            "body": "Batch documentation and inspection support transparent procurement for repeat industrial orders."
-          },
-          {
-            "icon": "truck",
-            "title": "Timely Delivery",
-            "body": "Ready stock and coordinated transport help projects stay on schedule across Central India."
-          }
-        ],
-        "offerings": [],
-        "gallery": []
       }
     ],
     "services": []
@@ -533,7 +473,7 @@
     "missionVision": {
       "mission": [
         {
-          "title": "Our Mission",
+          "title": "Our Missionn",
           "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
           "icon": "flag"
         },
