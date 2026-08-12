@@ -204,7 +204,7 @@
     "missionVision": {
       "mission": [
         {
-          "title": "Our Missionn",
+          "title": "Our Mission",
           "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
           "icon": "flag"
         },
@@ -266,7 +266,123 @@
         ]
       }
     ],
-    "services": []
+    "services": [],
+    "leadership": [
+      {
+        "name": "Mr. Nimesh Kothari",
+        "role": "Founder & Chairman",
+        "description": "Guides corporate strategy, industrial scaling, and steel mill relationships with three decades of trust.",
+        "image": "/company/Nimesh_sir.jpg"
+      },
+      {
+        "name": "Mr. Nishant Kothari",
+        "role": "Chief Executive Officer",
+        "description": "Directs operational workflows, business development, and supply-chain digitisation frameworks.",
+        "image": "/company/Nishant_sir.jpeg"
+      },
+      {
+        "name": "Mr. Dhaval Kothari",
+        "role": "Managing Director",
+        "description": "Leads technical processing plants, quality control protocols, and nationwide distribution logistics.",
+        "image": "/company/dhaval_kothari_updated.png"
+      }
+    ],
+    "marketingTeam": [
+      {
+        "name": "Mr. Navin Vishwakarama",
+        "role": "Marketing Team",
+        "description": "Executing data-driven marketing strategies to foster client relationships and drive growth across new territories.",
+        "image": "/company/navin_marketing.png"
+      },
+      {
+        "name": "Mr. Ritik Dhanotiya",
+        "role": "Marketing Team",
+        "description": "Driving brand awareness and expanding market reach through innovative campaigns and strategic communications.",
+        "image": "/company/ritik_marketing.png"
+      }
+    ],
+    "gallery": {
+      "eyebrow": "Visual Showcase",
+      "title": "Industrial Gallery",
+      "items": [
+        {
+          "id": "slitting",
+          "title": "Heavy Slitting Operations",
+          "image": "/Gallary/Heavy_Slitting_Operations.png",
+          "className": "md:col-span-2 md:row-span-2 min-h-[350px] md:min-h-[450px] lg:min-h-[600px]"
+        },
+        {
+          "id": "warehouse",
+          "title": "Warehouse Operations",
+          "image": "/Gallary/Warehouse_Operations.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "distribution",
+          "title": "Distribution Network",
+          "image": "/Gallary/distribution.webp",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "dispatch",
+          "title": "Dispatch & Logistics Hub",
+          "image": "/Gallary/Dispatch_Logistics_Hub.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "ctl",
+          "title": "Cut-to-Length Processing",
+          "image": "/Gallary/Cut_to_Length_Processing.png",
+          "className": "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "storage",
+          "title": "Premium Steel Storage",
+          "image": "/Gallary/Premium_Steel_Storage.png",
+          "className": "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "capacity",
+          "title": "Industrial Capacity",
+          "image": "/Gallary/Industrial_Capacity.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        }
+      ]
+    },
+    "contact": {
+      "eyebrow": "Get In Touch",
+      "title": "Contact Our Team",
+      "description": "Have questions about ready stock, custom processing, or pricing? Our team is here to assist you.",
+      "phone": "+91 98260 52831",
+      "email": "info@nrkironsteel.com",
+      "address": "NRK Iron & Steel LLP, Indore, Madhya Pradesh, India",
+      "googleMapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.5!2d75.85!3d22.71!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDQyJzM2LjAiTiA3NcKwNTEnMDAuMCJF!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin"
+    },
+    "qualityControl": {
+      "eyebrow": "Quality Assurance",
+      "title": "Stringent Quality Control",
+      "lead": "As an ISO 9001:2008 certified enterprise, NRK Iron & Steel is committed to excellence in every aspect of our operations. From material sourcing to final dispatch, our rigorous quality assurance protocols ensure you receive exactly what you specify.",
+      "image": "/uploads/1786524998282-Dispatch_Logistics_Hub.png",
+      "badgeValue": "ISO",
+      "badgeLabel": "9001:2008 Certified",
+      "features": [
+        {
+          "icon": "verified",
+          "title": "ISO 9001:2008 Certified",
+          "description": "Internationally recognized standards for quality management systems."
+        },
+        {
+          "icon": "scale",
+          "title": "High-Accuracy Weighing",
+          "description": "Industrial bench and platform scales ensuring exact weight measurements for every order."
+        },
+        {
+          "icon": "fact_check",
+          "title": "Rigorous Material Inspection",
+          "description": "Verification of precise grades (e.g., E250, E350, CRCA) and thicknesses before processing."
+        }
+      ]
+    }
   },
   "published": {
     "hero": {
@@ -473,7 +589,7 @@
     "missionVision": {
       "mission": [
         {
-          "title": "Our Missionn",
+          "title": "Our Mission",
           "description": "To deliver uncompromising business excellence by providing meticulously processed steel products, fostering long-term partnerships through reliability and trust.",
           "icon": "flag"
         },
@@ -535,6 +651,122 @@
         ]
       }
     ],
-    "services": []
+    "services": [],
+    "leadership": [
+      {
+        "name": "Mr. Nimesh Kothari",
+        "role": "Founder & Chairman",
+        "description": "Guides corporate strategy, industrial scaling, and steel mill relationships with three decades of trust.",
+        "image": "/company/Nimesh_sir.jpg"
+      },
+      {
+        "name": "Mr. Nishant Kothari",
+        "role": "Chief Executive Officer",
+        "description": "Directs operational workflows, business development, and supply-chain digitisation frameworks.",
+        "image": "/company/Nishant_sir.jpeg"
+      },
+      {
+        "name": "Mr. Dhaval Kothari",
+        "role": "Managing Director",
+        "description": "Leads technical processing plants, quality control protocols, and nationwide distribution logistics.",
+        "image": "/company/dhaval_kothari_updated.png"
+      }
+    ],
+    "marketingTeam": [
+      {
+        "name": "Mr. Navin Vishwakarama",
+        "role": "Marketing Team",
+        "description": "Executing data-driven marketing strategies to foster client relationships and drive growth across new territories.",
+        "image": "/company/navin_marketing.png"
+      },
+      {
+        "name": "Mr. Ritik Dhanotiya",
+        "role": "Marketing Team",
+        "description": "Driving brand awareness and expanding market reach through innovative campaigns and strategic communications.",
+        "image": "/company/ritik_marketing.png"
+      }
+    ],
+    "gallery": {
+      "eyebrow": "Visual Showcase",
+      "title": "Industrial Gallery",
+      "items": [
+        {
+          "id": "slitting",
+          "title": "Heavy Slitting Operations",
+          "image": "/Gallary/Heavy_Slitting_Operations.png",
+          "className": "md:col-span-2 md:row-span-2 min-h-[350px] md:min-h-[450px] lg:min-h-[600px]"
+        },
+        {
+          "id": "warehouse",
+          "title": "Warehouse Operations",
+          "image": "/Gallary/Warehouse_Operations.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "distribution",
+          "title": "Distribution Network",
+          "image": "/Gallary/distribution.webp",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "dispatch",
+          "title": "Dispatch & Logistics Hub",
+          "image": "/Gallary/Dispatch_Logistics_Hub.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "ctl",
+          "title": "Cut-to-Length Processing",
+          "image": "/Gallary/Cut_to_Length_Processing.png",
+          "className": "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "storage",
+          "title": "Premium Steel Storage",
+          "image": "/Gallary/Premium_Steel_Storage.png",
+          "className": "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        },
+        {
+          "id": "capacity",
+          "title": "Industrial Capacity",
+          "image": "/Gallary/Industrial_Capacity.png",
+          "className": "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
+        }
+      ]
+    },
+    "contact": {
+      "eyebrow": "Get In Touch",
+      "title": "Contact Our Team",
+      "description": "Have questions about ready stock, custom processing, or pricing? Our team is here to assist you.",
+      "phone": "+91 98260 52831",
+      "email": "info@nrkironsteel.com",
+      "address": "NRK Iron & Steel LLP, Indore, Madhya Pradesh, India",
+      "googleMapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.5!2d75.85!3d22.71!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDQyJzM2LjAiTiA3NcKwNTEnMDAuMCJF!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin"
+    },
+    "qualityControl": {
+      "eyebrow": "Quality Assurance",
+      "title": "Stringent Quality Control",
+      "lead": "As an ISO 9001:2008 certified enterprise, NRK Iron & Steel is committed to excellence in every aspect of our operations. From material sourcing to final dispatch, our rigorous quality assurance protocols ensure you receive exactly what you specify.",
+      "image": "/uploads/1786524998282-Dispatch_Logistics_Hub.png",
+      "badgeValue": "ISO",
+      "badgeLabel": "9001:2008 Certified",
+      "features": [
+        {
+          "icon": "verified",
+          "title": "ISO 9001:2008 Certified",
+          "description": "Internationally recognized standards for quality management systems."
+        },
+        {
+          "icon": "scale",
+          "title": "High-Accuracy Weighing",
+          "description": "Industrial bench and platform scales ensuring exact weight measurements for every order."
+        },
+        {
+          "icon": "fact_check",
+          "title": "Rigorous Material Inspection",
+          "description": "Verification of precise grades (e.g., E250, E350, CRCA) and thicknesses before processing."
+        }
+      ]
+    }
   }
 }
