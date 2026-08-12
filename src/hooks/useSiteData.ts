@@ -6,7 +6,7 @@ let cachedData: Record<string, any> = {};
 let fetchPromises: Record<string, Promise<any> | null> = {};
 
 // Helper to clear cache
-function clearSiteDataCache() {
+export function clearSiteDataCache() {
   cachedData = {};
   fetchPromises = {};
 }
@@ -46,27 +46,8 @@ export function useSiteData<T>(key: string, defaultValue: T): T {
     const searchParams = new URLSearchParams(window.location.search);
     const isPreview = searchParams.get("preview") === "true";
 
-    // Instant localStorage preview support for serverless deploy
-    if (isPreview) {
-      const localData = localStorage.getItem("nrk_draft_preview_data");
-      if (localData) {
-        try {
-          const parsed = JSON.parse(localData);
-          if (parsed && parsed.draft && parsed.draft[key] !== undefined) {
-            setData(parsed.draft[key]);
-            return;
-          }
-        } catch (e) {
-          console.error("Failed to parse localStorage preview data", e);
-        }
-      }
-    }
-
-    const dataType = isPreview ? "draft" : "published";
-
-    // Setup an updater interval or trigger on focus
     const updateData = () => {
-      // Check localStorage again on update/focus
+      // Check localStorage first for instant draft preview across serverless environments
       if (isPreview) {
         const localData = localStorage.getItem("nrk_draft_preview_data");
         if (localData) {
@@ -76,12 +57,15 @@ export function useSiteData<T>(key: string, defaultValue: T): T {
               setData(parsed.draft[key]);
               return;
             }
-          } catch (_) {}
+          } catch (e) {
+            console.error("Failed to parse localStorage preview data", e);
+          }
         }
       }
 
+      const dataType = isPreview ? "draft" : "published";
       fetchSiteData(dataType).then((db) => {
-        if (db && db[key]) {
+        if (db && db[key] !== undefined) {
           setData(db[key]);
         }
       });
@@ -89,9 +73,19 @@ export function useSiteData<T>(key: string, defaultValue: T): T {
 
     updateData();
 
-    // Re-fetch when the page is focused to ensure live preview updates instantly
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "nrk_draft_preview_data") {
+        clearSiteDataCache();
+        updateData();
+      }
+    };
+
     window.addEventListener("focus", updateData);
-    return () => window.removeEventListener("focus", updateData);
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("focus", updateData);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [key]);
 
   return data;

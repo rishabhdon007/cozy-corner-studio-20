@@ -1,90 +1,91 @@
 "use client";
 
 import { SiteImage } from "@/components/site/SiteImage";
-import { SITE_IMAGES } from "@/lib/siteImages";
 import { cn } from "@/lib/utils";
+import { useSiteData } from "@/hooks/useSiteData";
+import db from "@/data/db.json";
 
 type GalleryItem = {
   id: string;
   title: string;
   image: string;
-  className: string;
+  className?: string;
 };
 
-const galleryItems: GalleryItem[] = [
-  {
-    id: "slitting",
-    title: "Heavy Slitting Operations",
-    image: "/Gallary/Heavy_Slitting_Operations.png",
-    className: "md:col-span-2 md:row-span-2 min-h-[350px] md:min-h-[450px] lg:min-h-[600px]",
-  },
-  {
-    id: "warehouse",
-    title: "Warehouse Operations",
-    image: "/Gallary/Warehouse_Operations.png",
-    className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-  {
-    id: "distribution",
-    title: "Distribution Network",
-    image: "/Gallary/distribution.webp",
-    className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-  {
-    id: "dispatch",
-    title: "Dispatch & Logistics Hub",
-    image: "/Gallary/Dispatch_Logistics_Hub.png",
-    className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-  {
-    id: "ctl",
-    title: "Cut-to-Length Processing",
-    image: "/Gallary/Cut_to_Length_Processing.png",
-    className: "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-  {
-    id: "storage",
-    title: "Premium Steel Storage",
-    image: "/Gallary/Premium_Steel_Storage.png",
-    className: "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-  {
-    id: "capacity",
-    title: "Industrial Capacity",
-    image: "/Gallary/Industrial_Capacity.png",
-    className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
-  },
-];
-
-const highlights = [
-  "Slitting, cut-to-length, annealing, and coated sheet processing under one roof",
-  "Large-format yards with crane handling, weighing, and ready stock dispatch",
-  "Pan-India logistics from Indore to Mumbai, Gujarat, Rajasthan, and Punjab",
-] as const;
+const defaultGallery = {
+  eyebrow: "Visual Showcase",
+  title: "Industrial Gallery",
+  items: [
+    {
+      id: "slitting",
+      title: "Heavy Slitting Operations",
+      image: "/Gallary/Heavy_Slitting_Operations.png",
+      className: "md:col-span-2 md:row-span-2 min-h-[350px] md:min-h-[450px] lg:min-h-[600px]",
+    },
+    {
+      id: "warehouse",
+      title: "Warehouse Operations",
+      image: "/Gallary/Warehouse_Operations.png",
+      className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+    {
+      id: "distribution",
+      title: "Distribution Network",
+      image: "/Gallary/distribution.webp",
+      className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+    {
+      id: "dispatch",
+      title: "Dispatch & Logistics Hub",
+      image: "/Gallary/Dispatch_Logistics_Hub.png",
+      className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+    {
+      id: "ctl",
+      title: "Cut-to-Length Processing",
+      image: "/Gallary/Cut_to_Length_Processing.png",
+      className: "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+    {
+      id: "storage",
+      title: "Premium Steel Storage",
+      image: "/Gallary/Premium_Steel_Storage.png",
+      className: "md:col-span-2 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+    {
+      id: "capacity",
+      title: "Industrial Capacity",
+      image: "/Gallary/Industrial_Capacity.png",
+      className: "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]",
+    },
+  ],
+};
 
 export function IndustrialGallerySection() {
+  const galleryData = useSiteData("gallery", (db.published as any).gallery || defaultGallery);
+  const items: GalleryItem[] = galleryData?.items || defaultGallery.items;
+
   return (
     <section className="overflow-hidden bg-white py-16 md:py-24 lg:py-32">
       <div className="mx-auto max-w-container-max px-gutter">
-        
         {/* Header Section */}
         <div data-scroll-reveal="up" className="mx-auto max-w-4xl text-center mb-16 md:mb-20">
           <span className="font-label-md mb-4 inline-block text-[10px] sm:text-xs font-black uppercase tracking-[0.22em] text-secondary">
-            Visual Showcase
+            {galleryData?.eyebrow || "Visual Showcase"}
           </span>
           <h2 className="font-display text-[clamp(2.5rem,5vw,4rem)] font-black leading-[1.05] text-primary">
-            Industrial Gallery
+            {galleryData?.title || "Industrial Gallery"}
           </h2>
         </div>
 
         {/* Gallery Grid */}
         <div data-scroll-reveal="up" className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-          {galleryItems.map((item) => (
+          {items.map((item, index) => (
             <article
-              key={item.id}
+              key={item.id || index}
               className={cn(
                 "group relative overflow-hidden rounded-2xl bg-slate-100 shadow-md ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20",
-                item.className
+                item.className || "md:col-span-1 md:row-span-1 min-h-[250px] lg:min-h-[300px]"
               )}
             >
               <SiteImage
@@ -104,7 +105,6 @@ export function IndustrialGallerySection() {
             </article>
           ))}
         </div>
-
       </div>
     </section>
   );

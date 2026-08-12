@@ -104,8 +104,10 @@ export async function POST(request: Request) {
     }
 
     if (action === 'commit') {
-      // Copy draft to published
-      data.published = JSON.parse(JSON.stringify(data.draft));
+      // Handle full body payload if passed, or fall back to data.draft
+      const draftState = body.draft || (Object.keys(body).length > 0 && !body.draft && !body.published ? body : data.draft);
+      data.draft = draftState;
+      data.published = JSON.parse(JSON.stringify(draftState));
       
       // Write locally if possible (will work in local dev)
       try {
@@ -114,7 +116,7 @@ export async function POST(request: Request) {
         // Ignore write failures on read-only environments (Vercel)
       }
 
-      // Check if automatic GitHub push is enabled
+      // Single atomic commit to GitHub
       const token = process.env.GITHUB_TOKEN;
       const repoUrl = process.env.GITHUB_REPO_URL;
       
@@ -123,24 +125,26 @@ export async function POST(request: Request) {
           await commitFileToGithub(
             'src/data/db.json',
             Buffer.from(JSON.stringify(data, null, 2), 'utf8'),
-            'chore: publish catalog updates from admin panel'
+            'chore: publish catalog & content updates from admin panel'
           );
           return NextResponse.json({
             success: true,
-            message: 'Committed & pushed to GitHub successfully! Production build triggered.'
+            message: 'Committed & pushed to GitHub successfully! Production build triggered.',
+            data
           });
         } catch (gitErr: any) {
           console.error("Git REST API operation failed:", gitErr);
           return NextResponse.json({
             success: true,
-            message: 'Saved changes, but GitHub push failed: ' + gitErr.message
+            message: 'Saved changes, but GitHub push failed: ' + gitErr.message,
+            data
           });
         }
       }
 
-      return NextResponse.json({ success: true, message: 'Committed successfully to local file' });
+      return NextResponse.json({ success: true, message: 'Committed successfully to local file', data });
     } else {
-      // Save to draft
+      // Save to draft - DO NOT push to GitHub here (prevents double Vercel builds)
       data.draft = body;
       
       // Write locally if possible (will work in local dev)
@@ -150,22 +154,7 @@ export async function POST(request: Request) {
         // Ignore write failures on read-only environments (Vercel)
       }
 
-      // In Vercel serverless environment, draft state must be committed to git to persist
-      const token = process.env.GITHUB_TOKEN;
-      const repoUrl = process.env.GITHUB_REPO_URL;
-      if (token && repoUrl && process.env.VERCEL) {
-        try {
-          await commitFileToGithub(
-            'src/data/db.json',
-            Buffer.from(JSON.stringify(data, null, 2), 'utf8'),
-            'chore: save catalog draft from admin panel'
-          );
-        } catch (err: any) {
-          console.error("Failed to commit draft to GitHub:", err);
-        }
-      }
-
-      return NextResponse.json({ success: true, message: 'Draft saved successfully' });
+      return NextResponse.json({ success: true, message: 'Draft saved successfully', draft: data.draft });
     }
   } catch (error) {
     return NextResponse.json({ error: 'Failed to write to database' }, { status: 500 });

@@ -68,6 +68,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    const MAX_SIZE = 1 * 1024 * 1024; // 1MB
+    if (file.size > MAX_SIZE) {
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      return NextResponse.json(
+        { error: `File size exceeds 1MB limit (selected file is ${sizeMB} MB). Please select an image under 1MB.` },
+        { status: 400 }
+      );
+    }
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
@@ -79,17 +87,6 @@ export async function POST(req: Request) {
       await fs.writeFile(filePath, buffer);
     } catch (_) {
       // Ignore write failures in read-only environment (Vercel)
-    }
-
-    // Write to GitHub if token exists (will work in Vercel prod)
-    const token = process.env.GITHUB_TOKEN;
-    const repoUrl = process.env.GITHUB_REPO_URL;
-    if (token && repoUrl) {
-      try {
-        await commitFileToGithub(`public/uploads/${filename}`, buffer, `chore: upload image ${filename}`);
-      } catch (err: any) {
-        console.error("Failed to commit uploaded image to GitHub:", err);
-      }
     }
 
     return NextResponse.json({ url: `/uploads/${filename}` });

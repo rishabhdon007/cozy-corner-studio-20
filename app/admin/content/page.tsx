@@ -5,96 +5,61 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash, ExternalLink, Save, Check, Layout, Sparkles, MessageSquare, Briefcase, FileText } from "lucide-react";
-
-// Image Field Helper Component with Real-time Preview and Local Upload Support
-const ImageField = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => {
-  const [uploading, setUploading] = useState(false);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const json = await res.json();
-      if (json.url) {
-        onChange(json.url);
-      } else {
-        alert("Upload failed: " + (json.error || "unknown error"));
-      }
-    } catch (err) {
-      alert("Failed to upload file");
-    }
-    setUploading(false);
-  };
-
-  const uploadId = `file-upload-${label.replace(/[^a-zA-Z0-9]/g, "-")}`;
-
-  return (
-    <div className="space-y-2">
-      <Label className="font-semibold text-gray-700">{label}</Label>
-      <div className="flex gap-4 items-center">
-        <div className="flex-1 flex flex-col gap-2">
-          <Input 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)} 
-            placeholder="e.g. /company/Nimesh_sir.jpg" 
-          />
-          <div className="flex items-center gap-2">
-            <input
-              type="file"
-              accept="image/*"
-              id={uploadId}
-              className="hidden"
-              onChange={handleFileChange}
-              disabled={uploading}
-            />
-            <label
-              htmlFor={uploadId}
-              className="px-3 py-1 bg-gray-100 hover:bg-gray-200 border text-xs font-bold rounded-lg cursor-pointer transition-all inline-block select-none disabled:opacity-50"
-            >
-              {uploading ? "Uploading..." : "Upload Image"}
-            </label>
-            {value && <span className="text-[10px] text-gray-400 truncate max-w-[200px]">{value}</span>}
-          </div>
-        </div>
-        <div className="w-16 h-16 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center shrink-0 shadow-sm">
-          <img 
-            src={value || "/company_logo.webp"} 
-            alt="Preview" 
-            className="object-cover w-full h-full" 
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "https://placehold.co/100x100?text=No+Image";
-            }} 
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
+import { ImageField } from "@/components/admin/ImageField";
+import {
+  Plus,
+  Trash,
+  ExternalLink,
+  Save,
+  Home,
+  Info,
+  Package,
+  Image as ImageIcon,
+  Phone,
+  RotateCcw,
+  GitCommit,
+  CheckCircle2,
+  Users,
+  Award,
+  ShieldCheck,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
 
 export default function ContentAdmin() {
   const [data, setData] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [committing, setCommitting] = useState(false);
   const [message, setMessage] = useState("");
-  const [activePreviewTab, setActivePreviewTab] = useState("home");
+  const [activePageTab, setActivePageTab] = useState<"home" | "about" | "products" | "gallery" | "contact">("home");
   const [activeSection, setActiveSection] = useState("hero");
   const [showCommitModal, setShowCommitModal] = useState(false);
 
   useEffect(() => {
+    let localDraft: any = null;
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("nrk_draft_preview_data");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.draft) localDraft = parsed.draft;
+        }
+      } catch (_) {}
+    }
+
     fetch("/api/admin/data?type=draft")
       .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch((err) => console.error("Failed to load data", err));
+      .then((serverData) => {
+        if (localDraft) {
+          setData({ ...serverData, ...localDraft });
+        } else {
+          setData(serverData);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load server draft", err);
+        if (localDraft) setData(localDraft);
+      });
   }, []);
 
   const handleSave = async (updatedData = data) => {
@@ -103,723 +68,1288 @@ export default function ContentAdmin() {
       localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: updatedData }));
     }
     try {
-      await fetch("/api/admin/data?action=save", {
+      const res = await fetch("/api/admin/data?action=save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
-      setMessage("Draft saved successfully!");
+      const json = await res.json();
+      if (res.ok) {
+        setMessage("Draft saved successfully!");
+      } else {
+        setMessage(json.error || "Saved to local draft.");
+      }
     } catch (err) {
-      setMessage("Failed to save.");
+      setMessage("Draft saved in browser cache.");
     }
     setSaving(false);
-    setTimeout(() => setMessage(""), 3000);
+    setTimeout(() => setMessage(""), 3500);
   };
 
   const handleCommit = async () => {
     setCommitting(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: data }));
+    }
     try {
-      await fetch("/api/admin/data?action=save", {
+      const res = await fetch("/api/admin/data?action=commit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ draft: data, published: data }),
       });
-      await fetch("/api/admin/data?action=commit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      });
-      setMessage("All edits are committed and live!");
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setMessage(json.message || "All edits are committed to GitHub & live build triggered!");
+        setShowCommitModal(false);
+      } else {
+        setMessage(json.message || json.error || "Failed to commit.");
+      }
     } catch (err) {
-      setMessage("Failed to commit.");
+      setMessage("Failed to execute commit.");
     }
     setCommitting(false);
+    setTimeout(() => setMessage(""), 4000);
+  };
+
+  const handleResetDraft = async () => {
+    if (!confirm("Are you sure you want to discard your current draft and reset to live published site data?")) {
+      return;
+    }
+    localStorage.removeItem("nrk_draft_preview_data");
+    try {
+      const res = await fetch("/api/admin/data?type=published");
+      const pubData = await res.json();
+      setData(pubData);
+      setMessage("Draft reset to live published data!");
+    } catch (_) {
+      setMessage("Failed to reset draft.");
+    }
     setTimeout(() => setMessage(""), 3000);
   };
 
-  const openPreview = () => {
+  const openPreview = (page: string = activePageTab) => {
     let path = "/?preview=true";
-    if (activePreviewTab === "about") path = "/about?preview=true";
-    if (activePreviewTab === "services") path = "/services?preview=true";
+    if (page === "about") path = "/about?preview=true";
+    if (page === "products") path = "/services?preview=true";
+    if (page === "gallery") path = "/gallery?preview=true";
+    if (page === "contact") path = "/contact?preview=true";
     window.open(path, "_blank");
   };
 
   const updateKey = (section: string, key: string, value: any) => {
-    setData({
+    const updated = {
       ...data,
       [section]: {
-        ...data[section],
+        ...data?.[section],
         [key]: value,
       },
-    });
+    };
+    setData(updated);
   };
 
-  const menuItems = [
-    { id: "hero", label: "Home Hero", icon: Sparkles },
-    { id: "stats", label: "Home Stats", icon: Layout },
-    { id: "servicesSection", label: "Services Intro", icon: Briefcase },
-    { id: "why-us", label: "Why Choose Us", icon: Sparkles },
-    { id: "partners", label: "Partners & Brands", icon: Layout },
-    { id: "testimonials", label: "Testimonials", icon: MessageSquare },
-    { id: "about", label: "About Hero", icon: Sparkles },
-    { id: "journey", label: "Company Journey", icon: Layout },
-    { id: "philosophy", label: "Mission & Vision", icon: Sparkles },
-    { id: "cta", label: "Connect CTA & Brochure", icon: FileText },
-  ];
+  const updateNestedArray = (section: string, index: number, field: string, value: any) => {
+    const arr = [...(data?.[section] || [])];
+    arr[index] = { ...arr[index], [field]: value };
+    const updated = { ...data, [section]: arr };
+    setData(updated);
+  };
 
-  if (!data) return <div className="p-10 text-center font-semibold text-gray-500">Loading Content Settings...</div>;
+  const addArrayItem = (section: string, newItem: any) => {
+    const arr = [...(data?.[section] || []), newItem];
+    const updated = { ...data, [section]: arr };
+    setData(updated);
+  };
+
+  const removeArrayItem = (section: string, index: number) => {
+    const arr = [...(data?.[section] || [])];
+    arr.splice(index, 1);
+    const updated = { ...data, [section]: arr };
+    setData(updated);
+  };
+
+  // Section list per page tab
+  const getPageSections = () => {
+    switch (activePageTab) {
+      case "home":
+        return [
+          { id: "hero", label: "Hero Banner" },
+          { id: "stats", label: "Key Metrics & Stats" },
+          { id: "secondary", label: "Secondary Material" },
+          { id: "partners", label: "Client Logos" },
+          { id: "testimonials", label: "Testimonials" },
+          { id: "whyChooseUs", label: "Why Choose Us" },
+          { id: "connectCta", label: "Connect CTA" },
+        ];
+      case "about":
+        return [
+          { id: "aboutHero", label: "About Hero & Banner" },
+          { id: "journey", label: "Company Journey (30+ Yrs)" },
+          { id: "missionVision", label: "Mission & Vision" },
+          { id: "leadership", label: "Founders & Leadership" },
+          { id: "marketingTeam", label: "Marketing Team" },
+        ];
+      case "products":
+        return [
+          { id: "productsOverview", label: "Catalog Overview" },
+          { id: "qualityControl", label: "Quality Assurance & Control" },
+        ];
+      case "gallery":
+        return [{ id: "galleryGrid", label: "Industrial Gallery Photos" }];
+      case "contact":
+        return [{ id: "contactInfo", label: "Contact Info & Location" }];
+      default:
+        return [];
+    }
+  };
+
+  if (!data) {
+    return (
+      <div className="flex h-[70vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+          <span className="text-sm font-bold text-gray-500">Loading Admin CMS & Catalog Data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  const sectionsList = getPageSections();
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      {/* Top Banner Control Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+    <div className="max-w-7xl mx-auto space-y-6 pb-20">
+      {/* HEADER CONTROLS BAR */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Website Pages Content Editor</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage taglines, sliders, stats, testimonials, and company philosophy.</p>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          {message && (
-            <span className="text-sm font-semibold text-green-600 bg-green-50 px-3 py-1.5 rounded-lg border border-green-200 flex items-center gap-1.5 animate-pulse">
-              <Check className="h-4 w-4" /> {message}
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
+              NRK CMS Manager
             </span>
-          )}
-          
-          <select 
-            value={activePreviewTab} 
-            onChange={(e) => setActivePreviewTab(e.target.value)}
-            className="border rounded-lg text-sm px-3 py-2 bg-gray-50 font-medium"
+          </div>
+          <h1 className="text-2xl font-black text-gray-900 tracking-tight mt-1">
+            Website Page & Section CMS
+          </h1>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Button
+            onClick={() => handleSave()}
+            disabled={saving}
+            variant="outline"
+            className="h-9 px-3.5 font-bold border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 rounded-xl text-xs"
           >
-            <option value="home">Preview Home Page</option>
-            <option value="about">Preview About Us</option>
-            <option value="services">Preview Products Page</option>
-          </select>
-
-          <Button variant="outline" onClick={openPreview} className="flex items-center gap-1.5">
-            <ExternalLink className="h-4 w-4" /> Live Preview
+            <Save className="h-3.5 w-3.5 text-blue-600" />
+            {saving ? "Saving..." : "Save Draft"}
           </Button>
 
-          <Button variant="secondary" onClick={() => handleSave(data)} disabled={saving} className="flex items-center gap-1.5">
-            <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Draft"}
+          <Button
+            onClick={() => setShowCommitModal(true)}
+            disabled={committing}
+            className="h-9 px-4 font-bold bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 rounded-xl shadow-md shadow-blue-600/20 text-xs"
+          >
+            <GitCommit className="h-3.5 w-3.5" />
+            {committing ? "Committing..." : "Commit & Publish"}
           </Button>
 
-          <Button onClick={() => setShowCommitModal(true)} disabled={committing || saving} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
-            {committing ? "Deploying..." : "Commit & Deploy"}
+          <Button
+            onClick={() => openPreview()}
+            variant="ghost"
+            className="h-9 px-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 font-bold rounded-xl flex items-center gap-1 text-xs"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            Live Preview
+          </Button>
+
+          <Button
+            onClick={handleResetDraft}
+            variant="ghost"
+            className="h-9 px-2.5 text-red-600 hover:bg-red-50 font-bold rounded-xl text-xs flex items-center gap-1"
+            title="Discard draft changes"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset
           </Button>
         </div>
       </div>
 
-      {/* Rebuilt Sidebar Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        
-        {/* Left Column Sidebar */}
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-1 h-fit">
-          <h2 className="text-xs uppercase font-black tracking-wider text-gray-400 px-3 mb-2">Sections</h2>
-          {menuItems.map((item) => {
-            const IconComponent = item.icon;
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left text-sm font-semibold transition-all ${
-                  isActive 
-                    ? "bg-blue-50 text-blue-700 shadow-sm shadow-blue-50/50" 
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <IconComponent className={`h-4 w-4 ${isActive ? "text-blue-600" : "text-gray-400"}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+      {/* Toast Notification */}
+      {message && (
+        <div className="flex items-center justify-between p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-semibold shadow-sm animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <span>{message}</span>
+          </div>
         </div>
+      )}
 
-        {/* Right Editor Columns */}
-        <div className="md:col-span-3 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-          
-          {/* 1. Home Hero */}
-          {activeSection === "hero" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Home Hero Section</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="tagline">Rotating Typewriter Tagline</Label>
-                  <Input id="tagline" value={data.hero.tagline} onChange={(e) => updateKey("hero", "tagline", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="heading1">Title Line 1</Label>
-                  <Input id="heading1" value={data.hero.headingLine1} onChange={(e) => updateKey("hero", "headingLine1", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="heading2">Title Line 2</Label>
-                  <Input id="heading2" value={data.hero.headingLine2} onChange={(e) => updateKey("hero", "headingLine2", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="heading3">Title Line 3 (Accent color)</Label>
-                  <Input id="heading3" value={data.hero.headingLine3} onChange={(e) => updateKey("hero", "headingLine3", e.target.value)} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="heroDesc">Hero Subheading Description</Label>
-                <Textarea id="heroDesc" rows={3} value={data.hero.description} onChange={(e) => updateKey("hero", "description", e.target.value)} />
-              </div>
-              
-              {/* Feature Highlights */}
-              <div className="pt-4 border-t space-y-4">
-                <h3 className="font-bold text-gray-800">Hero Feature highlights</h3>
-                {data.hero.features.map((feat: any, idx: number) => (
-                  <div key={idx} className="p-4 border rounded-xl bg-gray-50/50 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-1">
-                      <Label>Icon ID</Label>
-                      <Input value={feat.icon} onChange={e => {
-                        const feats = [...data.hero.features];
-                        feats[idx].icon = e.target.value;
-                        updateKey("hero", "features", feats);
-                      }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Title</Label>
-                      <Input value={feat.title} onChange={e => {
-                        const feats = [...data.hero.features];
-                        feats[idx].title = e.target.value;
-                        updateKey("hero", "features", feats);
-                      }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Description</Label>
-                      <Input value={feat.description} onChange={e => {
-                        const feats = [...data.hero.features];
-                        feats[idx].description = e.target.value;
-                        updateKey("hero", "features", feats);
-                      }} />
-                    </div>
+      {/* TOP HORIZONTAL PAGE TABS BAR */}
+      <div className="bg-white p-2 rounded-2xl border border-gray-200/80 shadow-sm flex flex-wrap gap-2 sticky top-4 z-30">
+        <button
+          onClick={() => {
+            setActivePageTab("home");
+            setActiveSection("hero");
+          }}
+          className={`px-5 py-3 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 transition-all ${
+            activePageTab === "home"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
+        >
+          <Home className="h-4 w-4" />
+          <span>Home Page</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActivePageTab("about");
+            setActiveSection("aboutHero");
+          }}
+          className={`px-5 py-3 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 transition-all ${
+            activePageTab === "about"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
+        >
+          <Info className="h-4 w-4" />
+          <span>About Us Page</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActivePageTab("products");
+            setActiveSection("productsOverview");
+          }}
+          className={`px-5 py-3 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 transition-all ${
+            activePageTab === "products"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
+        >
+          <Package className="h-4 w-4" />
+          <span>Products & Services</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActivePageTab("gallery");
+            setActiveSection("galleryGrid");
+          }}
+          className={`px-5 py-3 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 transition-all ${
+            activePageTab === "gallery"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
+        >
+          <ImageIcon className="h-4 w-4" />
+          <span>Gallery Page</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActivePageTab("contact");
+            setActiveSection("contactInfo");
+          }}
+          className={`px-5 py-3 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 transition-all ${
+            activePageTab === "contact"
+              ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+          }`}
+        >
+          <Phone className="h-4 w-4" />
+          <span>Contact Page</span>
+        </button>
+      </div>
+
+      {/* TWO-COLUMN LAYOUT: FIXED LEFT SECTION SIDEBAR + RIGHT CONTENT EDITOR */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        {/* LEFT VERTICAL SECTION SIDEBAR (Sticky while scrolling) */}
+        <aside className="md:col-span-3 bg-white p-3 rounded-2xl border border-gray-200/80 shadow-sm sticky top-24 z-20 space-y-1">
+          <div className="px-3 py-2 text-[10px] font-black uppercase tracking-wider text-gray-400 border-b border-gray-100 mb-1">
+            Page Sections
+          </div>
+          {sectionsList.map((sec) => (
+            <button
+              key={sec.id}
+              onClick={() => setActiveSection(sec.id)}
+              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between group ${
+                activeSection === sec.id
+                  ? "bg-gray-900 text-white shadow"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              }`}
+            >
+              <span>{sec.label}</span>
+              <ChevronRight
+                className={`h-3.5 w-3.5 transition-transform ${
+                  activeSection === sec.id ? "text-blue-400 translate-x-0.5" : "opacity-0 group-hover:opacity-100"
+                }`}
+              />
+            </button>
+          ))}
+        </aside>
+
+        {/* RIGHT MAIN EDITOR AREA */}
+        <main className="md:col-span-9 space-y-6">
+          {/* HOME PAGE EDITORS */}
+          {activePageTab === "home" && (
+            <>
+              {activeSection === "hero" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Hero Banner Configuration</h3>
+                    <p className="text-xs text-gray-500">Edit tagline, main headings, and description for the home hero.</p>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 2. Home Stats */}
-          {activeSection === "stats" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Homepage Stats Counters</h2>
-              <div className="grid grid-cols-1 gap-6">
-                {data.stats.map((stat: any, idx: number) => (
-                  <div key={idx} className="p-4 border rounded-xl bg-gray-50/50 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                    <div className="space-y-1">
-                      <Label>Counter Value (e.g. 4000+)</Label>
-                      <Input value={stat.value} onChange={e => {
-                        const updated = [...data.stats];
-                        updated[idx].value = e.target.value;
-                        setData({ ...data, stats: updated });
-                      }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Label Text</Label>
-                      <Input value={stat.label} onChange={e => {
-                        const updated = [...data.stats];
-                        updated[idx].label = e.target.value;
-                        setData({ ...data, stats: updated });
-                      }} />
-                    </div>
-                    <div className="space-y-1">
-                      <Label>Short Description</Label>
-                      <Textarea rows={1} value={stat.description} onChange={e => {
-                        const updated = [...data.stats];
-                        updated[idx].description = e.target.value;
-                        setData({ ...data, stats: updated });
-                      }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 3. Services Intro */}
-          {activeSection === "servicesSection" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Homepage Services Header</h2>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="servHeading">Section Heading</Label>
-                  <Input id="servHeading" value={data.servicesSection.heading} onChange={(e) => updateKey("servicesSection", "heading", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="servDesc">Description Paragraph</Label>
-                  <Textarea id="servDesc" rows={3} value={data.servicesSection.description} onChange={(e) => updateKey("servicesSection", "description", e.target.value)} />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 4. Why Choose Us */}
-          {activeSection === "why-us" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Why Choose Us Details</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="whyEyebrow">Eyebrow</Label>
-                  <Input id="whyEyebrow" value={data.whyChooseUs.eyebrow} onChange={(e) => updateKey("whyChooseUs", "eyebrow", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="whyTitle">Main Section Title</Label>
-                  <Input id="whyTitle" value={data.whyChooseUs.title} onChange={(e) => updateKey("whyChooseUs", "title", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="badgeVal">Badge Value (e.g. 30+)</Label>
-                  <Input id="badgeVal" value={data.whyChooseUs.badgeValue} onChange={(e) => updateKey("whyChooseUs", "badgeValue", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="badgeLbl">Badge Label (e.g. Years of Trust)</Label>
-                  <Input id="badgeLbl" value={data.whyChooseUs.badgeLabel} onChange={(e) => updateKey("whyChooseUs", "badgeLabel", e.target.value)} />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <ImageField 
-                    label="Cover Image Path" 
-                    value={data.whyChooseUs.image || ""} 
-                    onChange={(v) => updateKey("whyChooseUs", "image", v)} 
-                  />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="whyLead">Lead Intro Text</Label>
-                  <Textarea id="whyLead" rows={2} value={data.whyChooseUs.lead} onChange={(e) => updateKey("whyChooseUs", "lead", e.target.value)} />
-                </div>
-              </div>
-
-              {/* Features List */}
-              <div className="pt-4 space-y-4 border-t">
-                <h3 className="font-bold text-gray-800">Why Choose Us feature grid</h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {data.whyChooseUs.features.map((feat: any, idx: number) => (
-                    <div key={idx} className="flex gap-4 p-4 border rounded-xl bg-gray-50/50 items-start">
-                      <span className="font-bold text-gray-400 self-center">#{idx + 1}</span>
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-1">
-                          <Label>Icon ID</Label>
-                          <Input value={feat.icon} onChange={e => {
-                            const feats = [...data.whyChooseUs.features];
-                            feats[idx].icon = e.target.value;
-                            updateKey("whyChooseUs", "features", feats);
-                          }} />
-                        </div>
-                        <div className="space-y-1">
-                          <Label>Title</Label>
-                          <Input value={feat.title} onChange={e => {
-                            const feats = [...data.whyChooseUs.features];
-                            feats[idx].title = e.target.value;
-                            updateKey("whyChooseUs", "features", feats);
-                          }} />
-                        </div>
-                        <div className="space-y-1">
-                          <Label>Description</Label>
-                          <Input value={feat.description} onChange={e => {
-                            const feats = [...data.whyChooseUs.features];
-                            feats[idx].description = e.target.value;
-                            updateKey("whyChooseUs", "features", feats);
-                          }} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 5. Partners */}
-          {activeSection === "partners" && (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center border-b pb-3">
-                <h2 className="text-xl font-bold text-gray-800">Brands We Work With</h2>
-                <Button size="sm" variant="outline" className="flex items-center gap-1" onClick={() => {
-                  const updated = [...data.partners, { name: "New Partner", logo: "/assests/client_logo/sail.webp", alt: "New Partner" }];
-                  setData({ ...data, partners: updated });
-                }}>
-                  <Plus className="h-4 w-4" /> Add Brand
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                {data.partners.map((partner: any, idx: number) => (
-                  <div key={idx} className="flex gap-4 p-4 border rounded-xl items-start bg-gray-50/50">
-                    <div className="flex-1 space-y-4">
-                      <div className="space-y-1">
-                        <Label>Brand Name</Label>
-                        <Input value={partner.name} onChange={(e) => {
-                          const updated = [...data.partners];
-                          updated[idx].name = e.target.value;
-                          updated[idx].alt = e.target.value;
-                          setData({ ...data, partners: updated });
-                        }} />
-                      </div>
-                      <ImageField 
-                        label="Logo Image Path" 
-                        value={partner.logo} 
-                        onChange={(v) => {
-                          const updated = [...data.partners];
-                          updated[idx].logo = v;
-                          setData({ ...data, partners: updated });
-                        }} 
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Tagline Eyebrow</Label>
+                      <Input
+                        value={data.hero?.tagline || ""}
+                        onChange={(e) => updateKey("hero", "tagline", e.target.value)}
+                        className="mt-1"
                       />
                     </div>
-                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700 shrink-0 self-center" onClick={() => {
-                      const updated = data.partners.filter((_: any, i: number) => i !== idx);
-                      setData({ ...data, partners: updated });
-                    }}><Trash className="h-5 w-5" /></Button>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Heading Line 1</Label>
+                        <Input
+                          value={data.hero?.headingLine1 || ""}
+                          onChange={(e) => updateKey("hero", "headingLine1", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Heading Line 2 (Highlighted)</Label>
+                        <Input
+                          value={data.hero?.headingLine2 || ""}
+                          onChange={(e) => updateKey("hero", "headingLine2", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Heading Line 3</Label>
+                        <Input
+                          value={data.hero?.headingLine3 || ""}
+                          onChange={(e) => updateKey("hero", "headingLine3", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Description Paragraph</Label>
+                      <Textarea
+                        rows={3}
+                        value={data.hero?.description || ""}
+                        onChange={(e) => updateKey("hero", "description", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              )}
+
+              {activeSection === "stats" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Key Metrics & Statistics</h3>
+                      <p className="text-xs text-gray-500">Edit experience, reach, and retention metrics.</p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        addArrayItem("stats", {
+                          value: "100+",
+                          label: "New Metric",
+                          description: "Metric details here",
+                          icon: "star",
+                        })
+                      }
+                      size="sm"
+                      className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add Metric
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(data.stats || []).map((stat: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-3 relative">
+                        <button
+                          onClick={() => removeArrayItem("stats", index)}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </button>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Value (e.g. 30+)</Label>
+                          <Input
+                            value={stat.value}
+                            onChange={(e) => updateNestedArray("stats", index, "value", e.target.value)}
+                            className="mt-1 bg-white"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Label</Label>
+                          <Input
+                            value={stat.label}
+                            onChange={(e) => updateNestedArray("stats", index, "label", e.target.value)}
+                            className="mt-1 bg-white"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Description</Label>
+                          <Textarea
+                            rows={2}
+                            value={stat.description}
+                            onChange={(e) => updateNestedArray("stats", index, "description", e.target.value)}
+                            className="mt-1 bg-white text-xs"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "secondary" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Secondary Material Section</h3>
+                    <p className="text-xs text-gray-500">Edit intro heading and description for secondary steel supply.</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Heading Title</Label>
+                      <Input
+                        value={data.servicesSection?.heading || ""}
+                        onChange={(e) => updateKey("servicesSection", "heading", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Description</Label>
+                      <Textarea
+                        rows={3}
+                        value={data.servicesSection?.description || ""}
+                        onChange={(e) => updateKey("servicesSection", "description", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "partners" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Client & Brand Logos</h3>
+                      <p className="text-xs text-gray-500">Manage client brand logos displayed on home page marquee.</p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        addArrayItem("partners", {
+                          name: "New Partner",
+                          logo: "/assests/client_logo/Tata_Steel_Logo.webp",
+                          alt: "New Partner Logo",
+                        })
+                      }
+                      size="sm"
+                      className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add Client Logo
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(data.partners || []).map((partner: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-4 relative">
+                        <button
+                          onClick={() => removeArrayItem("partners", index)}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </button>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Company Name</Label>
+                          <Input
+                            value={partner.name}
+                            onChange={(e) => updateNestedArray("partners", index, "name", e.target.value)}
+                            className="mt-1 bg-white"
+                          />
+                        </div>
+                        <ImageField
+                          label={`Logo for ${partner.name || "Client"}`}
+                          value={partner.logo || ""}
+                          onChange={(val) => updateNestedArray("partners", index, "logo", val)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "testimonials" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Client Testimonials</h3>
+                      <p className="text-xs text-gray-500">Manage client reviews and testimonials.</p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        addArrayItem("testimonials", {
+                          quote: "Excellent quality material and fast delivery.",
+                          name: "Client Name",
+                          role: "Industrial Buyer",
+                          initials: "CN",
+                        })
+                      }
+                      size="sm"
+                      className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add Testimonial
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(data.testimonials || []).map((t: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-3 relative">
+                        <button
+                          onClick={() => removeArrayItem("testimonials", index)}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </button>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Client Quote</Label>
+                          <Textarea
+                            rows={3}
+                            value={t.quote}
+                            onChange={(e) => updateNestedArray("testimonials", index, "quote", e.target.value)}
+                            className="mt-1 bg-white text-xs"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <Label className="text-xs font-bold text-gray-700">Client Name</Label>
+                            <Input
+                              value={t.name}
+                              onChange={(e) => updateNestedArray("testimonials", index, "name", e.target.value)}
+                              className="mt-1 bg-white"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs font-bold text-gray-700">Role / Company</Label>
+                            <Input
+                              value={t.role}
+                              onChange={(e) => updateNestedArray("testimonials", index, "role", e.target.value)}
+                              className="mt-1 bg-white"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "whyChooseUs" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Why Choose Us Section</h3>
+                    <p className="text-xs text-gray-500">Edit titles and featured founder image.</p>
+                  </div>
+                  <div className="space-y-4">
+                    <ImageField
+                      label="Featured Image (Founder / Facility)"
+                      value={data.whyChooseUs?.image || ""}
+                      onChange={(val) => updateKey("whyChooseUs", "image", val)}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Eyebrow</Label>
+                        <Input
+                          value={data.whyChooseUs?.eyebrow || ""}
+                          onChange={(e) => updateKey("whyChooseUs", "eyebrow", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Title</Label>
+                        <Input
+                          value={data.whyChooseUs?.title || ""}
+                          onChange={(e) => updateKey("whyChooseUs", "title", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Lead Paragraph</Label>
+                      <Textarea
+                        rows={3}
+                        value={data.whyChooseUs?.lead || ""}
+                        onChange={(e) => updateKey("whyChooseUs", "lead", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "connectCta" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Connect CTA & Brochure</h3>
+                    <p className="text-xs text-gray-500">Edit bottom banner titles and brochure download URL.</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Title</Label>
+                      <Input
+                        value={data.connectCta?.title || ""}
+                        onChange={(e) => updateKey("connectCta", "title", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Description</Label>
+                      <Textarea
+                        rows={2}
+                        value={data.connectCta?.description || ""}
+                        onChange={(e) => updateKey("connectCta", "description", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Brochure PDF URL</Label>
+                      <Input
+                        value={data.connectCta?.brochureUrl || ""}
+                        onChange={(e) => updateKey("connectCta", "brochureUrl", e.target.value)}
+                        className="mt-1 font-mono text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
-          {/* 6. Testimonials */}
-          {activeSection === "testimonials" && (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center border-b pb-3">
-                <h2 className="text-xl font-bold text-gray-800">Client Reviews</h2>
-                <Button size="sm" variant="outline" className="flex items-center gap-1" onClick={() => {
-                  const updated = [...data.testimonials, { quote: "", name: "New Client", role: "Partner", initials: "NC", avatarIcon: "person", avatarClass: "bg-blue-600 text-white" }];
-                  setData({ ...data, testimonials: updated });
-                }}>
-                  <Plus className="h-4 w-4" /> Add Review
+          {/* ABOUT US PAGE EDITORS */}
+          {activePageTab === "about" && (
+            <>
+              {activeSection === "aboutHero" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">About Us Banner & Summary</h3>
+                    <p className="text-xs text-gray-500">Edit titles, overview summary, and about banner image.</p>
+                  </div>
+                  <div className="space-y-4">
+                    <ImageField
+                      label="About Hero Banner Image"
+                      value={data.about?.image || ""}
+                      onChange={(val) => updateKey("about", "image", val)}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Eyebrow</Label>
+                        <Input
+                          value={data.about?.eyebrow || ""}
+                          onChange={(e) => updateKey("about", "eyebrow", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Title Highlight</Label>
+                        <Input
+                          value={data.about?.titleHighlight || ""}
+                          onChange={(e) => updateKey("about", "titleHighlight", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Company Summary</Label>
+                      <Textarea
+                        rows={4}
+                        value={data.about?.summary || ""}
+                        onChange={(e) => updateKey("about", "summary", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "journey" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Company Journey (30+ Years)</h3>
+                    <p className="text-xs text-gray-500">Edit company timeline milestones since 1994.</p>
+                  </div>
+                  <div className="space-y-6">
+                    {(data.journey?.milestones || []).map((m: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label className="text-xs font-bold text-gray-700">Year</Label>
+                            <Input
+                              value={m.year}
+                              onChange={(e) => {
+                                const arr = [...(data.journey?.milestones || [])];
+                                arr[index] = { ...arr[index], year: e.target.value };
+                                setData({ ...data, journey: { ...data.journey, milestones: arr } });
+                              }}
+                              className="mt-1 bg-white"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs font-bold text-gray-700">Milestone Title</Label>
+                            <Input
+                              value={m.title}
+                              onChange={(e) => {
+                                const arr = [...(data.journey?.milestones || [])];
+                                arr[index] = { ...arr[index], title: e.target.value };
+                                setData({ ...data, journey: { ...data.journey, milestones: arr } });
+                              }}
+                              className="mt-1 bg-white"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Description</Label>
+                          <Textarea
+                            rows={3}
+                            value={m.description}
+                            onChange={(e) => {
+                              const arr = [...(data.journey?.milestones || [])];
+                              arr[index] = { ...arr[index], description: e.target.value };
+                              setData({ ...data, journey: { ...data.journey, milestones: arr } });
+                            }}
+                            className="mt-1 bg-white text-xs"
+                          />
+                        </div>
+                        <ImageField
+                          label={`Milestone Photo (${m.year})`}
+                          value={m.image || ""}
+                          onChange={(val) => {
+                            const arr = [...(data.journey?.milestones || [])];
+                            arr[index] = { ...arr[index], image: val };
+                            setData({ ...data, journey: { ...data.journey, milestones: arr } });
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "missionVision" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Mission & Vision Statements</h3>
+                    <p className="text-xs text-gray-500">Edit company mission pillars and strategic vision.</p>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(data.missionVision?.mission || []).map((m: any, index: number) => (
+                        <div key={index} className="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-2">
+                          <Label className="text-xs font-bold text-gray-700">Mission Pillar Title</Label>
+                          <Input
+                            value={m.title}
+                            onChange={(e) => {
+                              const arr = [...(data.missionVision?.mission || [])];
+                              arr[index] = { ...arr[index], title: e.target.value };
+                              setData({ ...data, missionVision: { ...data.missionVision, mission: arr } });
+                            }}
+                            className="bg-white"
+                          />
+                          <Label className="text-xs font-bold text-gray-700">Description</Label>
+                          <Textarea
+                            rows={2}
+                            value={m.description}
+                            onChange={(e) => {
+                              const arr = [...(data.missionVision?.mission || [])];
+                              arr[index] = { ...arr[index], description: e.target.value };
+                              setData({ ...data, missionVision: { ...data.missionVision, mission: arr } });
+                            }}
+                            className="bg-white text-xs"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "leadership" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                        <Users className="h-5 w-5 text-blue-600" /> Founders & Leadership Team
+                      </h3>
+                      <p className="text-xs text-gray-500">Edit founder and key executives displayed on the About page.</p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        addArrayItem("leadership", {
+                          name: "Executive Name",
+                          role: "Director",
+                          description: "Executive details.",
+                          image: "/company/Nimesh_sir.jpg",
+                        })
+                      }
+                      size="sm"
+                      className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add Leadership Member
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(data.leadership || []).map((leader: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-4 relative">
+                        <button
+                          onClick={() => removeArrayItem("leadership", index)}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </button>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Full Name</Label>
+                          <Input
+                            value={leader.name}
+                            onChange={(e) => updateNestedArray("leadership", index, "name", e.target.value)}
+                            className="mt-1 bg-white font-bold"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Role / Designation</Label>
+                          <Input
+                            value={leader.role}
+                            onChange={(e) => updateNestedArray("leadership", index, "role", e.target.value)}
+                            className="mt-1 bg-white"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Description</Label>
+                          <Textarea
+                            rows={3}
+                            value={leader.description}
+                            onChange={(e) => updateNestedArray("leadership", index, "description", e.target.value)}
+                            className="mt-1 bg-white text-xs"
+                          />
+                        </div>
+                        <ImageField
+                          label={`Photo of ${leader.name || "Leader"}`}
+                          value={leader.image || ""}
+                          onChange={(val) => updateNestedArray("leadership", index, "image", val)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "marketingTeam" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                        <Users className="h-5 w-5 text-indigo-600" /> Marketing Team
+                      </h3>
+                      <p className="text-xs text-gray-500">Edit marketing team members displayed on the About page.</p>
+                    </div>
+                    <Button
+                      onClick={() =>
+                        addArrayItem("marketingTeam", {
+                          name: "Marketing Member",
+                          role: "Marketing Team",
+                          description: "Marketing responsibilities.",
+                          image: "/company/navin_marketing.png",
+                        })
+                      }
+                      size="sm"
+                      className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" /> Add Marketing Member
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(data.marketingTeam || []).map((marketer: any, index: number) => (
+                      <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-4 relative">
+                        <button
+                          onClick={() => removeArrayItem("marketingTeam", index)}
+                          className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </button>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Full Name</Label>
+                          <Input
+                            value={marketer.name}
+                            onChange={(e) => updateNestedArray("marketingTeam", index, "name", e.target.value)}
+                            className="mt-1 bg-white font-bold"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Role / Designation</Label>
+                          <Input
+                            value={marketer.role}
+                            onChange={(e) => updateNestedArray("marketingTeam", index, "role", e.target.value)}
+                            className="mt-1 bg-white"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs font-bold text-gray-700">Description</Label>
+                          <Textarea
+                            rows={3}
+                            value={marketer.description}
+                            onChange={(e) => updateNestedArray("marketingTeam", index, "description", e.target.value)}
+                            className="mt-1 bg-white text-xs"
+                          />
+                        </div>
+                        <ImageField
+                          label={`Photo of ${marketer.name || "Marketer"}`}
+                          value={marketer.image || ""}
+                          onChange={(val) => updateNestedArray("marketingTeam", index, "image", val)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* PRODUCTS & SERVICES PAGE EDITORS */}
+          {activePageTab === "products" && (
+            <>
+              {activeSection === "productsOverview" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <div>
+                      <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">Products & Services Catalog</h3>
+                      <p className="text-xs text-gray-500">Manage products, processing services, technical specs, and variants.</p>
+                    </div>
+                    <a
+                      href="/admin/products"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow inline-flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="h-4 w-4" /> Open Full Catalog Manager
+                    </a>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="p-6 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-3">
+                      <h4 className="font-bold text-gray-900 text-base">Steel Products ({data.products?.length || 0})</h4>
+                      <p className="text-xs text-gray-600">Prime & secondary steel products (HR Coils, CR Sheets, Structural Steel, etc.)</p>
+                      <a href="/admin/products" className="inline-block text-xs font-bold text-blue-600 hover:underline pt-2">
+                        Edit Products Catalog &rarr;
+                      </a>
+                    </div>
+                    <div className="p-6 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-3">
+                      <h4 className="font-bold text-gray-900 text-base">Processing Services ({data.services?.length || 0})</h4>
+                      <p className="text-xs text-gray-600">Slitting, Cut-to-length, Pickling, and custom processing offerings.</p>
+                      <a href="/admin/products" className="inline-block text-xs font-bold text-blue-600 hover:underline pt-2">
+                        Edit Services Catalog &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "qualityControl" && (
+                <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+                  <div className="border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                      <ShieldCheck className="h-5 w-5 text-blue-600" />
+                      Quality Assurance & Stringent Quality Control
+                    </h3>
+                    <p className="text-xs text-gray-500">Edit quality assurance badges, description, inspection points, and certifications image.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <ImageField
+                      label="Quality Control Inspection / Facility Image"
+                      value={data.qualityControl?.image || ""}
+                      onChange={(val) => updateKey("qualityControl", "image", val)}
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Eyebrow Tagline</Label>
+                        <Input
+                          value={data.qualityControl?.eyebrow || ""}
+                          onChange={(e) => updateKey("qualityControl", "eyebrow", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Main Title</Label>
+                        <Input
+                          value={data.qualityControl?.title || ""}
+                          onChange={(e) => updateKey("qualityControl", "title", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Badge Value (e.g. ISO)</Label>
+                        <Input
+                          value={data.qualityControl?.badgeValue || ""}
+                          onChange={(e) => updateKey("qualityControl", "badgeValue", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-bold text-gray-700">Badge Label (e.g. 9001:2008 Certified)</Label>
+                        <Input
+                          value={data.qualityControl?.badgeLabel || ""}
+                          onChange={(e) => updateKey("qualityControl", "badgeLabel", e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Lead Paragraph</Label>
+                      <Textarea
+                        rows={3}
+                        value={data.qualityControl?.lead || ""}
+                        onChange={(e) => updateKey("qualityControl", "lead", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+
+                    {/* Features List */}
+                    <div className="pt-4 border-t border-gray-100">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">Quality Inspection Points</h4>
+                        <Button
+                          onClick={() => {
+                            const features = [...(data.qualityControl?.features || [])];
+                            features.push({
+                              icon: "verified",
+                              title: "New Quality Point",
+                              description: "Description of quality check",
+                            });
+                            setData({ ...data, qualityControl: { ...data.qualityControl, features } });
+                          }}
+                          size="sm"
+                          className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                        >
+                          <Plus className="h-3.5 w-3.5 mr-1" /> Add Quality Point
+                        </Button>
+                      </div>
+
+                      <div className="space-y-4">
+                        {(data.qualityControl?.features || []).map((feat: any, index: number) => (
+                          <div key={index} className="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-3 relative">
+                            <button
+                              onClick={() => {
+                                const features = [...(data.qualityControl?.features || [])];
+                                features.splice(index, 1);
+                                setData({ ...data, qualityControl: { ...data.qualityControl, features } });
+                              }}
+                              className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                            >
+                              <Trash className="h-4 w-4" />
+                            </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <Label className="text-xs font-bold text-gray-700">Icon Name</Label>
+                                <Input
+                                  value={feat.icon}
+                                  onChange={(e) => {
+                                    const features = [...(data.qualityControl?.features || [])];
+                                    features[index] = { ...features[index], icon: e.target.value };
+                                    setData({ ...data, qualityControl: { ...data.qualityControl, features } });
+                                  }}
+                                  className="mt-1 bg-white text-xs font-mono"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs font-bold text-gray-700">Title</Label>
+                                <Input
+                                  value={feat.title}
+                                  onChange={(e) => {
+                                    const features = [...(data.qualityControl?.features || [])];
+                                    features[index] = { ...features[index], title: e.target.value };
+                                    setData({ ...data, qualityControl: { ...data.qualityControl, features } });
+                                  }}
+                                  className="mt-1 bg-white text-xs"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label className="text-xs font-bold text-gray-700">Description</Label>
+                              <Textarea
+                                rows={2}
+                                value={feat.description}
+                                onChange={(e) => {
+                                  const features = [...(data.qualityControl?.features || [])];
+                                  features[index] = { ...features[index], description: e.target.value };
+                                  setData({ ...data, qualityControl: { ...data.qualityControl, features } });
+                                }}
+                                className="mt-1 bg-white text-xs"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* GALLERY PAGE EDITORS */}
+          {activePageTab === "gallery" && (
+            <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+                <div>
+                  <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                    <ImageIcon className="h-5 w-5 text-blue-600" />
+                    Industrial Gallery Photos
+                  </h3>
+                  <p className="text-xs text-gray-500">Manage plant photos, warehouse shots, and machinery images.</p>
+                </div>
+                <Button
+                  onClick={() => {
+                    const items = [...(data.gallery?.items || [])];
+                    items.push({
+                      id: `photo-${Date.now()}`,
+                      title: "New Plant Image",
+                      image: "/Gallary/Heavy_Slitting_Operations.png",
+                      className: "md:col-span-1 md:row-span-1 min-h-[250px]",
+                    });
+                    setData({ ...data, gallery: { ...data.gallery, items } });
+                  }}
+                  size="sm"
+                  className="bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold border border-blue-200 text-xs rounded-xl"
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" /> Add Gallery Photo
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
-                {data.testimonials.map((review: any, idx: number) => (
-                  <div key={idx} className="flex gap-4 p-5 border rounded-xl bg-gray-50/50 items-start">
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2 md:col-span-2">
-                        <Label>Quote Text</Label>
-                        <Textarea rows={2} value={review.quote} onChange={(e) => {
-                          const updated = [...data.testimonials];
-                          updated[idx].quote = e.target.value;
-                          setData({ ...data, testimonials: updated });
-                        }} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Name</Label>
-                        <Input value={review.name} onChange={(e) => {
-                          const updated = [...data.testimonials];
-                          updated[idx].name = e.target.value;
-                          const initials = e.target.value.split(" ").map((n: string) => n[0]).join("").slice(0,2).toUpperCase();
-                          updated[idx].initials = initials || "NC";
-                          setData({ ...data, testimonials: updated });
-                        }} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Role / Title</Label>
-                        <Input value={review.role} onChange={(e) => {
-                          const updated = [...data.testimonials];
-                          updated[idx].role = e.target.value;
-                          setData({ ...data, testimonials: updated });
-                        }} />
-                      </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {(data.gallery?.items || []).map((item: any, index: number) => (
+                  <div key={index} className="p-5 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-4 relative">
+                    <button
+                      onClick={() => {
+                        const items = [...(data.gallery?.items || [])];
+                        items.splice(index, 1);
+                        setData({ ...data, gallery: { ...data.gallery, items } });
+                      }}
+                      className="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition-colors"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </button>
+                    <div>
+                      <Label className="text-xs font-bold text-gray-700">Photo Title / Caption</Label>
+                      <Input
+                        value={item.title}
+                        onChange={(e) => {
+                          const items = [...(data.gallery?.items || [])];
+                          items[index] = { ...items[index], title: e.target.value };
+                          setData({ ...data, gallery: { ...data.gallery, items } });
+                        }}
+                        className="mt-1 bg-white font-bold text-xs"
+                      />
                     </div>
-                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700" onClick={() => {
-                      const updated = data.testimonials.filter((_: any, i: number) => i !== idx);
-                      setData({ ...data, testimonials: updated });
-                    }}><Trash className="h-5 w-5" /></Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 7. About Hero */}
-          {activeSection === "about" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">About Us Page Hero</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="eyebrowAbt">Eyebrow</Label>
-                  <Input id="eyebrowAbt" value={data.about.eyebrow} onChange={(e) => updateKey("about", "eyebrow", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="titleBefore">Title Prefix</Label>
-                  <Input id="titleBefore" value={data.about.titleBefore} onChange={(e) => updateKey("about", "titleBefore", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="titleHighlight">Title Highlight</Label>
-                  <Input id="titleHighlight" value={data.about.titleHighlight} onChange={(e) => updateKey("about", "titleHighlight", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="titleAfter">Title Suffix</Label>
-                  <Input id="titleAfter" value={data.about.titleAfter} onChange={(e) => updateKey("about", "titleAfter", e.target.value)} />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="summaryAbt">Main Summary</Label>
-                  <Textarea id="summaryAbt" rows={3} value={data.about.summary} onChange={(e) => updateKey("about", "summary", e.target.value)} />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <ImageField 
-                    label="Hero Background Media Path" 
-                    value={data.about.image} 
-                    onChange={(v) => updateKey("about", "image", v)} 
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 8. Journey Milestones */}
-          {activeSection === "journey" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Company Journey History</h2>
-              
-              {/* Legacy lines list */}
-              <div className="space-y-3">
-                <Label>History Paragraphs (Lines of copy)</Label>
-                {data.journey.legacyLines.map((line: string, idx: number) => (
-                  <div key={idx} className="flex gap-2">
-                    <Textarea 
-                      rows={2} 
-                      value={line} 
-                      onChange={e => {
-                        const updated = [...data.journey.legacyLines];
-                        updated[idx] = e.target.value;
-                        updateKey("journey", "legacyLines", updated);
-                      }} 
-                      className="flex-1"
+                    <ImageField
+                      label={`Gallery Image #${index + 1}`}
+                      value={item.image || ""}
+                      onChange={(val) => {
+                        const items = [...(data.gallery?.items || [])];
+                        items[index] = { ...items[index], image: val };
+                        setData({ ...data, gallery: { ...data.gallery, items } });
+                      }}
                     />
                   </div>
                 ))}
               </div>
-
-              {/* Milestones list */}
-              <div className="pt-4 border-t space-y-4">
-                <h3 className="font-bold text-gray-800">Journey Milestones</h3>
-                <div className="space-y-6">
-                  {data.journey.milestones.map((ms: any, idx: number) => (
-                    <div key={idx} className="p-4 border rounded-xl bg-gray-50/50 space-y-4">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="space-y-1">
-                          <Label>Milestone Year (e.g. 1994)</Label>
-                          <Input value={ms.year} onChange={e => {
-                            const updated = [...data.journey.milestones];
-                            updated[idx].year = e.target.value;
-                            updateKey("journey", "milestones", updated);
-                          }} />
-                        </div>
-                        <div className="space-y-1">
-                          <Label>Milestone Title</Label>
-                          <Input value={ms.title} onChange={e => {
-                            const updated = [...data.journey.milestones];
-                            updated[idx].title = e.target.value;
-                            updateKey("journey", "milestones", updated);
-                          }} />
-                        </div>
-                        <div className="space-y-1">
-                          <Label>Icon ID</Label>
-                          <Input value={ms.icon} onChange={e => {
-                            const updated = [...data.journey.milestones];
-                            updated[idx].icon = e.target.value;
-                            updateKey("journey", "milestones", updated);
-                          }} />
-                        </div>
-                        <div className="space-y-1 md:col-span-1">
-                          <Label>Photo Image URL</Label>
-                          <Input value={ms.image} onChange={e => {
-                            const updated = [...data.journey.milestones];
-                            updated[idx].image = e.target.value;
-                            updateKey("journey", "milestones", updated);
-                          }} />
-                        </div>
-                        <div className="space-y-1 col-span-2 md:col-span-4">
-                          <Label>Description Copy</Label>
-                          <Textarea rows={2} value={ms.description} onChange={e => {
-                            const updated = [...data.journey.milestones];
-                            updated[idx].description = e.target.value;
-                            updateKey("journey", "milestones", updated);
-                          }} />
-                        </div>
-                        <div className="col-span-2 md:col-span-4">
-                          <ImageField 
-                            label="Milestone Cover Image" 
-                            value={ms.image} 
-                            onChange={(v) => {
-                              const updated = [...data.journey.milestones];
-                              updated[idx].image = v;
-                              updateKey("journey", "milestones", updated);
-                            }} 
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
-          {/* 9. Mission & Vision */}
-          {activeSection === "philosophy" && (
-            <div className="space-y-6">
-              
-              {/* Mission statement */}
+          {/* CONTACT PAGE EDITORS */}
+          {activePageTab === "contact" && (
+            <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200/80 shadow-sm space-y-6">
+              <div className="border-b border-gray-100 pb-4">
+                <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-blue-600" />
+                  Contact Details & Office Location
+                </h3>
+                <p className="text-xs text-gray-500">Edit phone, email, address, and Google Maps URL.</p>
+              </div>
+
               <div className="space-y-4">
-                <div className="flex justify-between items-center border-b pb-3">
-                  <h2 className="text-xl font-bold text-gray-800">Our Mission Statements</h2>
-                  <Button size="sm" variant="outline" onClick={() => {
-                    const updated = [...data.missionVision.mission, { title: "New statement", description: "", icon: "flag" }];
-                    updateKey("missionVision", "mission", updated);
-                  }}>+ Add Mission</Button>
-                </div>
-                {data.missionVision.mission.map((ms: any, idx: number) => (
-                  <div key={idx} className="p-4 border rounded-xl bg-gray-50/50 flex gap-4 items-start">
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <Label>Title</Label>
-                        <Input value={ms.title} onChange={e => {
-                          const updated = [...data.missionVision.mission];
-                          updated[idx].title = e.target.value;
-                          updateKey("missionVision", "mission", updated);
-                        }} />
-                      </div>
-                      <div className="space-y-1">
-                        <Label>Icon ID</Label>
-                        <Input value={ms.icon} onChange={e => {
-                          const updated = [...data.missionVision.mission];
-                          updated[idx].icon = e.target.value;
-                          updateKey("missionVision", "mission", updated);
-                        }} />
-                      </div>
-                      <div className="space-y-1 col-span-2">
-                        <Label>Description Copy</Label>
-                        <Textarea rows={2} value={ms.description} onChange={e => {
-                          const updated = [...data.missionVision.mission];
-                          updated[idx].description = e.target.value;
-                          updateKey("missionVision", "mission", updated);
-                        }} />
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700" onClick={() => {
-                      const updated = data.missionVision.mission.filter((_: any, i: number) => i !== idx);
-                      updateKey("missionVision", "mission", updated);
-                    }}><Trash className="h-5 w-5" /></Button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-xs font-bold text-gray-700">Phone Number</Label>
+                    <Input
+                      value={data.contact?.phone || ""}
+                      onChange={(e) => updateKey("contact", "phone", e.target.value)}
+                      className="mt-1"
+                    />
                   </div>
-                ))}
-              </div>
-
-              {/* Vision statement */}
-              <div className="pt-6 border-t space-y-4">
-                <div className="flex justify-between items-center border-b pb-3">
-                  <h2 className="text-xl font-bold text-gray-800">Our Vision Statements</h2>
-                  <Button size="sm" variant="outline" onClick={() => {
-                    const updated = [...data.missionVision.vision, { title: "New Vision", description: "", icon: "visibility" }];
-                    updateKey("missionVision", "vision", updated);
-                  }}>+ Add Vision</Button>
-                </div>
-                {data.missionVision.vision.map((vs: any, idx: number) => (
-                  <div key={idx} className="p-4 border rounded-xl bg-gray-50/50 flex gap-4 items-start">
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <Label>Title</Label>
-                        <Input value={vs.title} onChange={e => {
-                          const updated = [...data.missionVision.vision];
-                          updated[idx].title = e.target.value;
-                          updateKey("missionVision", "vision", updated);
-                        }} />
-                      </div>
-                      <div className="space-y-1">
-                        <Label>Icon ID</Label>
-                        <Input value={vs.icon} onChange={e => {
-                          const updated = [...data.missionVision.vision];
-                          updated[idx].icon = e.target.value;
-                          updateKey("missionVision", "vision", updated);
-                        }} />
-                      </div>
-                      <div className="space-y-1 col-span-2">
-                        <Label>Description Copy</Label>
-                        <Textarea rows={2} value={vs.description} onChange={e => {
-                          const updated = [...data.missionVision.vision];
-                          updated[idx].description = e.target.value;
-                          updateKey("missionVision", "vision", updated);
-                        }} />
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700" onClick={() => {
-                      const updated = data.missionVision.vision.filter((_: any, i: number) => i !== idx);
-                      updateKey("missionVision", "vision", updated);
-                    }}><Trash className="h-5 w-5" /></Button>
+                  <div>
+                    <Label className="text-xs font-bold text-gray-700">Official Email</Label>
+                    <Input
+                      value={data.contact?.email || ""}
+                      onChange={(e) => updateKey("contact", "email", e.target.value)}
+                      className="mt-1"
+                    />
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 10. Connect CTA */}
-          {activeSection === "cta" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold border-b pb-3 text-gray-800">Connect CTA Section</h2>
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="ctaEyebrow">Eyebrow</Label>
-                  <Input id="ctaEyebrow" value={data.connectCta.eyebrow} onChange={(e) => updateKey("connectCta", "eyebrow", e.target.value)} />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="ctaTitle">Title</Label>
-                  <Input id="ctaTitle" value={data.connectCta.title} onChange={(e) => updateKey("connectCta", "title", e.target.value)} />
+                <div>
+                  <Label className="text-xs font-bold text-gray-700">Office & Facility Address</Label>
+                  <Textarea
+                    rows={2}
+                    value={data.contact?.address || ""}
+                    onChange={(e) => updateKey("contact", "address", e.target.value)}
+                    className="mt-1"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="ctaDesc">Description Copy</Label>
-                  <Textarea id="ctaDesc" rows={3} value={data.connectCta.description} onChange={(e) => updateKey("connectCta", "description", e.target.value)} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="brochure">Brochure Download Link</Label>
-                  <Input id="brochure" value={data.connectCta.brochureUrl} onChange={(e) => updateKey("connectCta", "brochureUrl", e.target.value)} />
+                <div>
+                  <Label className="text-xs font-bold text-gray-700">Google Maps Embed URL</Label>
+                  <Input
+                    value={data.contact?.googleMapEmbed || ""}
+                    onChange={(e) => updateKey("contact", "googleMapEmbed", e.target.value)}
+                    className="mt-1 text-xs font-mono"
+                  />
                 </div>
               </div>
             </div>
           )}
-
-        </div>
+        </main>
       </div>
 
-      {/* Confirmation Modal */}
+      {/* COMMIT CONFIRMATION MODAL */}
       {showCommitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-          <div className="bg-white rounded-3xl p-7 max-w-md w-full border border-gray-100 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200">
-            <div className="flex items-start gap-4">
-              <div className="p-2.5 bg-amber-50 rounded-2xl text-amber-600 shrink-0 shadow-sm border border-amber-100/50">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-xl font-black text-gray-900 tracking-tight">Deploy Draft to Live Site?</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  You are about to push all your saved draft edits to the live production server.
-                </p>
-              </div>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl space-y-5 animate-in zoom-in-95">
+            <div className="flex items-center gap-3 text-blue-600">
+              <GitCommit className="h-7 w-7" />
+              <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Commit & Publish to Live</h3>
             </div>
-
-            <div className="bg-blue-50/60 border border-blue-100/80 rounded-2xl p-4 space-y-2">
-              <p className="text-xs font-black text-blue-900 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 bg-blue-600 rounded-full animate-ping" />
-                Before you commit:
-              </p>
-              <ul className="text-xs text-blue-700/90 list-disc list-inside space-y-1.5 pl-1 leading-relaxed">
-                <li>Make sure to preview the pages using the <strong>Live Preview</strong> button.</li>
-                <li>Verify that all updated texts, metrics, and images look correct.</li>
-                <li className="font-bold text-amber-800">Note: Committed changes will take up to 2-5 minutes to reflect in production.</li>
-              </ul>
+            <p className="text-xs text-gray-600 leading-relaxed">
+              This will perform a single atomic commit of your updated database configuration (`src/data/db.json`) to your GitHub repository, triggering a single Vercel production build.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-800 font-semibold">
+              ✓ 1 production build will be triggered on Vercel containing all your latest edits.
             </div>
-
-            <div className="flex gap-3 justify-end pt-1">
-              <Button variant="outline" onClick={() => setShowCommitModal(false)} className="rounded-xl font-semibold border-gray-200">
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                variant="ghost"
+                onClick={() => setShowCommitModal(false)}
+                className="h-10 px-4 font-bold text-gray-600 hover:bg-gray-100 rounded-xl text-xs"
+              >
                 Cancel
               </Button>
-              <Button 
-                onClick={() => {
-                  setShowCommitModal(false);
-                  handleCommit();
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md shadow-blue-600/10"
+              <Button
+                onClick={handleCommit}
+                disabled={committing}
+                className="h-10 px-5 font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-600/20 text-xs"
               >
-                Confirm & Deploy Live
+                {committing ? "Committing to Git..." : "Confirm & Commit Now"}
               </Button>
             </div>
           </div>

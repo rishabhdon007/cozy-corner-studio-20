@@ -3,8 +3,10 @@
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
 import { SITE_IMAGES } from "@/lib/siteImages";
+import { useSiteData } from "@/hooks/useSiteData";
+import db from "@/data/db.json";
 
-const marketers = [
+const defaultMarketers = [
   {
     name: "Mr. Navin Vishwakarama",
     role: "Marketing Team",
@@ -20,6 +22,8 @@ const marketers = [
 ];
 
 export function MarketingTeamSection() {
+  const marketers = useSiteData("marketingTeam", (db.published as any).marketingTeam || defaultMarketers);
+
   return (
     <section className="bg-[#0f1d30] py-20 md:py-28 relative overflow-hidden">
       <div
@@ -47,7 +51,7 @@ export function MarketingTeamSection() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:max-w-4xl lg:mx-auto">
-          {marketers.map((marketer, index) => (
+          {marketers.map((marketer: any, index: number) => (
             <div
               key={marketer.name}
               data-scroll-reveal="top"

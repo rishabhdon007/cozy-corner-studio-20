@@ -3,8 +3,10 @@
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { SiteImage } from "@/components/site/SiteImage";
 import { LEADERSHIP_IMAGES, SITE_IMAGES } from "@/lib/siteImages";
+import { useSiteData } from "@/hooks/useSiteData";
+import db from "@/data/db.json";
 
-const leaders = [
+const defaultLeaders = [
   {
     name: "Mr. Nimesh Kothari",
     role: "Founder & Chairman",
@@ -26,6 +28,8 @@ const leaders = [
 ];
 
 export function LeadershipSection() {
+  const leaders = useSiteData("leadership", (db.published as any).leadership || defaultLeaders);
+
   return (
     <section className="bg-[#0f1d30] py-20 md:py-28 relative overflow-hidden">
       <div
@@ -53,7 +57,7 @@ export function LeadershipSection() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {leaders.map((leader, index) => (
+          {leaders.map((leader: any, index: number) => (
             <div
               key={leader.name}
               data-scroll-reveal="top"

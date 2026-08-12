@@ -8,91 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash, ExternalLink, Save, Check, Layers } from "lucide-react";
 
+import { ImageField } from "@/components/admin/ImageField";
 import { products as staticProducts } from "@/data/products";
 import { services as staticServices } from "@/data/services";
-
-// Image Field Helper Component with Real-time Preview and Local Upload Support
-const ImageField = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => {
-  const [uploading, setUploading] = useState(false);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const json = await res.json();
-      if (json.url) {
-        onChange(json.url);
-      } else {
-        alert("Upload failed: " + (json.error || "unknown error"));
-      }
-    } catch (err) {
-      alert("Failed to upload file");
-    }
-    setUploading(false);
-  };
-
-  const uploadId = `file-upload-${label.replace(/[^a-zA-Z0-9]/g, "-")}`;
-
-  return (
-    <div className="space-y-2 w-full">
-      <Label className="font-semibold text-gray-700">{label}</Label>
-      <div className="flex gap-4 items-center">
-        <div className="flex-1 flex flex-col gap-2">
-          <Input 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)} 
-            placeholder="e.g. /company/Nimesh_sir.jpg" 
-          />
-          <div className="flex items-center gap-2">
-            <input
-              type="file"
-              accept="image/*"
-              id={uploadId}
-              className="hidden"
-              onChange={handleFileChange}
-              disabled={uploading}
-            />
-            <label
-              htmlFor={uploadId}
-              className="px-3 py-1 bg-gray-100 hover:bg-gray-200 border text-xs font-bold rounded-lg cursor-pointer transition-all inline-block select-none disabled:opacity-50"
-            >
-              {uploading ? "Uploading..." : "Upload Image"}
-            </label>
-            {value && (
-              <button
-                type="button"
-                onClick={() => onChange("")}
-                className="px-3 py-1 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 text-xs font-bold rounded-lg transition-all inline-block select-none"
-              >
-                Clear
-              </button>
-            )}
-            {value && <span className="text-[10px] text-gray-400 truncate max-w-[200px]">{value}</span>}
-          </div>
-        </div>
-        <div className="w-16 h-16 rounded-xl border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center shrink-0 shadow-sm">
-          <img 
-            src={value || "/company_logo.webp"} 
-            alt="Preview" 
-            className="object-cover w-full h-full" 
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "https://placehold.co/100x100?text=No+Image";
-            }} 
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 type Spec = { label: string; value: string };
 type FeatureCard = { icon: string; title: string; body: string };
@@ -152,10 +70,30 @@ export default function CatalogManager() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/data?type=published")
+    let localDraft: any = null;
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("nrk_draft_preview_data");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.draft) localDraft = parsed.draft;
+        }
+      } catch (_) {}
+    }
+
+    fetch("/api/admin/data?type=draft")
       .then((res) => res.json())
-      .then((json) => setDbData(json))
-      .catch((err) => console.error("Failed to load data", err));
+      .then((serverData) => {
+        if (localDraft) {
+          setDbData({ ...serverData, ...localDraft });
+        } else {
+          setDbData(serverData);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load catalog draft", err);
+        if (localDraft) setDbData(localDraft);
+      });
   }, []);
 
   const handleSave = async (updatedDbData = dbData) => {
@@ -164,15 +102,19 @@ export default function CatalogManager() {
       localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: updatedDbData }));
     }
     try {
-      await fetch("/api/admin/data?action=save", {
+      const res = await fetch("/api/admin/data?action=save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedDbData),
       });
-      setMessage("Saved to draft!");
+      if (res.ok) {
+        setMessage("Draft saved successfully!");
+      } else {
+        setMessage("Saved to local draft cache.");
+      }
       setDbData(updatedDbData);
     } catch (err) {
-      setMessage("Failed to save draft.");
+      setMessage("Saved to local draft.");
     }
     setSaving(false);
     setTimeout(() => setMessage(""), 3000);
@@ -180,19 +122,27 @@ export default function CatalogManager() {
 
   const handleCommit = async () => {
     setCommitting(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("nrk_draft_preview_data", JSON.stringify({ draft: dbData }));
+    }
     try {
-      await handleSave();
-      await fetch("/api/admin/data?action=commit", {
+      const res = await fetch("/api/admin/data?action=commit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ draft: dbData, published: dbData }),
       });
-      setMessage("Catalog updates committed & live!");
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setMessage(json.message || "Catalog updates committed & live build triggered!");
+        setShowCommitModal(false);
+      } else {
+        setMessage(json.error || "Commit failed.");
+      }
     } catch (err) {
       setMessage("Commit failed.");
     }
     setCommitting(false);
-    setTimeout(() => setMessage(""), 3000);
+    setTimeout(() => setMessage(""), 3500);
   };
 
   // Combine static and dynamic data
@@ -301,9 +251,11 @@ export default function CatalogManager() {
     }
   };
 
-  const handleDelete = (slug: string, kind: "product" | "service", e: React.MouseEvent) => {
+  const handleDelete = (slug: string, kind: "product" | "service", title: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm("Are you sure you want to delete/reset this item? (For static items, this resets them to default)")) {
+    const itemLabel = kind === "service" ? "service" : "product";
+    const nameStr = title ? ` "${title}"` : "";
+    if (confirm(`Are you sure you want to delete this ${itemLabel}${nameStr}?`)) {
       const arrayKey = kind === "product" ? "products" : "services";
       const updatedList = (dbData[arrayKey] || []).filter((p: any) => p.slug !== slug);
       handleSave({ ...dbData, [arrayKey]: updatedList });
@@ -399,7 +351,7 @@ export default function CatalogManager() {
                     {dbData.products?.some((dp: any) => dp.slug === item.slug) && (
                       <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold mr-1">Draft</span>
                     )}
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(item.slug, "product", e)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(item.slug, "product", item.title, e)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
@@ -430,7 +382,7 @@ export default function CatalogManager() {
                     {dbData.services?.some((ds: any) => ds.slug === item.slug) && (
                       <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold mr-1">Draft</span>
                     )}
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(item.slug, "service", e)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={(e) => handleDelete(item.slug, "service", item.title, e)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
