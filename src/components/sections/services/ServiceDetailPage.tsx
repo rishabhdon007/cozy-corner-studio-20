@@ -1015,7 +1015,7 @@ function RelatedProducts({ products }: { products: ProductRecommendation[] }) {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {productCards.map((item, index) => (
           <ServiceCard
-            key={item.id}
+            key={`${item.kind ?? "card"}-${item.id || item.slug}-${index}`}
             item={item}
             href={`/product/${item.slug}`}
             catalogKind="product"

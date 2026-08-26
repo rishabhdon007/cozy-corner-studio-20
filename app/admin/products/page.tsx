@@ -31,7 +31,7 @@ type CatalogItem = {
   description: string;
   mainImage: string;
   kind: "product" | "service";
-  section: string; // prime, secondary, processing, fabrication, specialty
+  section: string; // prime, secondary, processing, fabrication, manufacturing
   specs: Spec[];
   variants: string[];
   process: string[];
@@ -441,7 +441,6 @@ export default function CatalogManager() {
                         <option value="secondary">Secondary Material (Home/Services)</option>
                         <option value="processing">Steel Processing Products (Services)</option>
                         <option value="fabrication">Fabrication & Support (Services)</option>
-                        <option value="specialty">Specialty Capabilities (Services)</option>
                         <option value="manufacturing">Manufacturing Products (Services)</option>
                       </select>
                     </div>

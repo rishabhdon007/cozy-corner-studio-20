@@ -10,6 +10,8 @@ export type ServiceCardItem = {
   image: string;
   eyebrow?: string;
   kind?: "service" | "product";
+  section?: string;
+  hideDispatchBadge?: boolean;
 };
 
 const toCard = (item: {
@@ -20,6 +22,8 @@ const toCard = (item: {
   image: string;
   eyebrow?: string;
   kind?: "service" | "product";
+  section?: string;
+  hideDispatchBadge?: boolean;
 }): ServiceCardItem => ({
   id: item.id,
   slug: item.slug,
@@ -28,15 +32,17 @@ const toCard = (item: {
   image: item.image,
   eyebrow: item.eyebrow,
   kind: item.kind,
+  section: item.section,
+  hideDispatchBadge: item.hideDispatchBadge,
 });
 
 export const processingServiceCards: ServiceCardItem[] = [
   ...serviceCardMeta
     .filter((item) => item.section === "processing")
-    .map((item) => toCard({ ...item, kind: "service" as const })),
+    .map((item) => toCard({ ...item, kind: "service" as const, hideDispatchBadge: true })),
   ...productCardMeta
     .filter((item) => item.section === "processing")
-    .map((item) => toCard({ ...item, kind: "product" as const })),
+    .map((item) => toCard({ ...item, kind: "product" as const, hideDispatchBadge: true })),
 ];
 
 export const specialtyServiceCards: ServiceCardItem[] = specialtyServiceCardMeta.map((item) =>
@@ -65,13 +71,12 @@ export const productCatalogCards: ServiceCardItem[] = [...primeProductCards, ...
 
 export const fabricationServiceCards: ServiceCardItem[] = serviceCardMeta
   .filter((item) => item.section === "fabrication")
-  .map((item) => toCard({ ...item, kind: "service" }));
+  .map((item) => toCard({ ...item, kind: "service", hideDispatchBadge: true }));
 
 /** Full catalogue shown on the Services page */
 export const allServiceCards: ServiceCardItem[] = [
   ...processingServiceCards,
   ...fabricationServiceCards,
-  ...specialtyServiceCards,
   ...primeProductCards,
   ...secondaryProductCards,
   ...manufacturingProductCards,

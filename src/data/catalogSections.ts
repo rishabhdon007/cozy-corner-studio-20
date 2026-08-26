@@ -3,7 +3,6 @@ import {
   getVisibleSecondaryProductCards,
   primeProductCards,
   processingServiceCards,
-  specialtyServiceCards,
   manufacturingProductCards,
   type ServiceCardItem,
 } from "@/data/serviceCards";
@@ -44,12 +43,6 @@ export const catalogSections: CatalogSection[] = [
     heading: "Fabrication & Support",
     description: "Profiling, purlins, deck sheets, logistics, and secure packaging for complete project support.",
     items: fabricationServiceCards,
-  },
-  {
-    id: "specialty",
-    heading: "Specialty Capabilities",
-    description: "Deck sheets, Z & C purlins, wooden pallet packaging, and custom profiling.",
-    items: specialtyServiceCards,
   },
   {
     id: "prime",

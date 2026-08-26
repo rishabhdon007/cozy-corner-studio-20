@@ -96,9 +96,10 @@ export const contactInfo = {
   phoneHref: "tel:+919770501623",
   phoneTel: "+919770501623",
   secondaryPhones: [
+    { display: "+91-9302106507", href: "tel:+919302106507" },
+    { display: "+91-9977-35650", href: "tel:+91997735650" },
     { display: "0731-2420824", href: "tel:+917312420824" },
     { display: "0731-2420825", href: "tel:+917312420825" },
-    { display: "+91-9302106507", href: "tel:+919302106507" },
     { display: "+91-9977777099", href: "tel:+919977777099" },
   ],
   whatsappNumber: "919770501623",

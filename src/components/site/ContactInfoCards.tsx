@@ -17,6 +17,12 @@ export function ContactInfoCards({ className, scrollReveal = "right" }: ContactI
         value={`+91 ${contactInfo.phone}`}
         href={contactInfo.phoneHref}
       />
+      <ContactInfoCard
+        icon="phone_forwarded"
+        label="Alternate Numbers"
+        value="+91 9302106507 / +91 9977-35650"
+        href="tel:+919302106507"
+      />
       <ContactInfoCard icon="mail" label="Email Our Partners" value={contactInfo.email} href={contactInfo.emailHref} />
       <ContactInfoCard
         icon="location_on"

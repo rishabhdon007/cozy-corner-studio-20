@@ -40,6 +40,8 @@ export function ServicesCatalogPage() {
       image: p.mainImage || p.image,
       eyebrow: p.eyebrow || p.category,
       kind: "product" as const,
+      section: p.section || (p.category === "Prime Material" ? "prime" : "secondary"),
+      hideDispatchBadge: p.section === "processing" || p.section === "fabrication",
     }));
 
     const dynamicServiceCards = (dynamicServices || []).map((s) => ({
@@ -50,9 +52,18 @@ export function ServicesCatalogPage() {
       image: s.mainImage || s.image,
       eyebrow: s.eyebrow || s.category,
       kind: "service" as const,
+      section: s.section || "processing",
+      hideDispatchBadge: (s.section || "processing") === "processing" || s.section === "fabrication",
     }));
 
-    return [...allServiceCards, ...dynamicProductCards, ...dynamicServiceCards];
+    const combined = [...dynamicProductCards, ...dynamicServiceCards, ...allServiceCards];
+    const seen = new Set<string>();
+    return combined.filter((item) => {
+      const itemKey = `${item.kind ?? "service"}-${item.slug || item.id}`;
+      if (seen.has(itemKey)) return false;
+      seen.add(itemKey);
+      return true;
+    });
   }, [dynamicProducts, dynamicServices]);
 
   const mergedCatalogSections = useMemo(() => {
@@ -82,9 +93,22 @@ export function ServicesCatalogPage() {
 
     return catalogSections.map((section) => {
       const sectionCards = allDynamic.filter((card) => card.section === section.id);
+      const combined = [...sectionCards, ...section.items];
+
+      const seenKeys = new Set<string>();
+      const uniqueItems: ServiceCardItem[] = [];
+
+      for (const item of combined) {
+        const itemKey = item.slug || item.id;
+        if (!seenKeys.has(itemKey)) {
+          seenKeys.add(itemKey);
+          uniqueItems.push(item);
+        }
+      }
+
       return {
         ...section,
-        items: [...section.items, ...sectionCards],
+        items: uniqueItems,
       };
     });
   }, [dynamicProducts, dynamicServices]);

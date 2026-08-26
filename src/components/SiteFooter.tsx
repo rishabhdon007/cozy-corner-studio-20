@@ -111,11 +111,16 @@ export function SiteFooter() {
                 {contactInfo.address.full}
               </a>
             </li>
-            <li className="flex items-center">
-              <span className="material-symbols-outlined mr-2 text-sm">call</span>
-              <a href={contactInfo.phoneHref} className="transition-opacity hover:text-on-primary hover:opacity-100">
-                {contactInfo.phone}
-              </a>
+            <li className="flex items-start">
+              <span className="material-symbols-outlined mr-2 mt-0.5 text-sm">call</span>
+              <div className="flex flex-col space-y-1">
+                <a href={contactInfo.phoneHref} className="transition-opacity hover:text-on-primary hover:opacity-100">
+                  +91 {contactInfo.phone}
+                </a>
+                <span className="text-xs opacity-75">
+                  Alt: <a href="tel:+919302106507" className="hover:underline">+91 9302106507</a> / <a href="tel:+91997735650" className="hover:underline">+91 9977-35650</a>
+                </span>
+              </div>
             </li>
             <li className="flex items-center">
               <span className="material-symbols-outlined mr-2 text-sm">mail</span>

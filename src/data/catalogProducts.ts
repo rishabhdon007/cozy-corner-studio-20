@@ -121,7 +121,7 @@ export const productRecommendations = {
   bpSheet: {
     slug: "bp-sheet",
     title: "BP Sheet (Bhatti Material)",
-    type: "Steel Processing",
+    type: "Secondary Material",
     image: bpSheetImages[0] || CATALOG_IMAGES.cr,
     note: "BP Sheets (Bhatti Material) for high-heat and industrial processing.",
   },
@@ -735,7 +735,7 @@ const secondaryEntries = [
       { property: "Size", value: "8 x 4 FT", method: "Stock allocation" },
     ]),
     recommendations: [rec.secondaryCrfh, rec.centering, rec.crCoils],
-    section: "processing",
+    section: "secondary",
   }),
   buildSecondaryProduct({
     slug: "centering-plates",
