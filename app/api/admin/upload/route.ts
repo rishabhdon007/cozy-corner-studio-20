@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+import { uploadedFileCache } from "@/lib/uploadCache";
 
 // Helper to write file content directly to GitHub repo via REST API
 async function commitFileToGithub(filePath: string, contentBuffer: Buffer, message: string) {
@@ -79,6 +80,16 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
+
+    const ext = path.extname(filename).toLowerCase();
+    let contentType = "image/png";
+    if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";
+    if (ext === ".webp") contentType = "image/webp";
+    if (ext === ".gif") contentType = "image/gif";
+    if (ext === ".svg") contentType = "image/svg+xml";
+
+    // Store in-memory for instant serving via /uploads/[filename] route
+    uploadedFileCache.set(filename, { buffer, contentType });
 
     // Ensure directory exists & save locally (will work in local dev)
     try {

@@ -61,9 +61,9 @@ export const ImageField = ({
       });
       const json = await res.json();
       if (res.ok && json.url) {
-        setLocalBlobUrl(null);
         onChange(json.url);
         setError(null);
+        setImageError(false);
       } else {
         setError(json.error || "Failed to upload image.");
       }
