@@ -11,7 +11,7 @@ import {
   normalizeImageSrc,
   toImageSrc,
 } from "@/lib/siteImages";
-import { isCatalogProductImageSrc } from "@/data/productAssetPaths";
+import { isCatalogProductImageSrc, isLocalProductAssetSrc } from "@/data/productAssetPaths";
 
 type SiteImageProps = {
   src: ImageSource;
@@ -47,7 +47,10 @@ export function SiteImage({
     setCurrentSrc(normalizedSrc);
   }, [normalizedSrc]);
 
-  const isDirectProductAsset = isCatalogProductImageSrc(normalizedSrc);
+  const isDirectProductAsset =
+    isCatalogProductImageSrc(normalizedSrc) ||
+    isLocalProductAssetSrc(normalizedSrc) ||
+    normalizedSrc.startsWith("/uploads/");
   const svg = unoptimized ?? (isSvgSrc(currentSrc) || isDirectProductAsset);
 
   const handleError = () => {

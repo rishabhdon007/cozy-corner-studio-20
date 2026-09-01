@@ -80,7 +80,14 @@ function useCatalogDetail(slug: string, staticItem: any, kind: "product" | "serv
       gallery: dynamicItem.gallery || [],
       specs: dynamicItem.specs || [],
       variants: dynamicItem.variants || [],
-      technicalSpecs: dynamicItem.technicalSpecs || [],
+      technicalSpecs:
+        dynamicItem.technicalSpecs && dynamicItem.technicalSpecs.length > 0
+          ? dynamicItem.technicalSpecs
+          : (dynamicItem.specs || []).map((s: any) => ({
+              property: s.label,
+              value: s.value,
+              method: "Standard Specification",
+            })),
       featureCards: dynamicItem.featureCards || [],
       process: dynamicItem.process || [],
       offerings: dynamicItem.offerings || [],

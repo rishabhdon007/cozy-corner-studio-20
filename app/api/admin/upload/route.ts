@@ -89,6 +89,21 @@ export async function POST(req: Request) {
       // Ignore write failures in read-only environment (Vercel)
     }
 
+    // Commit file directly to GitHub repository if credentials exist
+    const token = process.env.GITHUB_TOKEN;
+    const repoUrl = process.env.GITHUB_REPO_URL;
+    if (token && repoUrl) {
+      try {
+        await commitFileToGithub(
+          `public/uploads/${filename}`,
+          buffer,
+          `upload: add ${filename} via admin panel`
+        );
+      } catch (gitErr: any) {
+        console.error("Failed to commit uploaded image to GitHub:", gitErr);
+      }
+    }
+
     return NextResponse.json({ url: `/uploads/${filename}` });
   } catch (err: any) {
     console.error("Upload error", err);

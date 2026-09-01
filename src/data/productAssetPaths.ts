@@ -20,6 +20,7 @@ function decodeAssetPath(src?: string | null): string {
 /** Paths served directly from /public — bypass next/image optimization */
 export function isCatalogProductImageSrc(src?: string | null): boolean {
   const normalized = decodeAssetPath(src);
+  if (normalized.startsWith("/uploads/")) return true;
   return (
     isPickleProductImageSrc(normalized) ||
     isPickledCuttingProductImageSrc(normalized) ||
@@ -32,8 +33,15 @@ export function isCatalogProductImageSrc(src?: string | null): boolean {
   );
 }
 
-/** Any local product asset under /assests/products (CMS-uploaded paths) */
+/** Any local product or CMS-uploaded asset path */
 export function isLocalProductAssetSrc(src?: string | null): boolean {
   const normalized = decodeAssetPath(src);
-  return normalized.startsWith("/assests/products/");
+  return (
+    normalized.startsWith("/assests/products/") ||
+    normalized.startsWith("/uploads/") ||
+    normalized.startsWith("http://") ||
+    normalized.startsWith("https://") ||
+    normalized.startsWith("blob:") ||
+    normalized.startsWith("data:")
+  );
 }

@@ -106,8 +106,9 @@ export async function POST(request: Request) {
     if (action === 'commit') {
       // Handle full body payload if passed, or fall back to data.draft
       const draftState = body.draft || (Object.keys(body).length > 0 && !body.draft && !body.published ? body : data.draft);
-      data.draft = draftState;
-      data.published = JSON.parse(JSON.stringify(draftState));
+      const mergedDraft = { ...data.draft, ...draftState };
+      data.draft = mergedDraft;
+      data.published = JSON.parse(JSON.stringify(mergedDraft));
       
       // Write locally if possible (will work in local dev)
       try {
@@ -145,7 +146,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Committed successfully to local file', data });
     } else {
       // Save to draft - DO NOT push to GitHub here (prevents double Vercel builds)
-      data.draft = body;
+      data.draft = { ...data.draft, ...body };
       
       // Write locally if possible (will work in local dev)
       try {

@@ -223,7 +223,7 @@ export default function CatalogManager() {
     const currentList = dbData[arrayKey] || [];
 
     const cleanedGallery = (form.gallery || []).filter((src) => src.trim() !== "");
-    const cleanedForm = { ...form, gallery: cleanedGallery };
+    const cleanedForm = { ...form, image: form.mainImage, gallery: cleanedGallery };
 
     let updatedList;
     if (editingSlug === "new") {

@@ -25,11 +25,9 @@ export const ImageField = ({
   const [imageError, setImageError] = useState(false);
   const [localBlobUrl, setLocalBlobUrl] = useState<string | null>(null);
 
-  // Clear local blob URL when value is cleared
+  // Clear local blob URL when value changes or is cleared
   useEffect(() => {
-    if (!value) {
-      setLocalBlobUrl(null);
-    }
+    setLocalBlobUrl(null);
   }, [value]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +61,7 @@ export const ImageField = ({
       });
       const json = await res.json();
       if (res.ok && json.url) {
+        setLocalBlobUrl(null);
         onChange(json.url);
         setError(null);
       } else {

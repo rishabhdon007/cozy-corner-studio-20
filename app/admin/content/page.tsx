@@ -120,6 +120,11 @@ export default function ContentAdmin() {
       const res = await fetch("/api/admin/data?type=published");
       const pubData = await res.json();
       setData(pubData);
+      await fetch("/api/admin/data?action=save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pubData),
+      });
       setMessage("Draft reset to live published data!");
     } catch (_) {
       setMessage("Failed to reset draft.");
